@@ -1,0 +1,80 @@
+# mutation{
+#   userCreateOne(record:{
+#     name: "test",
+#     email: "test12@test.com",
+#     password: "test",
+#   } 
+#   ){record{
+#      _id, name, email,password,orders{
+#       _id,
+#     }
+#   }
+#   }
+# }
+
+# mutation{
+#   productCreateOne(record:{
+#     price: "1101",
+#     title: "Phone11",
+#     content: "Bed phone11"
+#   } 
+#   ){record{
+#      _id, price,title,content
+#   }
+#   }
+# }
+
+# query{
+#   test(root:"test messages!"){
+#     message
+#   }
+# }
+
+# mutation{
+#   orderCreateOne(record:{
+#     user:"61716c933a54b9535c09dafc",
+#     products:["61716db23a54b9535c09daff","61716fba352777d15cd4ee92"],
+#   } 
+#   ){record{
+#      _id,
+#     create_at,
+#     user{
+#       name , _id, email
+#     },
+#     products{
+#       _id, title, content
+#     }
+#   }
+#   }
+# }
+
+
+# query{
+#   getAllUsers{
+#     name ,password,email,orders{
+#       id
+#     },id
+#   }
+# }
+
+
+
+
+# query{
+#   userById(_id:"61716c933a54b9535c09dafc"){
+#     _id,
+#     name,
+#     email,
+#     update_at,
+#     create_at,
+#     orders{
+#       user{
+#         name
+#       },
+#       products{
+#         price
+#       }
+#     }    
+#   }
+# }
+

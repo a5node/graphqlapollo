@@ -1,0 +1,69 @@
+{
+  "compilerOptions": {
+    "module": "commonjs",
+    "esModuleInterop": true,
+    "target": "es5",
+    "lib": [
+      "dom",
+      "es2018",
+      "esnext.asynciterable"
+    ],
+   
+    "alwaysStrict":true,
+    "checkJs": true,
+    "sourceMap": true,
+    "outDir": "./dist",
+    "strictNullChecks": true,              /* Enable strict null checks. */
+    "strictFunctionTypes": true,           /* Enable strict checking of function types. */
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "declaration": true,
+    "removeComments": true,
+    "allowSyntheticDefaultImports": true,
+    "incremental": true,
+    "allowUnreachableCode": false,
+    "allowUnusedLabels": false,
+    "declarationMap": true,
+    "noImplicitReturns": true,
+    "noUnusedLocals": false,
+    "noUnusedParameters": false,
+    "pretty": true,
+    "strict": true,
+    "noImplicitAny": true,
+    "skipLibCheck": true,
+    "importHelpers": true,
+
+    
+    "moduleResolution": "node",            /* Specify module resolution strategy: 'node' (Node.js) or 'classic' (TypeScript pre-1.6). */
+    "baseUrl": "./",                       /* Base directory to resolve non-absolute module names. */
+    "rootDir": "./",
+    "paths": {     
+      "@modules/*": ["./src/modules/*"],
+      "@config/*": ["./src/config/*"],
+      "@errors/*": ["./src/errors/*"],
+      "@server/*": ["./src/*"],
+      "@client/*": ["./client/*"],    
+    }
+  },
+  "types": ["node", "jest"],
+  "esModuleInterop": true, 
+  "forceConsistentCasingInFileNames": true,
+  "include": [
+    "./src/**/*.ts",
+    "./client/**/*",
+  ],
+  "ts-node": {
+    "files": true
+  },
+  "exclude": [
+    "node_modules", 
+    "test",
+    "dist",
+    "**/*.spec.ts",
+    "**/*.test.ts"
+    ],
+  "typedocOptions": {
+    "entryPoints": ["./src/index.ts"]
+  }
+}
+
