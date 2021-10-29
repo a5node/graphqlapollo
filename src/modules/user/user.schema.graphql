@@ -1,0 +1,46 @@
+type Order {
+    id: ID!
+    products: [Product!]
+    user: User!
+}
+
+type Product {
+    id: ID!
+    title: String!
+    price: String!
+    creator: User
+    orders:[Order!]    
+}
+
+type User {
+    id: ID!
+    name: String!
+    email: String!
+    password: String
+    token: String
+    orders: [Order!]
+}
+
+input InputCreatUser {
+  name: String!
+  email: String!
+  password: String!
+}
+type Test {
+  message: String
+}
+
+type Query {
+  getUserById(id: ID!): User
+  getAllUsers: [User!]
+  test(root: String!): Test
+}
+
+type Mutation {
+  createUser(input: InputCreatUser): User
+}
+
+schema {
+  query : Query
+  mutation : Mutation
+}
