@@ -1,8 +1,6 @@
-'use strict';
-
 import UserModel from './user.model';
 import { Http409Error } from '../../errors/http-errors';
-import { IUserSchema } from './user.interface';
+import { IUserSchema, IUserDefault } from './user.interface';
 
 import {
   TFindUserByEmail,
@@ -14,10 +12,8 @@ import {
   TAddItemToUser,
 } from '@server/types';
 
-export default class UserService {
-  createUser: TCreateUser = async ({ input }) => {
-    const { name, email, password } = input;
-
+class UserService {
+  createUser: TCreateUser = async ({ name, email, password }) => {
     let user = await UserModel.findOne({ email });
 
     if (user) {
@@ -37,9 +33,16 @@ export default class UserService {
 
     const userNew = await UserModel.createUser(data);
 
-    const token = userNew.token();
+    const access_token = userNew.token();
 
-    return { name, email, id: userNew._id, token } as IUserSchema & { token: string };
+    return {
+      name,
+      email,
+      id: userNew._id,
+      access_token,
+      create_at: userNew.create_at,
+      update_at: userNew.update_at,
+    } as IUserSchema & IUserDefault;
   };
 
   getAllUsers: TGetAllUser = async () => await UserModel.find();
@@ -67,3 +70,4 @@ export default class UserService {
       { new: true },
     );
 }
+export default new UserService();

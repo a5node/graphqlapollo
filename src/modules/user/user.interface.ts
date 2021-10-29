@@ -1,4 +1,3 @@
-'use strict';
 import { Schema, Document, Model } from 'mongoose';
 import { IOrderSchema } from '../../interface';
 
@@ -13,12 +12,9 @@ import {
 } from '@server/types';
 
 export interface IInputCreateUser {
-  input: {
-    id?: string;
-    name: string;
-    password: string;
-    email: string;
-  };
+  name: string;
+  password: string;
+  email: string;
 }
 
 export interface IInputUpdateUser {
@@ -33,15 +29,17 @@ export interface IUserSchema extends Document {
   name: string;
   email: string;
   password: string | any;
-  orders?: IOrderSchema[] | Schema.Types.ObjectId[];
-  assToken?: string;
+  orders?: IOrderSchema[] | Schema.Types.ObjectId[] | string[];
+  access_token?: string;
+  readonly create_at?: Date;
+  readonly update_at?: Date;
 }
 
-export interface IToPublicJson {
-  _id: Schema.Types.ObjectId;
-  name: string;
-  email: string;
-  orders?: IOrderSchema[] | Schema.Types.ObjectId[];
+export interface IUserDefault {
+  readonly id: string | Schema.Types.ObjectId;
+  access_token: string;
+  readonly create_at: Date;
+  readonly update_at: Date;
 }
 
 export interface IUserInstance extends IUserSchema {

@@ -23,6 +23,9 @@ const options: OptionConfig = {
     useUnifiedTopology: true,
     autoIndex: true,
   },
+  apolloOptions: {
+    path: '/api/graphql',
+  },
 };
 
 export default options;

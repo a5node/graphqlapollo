@@ -1,41 +1,22 @@
 import 'reflect-metadata';
 import type http from 'http';
 import { Express } from 'express';
-import { gql } from 'apollo-server';
 import { ApolloServer, ExpressContext } from 'apollo-server-express';
 import { ApolloServerPluginDrainHttpServer } from 'apollo-server-core';
-import { DocumentNode } from 'graphql';
-
-import ApollServer from './builder.schem';
-
-const resolvers = {
-  Query: { test: () => {} },
-  Subscription: { test: () => {} },
-  Mutation: { test: () => {} },
-};
-
-const typeDefs: DocumentNode = gql`
-  type Query {
-    test(id: ID!): ID
-  }
-
-  type Mutation {
-    test(id: ID!): ID
-  }
-
-  type Subscription {
-    test(id: ID!): ID
-  }
-`;
+import { GraphQLSchema } from 'graphql';
+import config from '../config';
+import Builder from './builder.schem';
 
 export default async (app: Express, httpServer: http.Server): Promise<ApolloServer<ExpressContext>> => {
-  const schema = await ApollServer.initSchema();
-
+  const schema: GraphQLSchema = await Builder.initSchema();
   const server = new ApolloServer({
-    typeDefs: [typeDefs],
-    resolvers: [resolvers],
     schema,
-    context: ({ req }) => ({ req }),
+    context: ({ req }) => {
+      console.dir(req.token);
+      return {
+        req,
+      };
+    },
     plugins: [
       ApolloServerPluginDrainHttpServer({
         httpServer,
@@ -45,7 +26,7 @@ export default async (app: Express, httpServer: http.Server): Promise<ApolloServ
 
   await server.start();
 
-  server.applyMiddleware({ app, path: '/api/graphgl' });
+  server.applyMiddleware({ app, path: config.apolloOptions.path });
 
   return server;
 };
@@ -123,6 +104,26 @@ export default async (app: Express, httpServer: http.Server): Promise<ApolloServ
 //       dateScalarMode: 'timestamp',
 //       scalarsMap: [{ type: ObjectId, scalar: ObjectIdScalar }],
 //     });
+
+//   const resolvers = {
+//     Query: { test: () => {} },
+//     Subscription: { test: () => {} },
+//     Mutation: { test: () => {} },
+//   };
+
+//   const typeDefs = gql`
+//     type Query {
+//       test(id: ID!): ID
+//     }
+
+//     type Mutation {
+//       test(id: ID!): ID
+//     }
+
+//     type Subscription {
+//       test(id: ID!): ID
+//     }
+//   `;
 
 //     this.server = new ApolloServer({
 //       schema: this.schema,

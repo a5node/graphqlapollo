@@ -1,29 +1,21 @@
-'use strict';
 import 'reflect-metadata';
 import { Arg, FieldResolver, Query, Mutation, Resolver, Root } from 'type-graphql';
+import UserServers from './user.servers';
 
 // import UserModel from './user.model';
 // import { Http409Error } from '@server/errors/http-errors';
 // import { IUserSchema } from './user.interface';
-import Users from './user.schema';
+import User, { InputCreateUser, CreateUser } from './user.schema';
 
-@Resolver(of => Users)
+@Resolver(of => User)
 export default class {
   @Query(returns => String)
-  hello(): String {
-    return 'Welcome';
+  hello(): string {
+    return 'User';
   }
 
-  // @Mutation(returns => User)
-  // createUser(
-  //   @Arg('name') name: String,
-  //   @Arg('email') email: String
-  // ): UserData[] {
-  //   let id = users.length + 1;
-  //   return users.concat({
-  //     id,
-  //     name,
-  //     email
-  //   });
-  // }
+  @Mutation(returns => CreateUser)
+  async createUser(@Arg('data') data: InputCreateUser): Promise<CreateUser> {
+    return await UserServers.createUser(data);
+  }
 }

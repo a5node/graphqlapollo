@@ -1,4 +1,3 @@
-'use strict';
 import { Schema, model } from 'mongoose';
 
 import { ORDER, USER, USERS } from '../constants';
@@ -14,7 +13,7 @@ const UserSchema = new Schema<IUserSchema, IUserModel>(
     email: { type: String, required: true, unique: true },
     password: { type: String, required: true },
     orders: [{ type: Schema.Types.ObjectId, ref: ORDER }],
-    assToken: { type: String, required: false },
+    access_token: { type: String, required: false },
   },
   {
     timestamps: {
@@ -39,18 +38,17 @@ UserSchema.statics.createUser = async function (date: Partial<IUserSchema>): Pro
   return user.save();
 };
 
-UserSchema.methods.token = function () {
+UserSchema.methods.token = function (): string {
   return generateToken({ id: this._id.toString(), email: this.email.toString() });
 };
 
 UserSchema.methods.verifyPassword = async function (password: string) {
   try {
     await checkPassword(this.password, password);
+    return true;
   } catch (error) {
     throw new Http403Error({ code: 4 });
   }
-
-  return true;
 };
 
 const User: IUserModel = model<IUserInstance, IUserModel>(USER, UserSchema, USERS);

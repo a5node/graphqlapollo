@@ -5,22 +5,16 @@ import { ObjectId } from 'mongodb';
 import { buildSchema, NonEmptyArray } from 'type-graphql';
 import { ObjectIdScalar } from '../scalar/ObjectId.scalar';
 
-// import { gql } from 'apollo-server';
-
 class builderSchema {
   private schema!: GraphQLSchema;
   private resolvers!: NonEmptyArray<string>;
 
   public async initResolvers(resolver: any) {
-    const res: any = [];
-
+    const res: NonEmptyArray<string> | any = [__dirname + '../modules/**/*.resolver.{ts,js}'];
     if (this.resolvers) {
-      console.dir('value 2');
-
       res.push(resolver, this.resolvers);
       this.resolvers = res;
     } else {
-      console.dir('value 1');
       this.resolvers = resolver;
     }
   }

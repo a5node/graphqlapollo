@@ -3,6 +3,82 @@
 # !!!   DO NOT MODIFY THIS FILE BY YOURSELF   !!!
 # -----------------------------------------------
 
+type CreateUser {
+  access_token: String
+  create_at: Timestamp
+  email: String!
+  id: ObjectId
+  name: String!
+  update_at: Timestamp
+}
+
+type Default {
+  create_at: Timestamp
+  update_at: Timestamp
+}
+
+input InputCreateUser {
+  email: String!
+  name: String!
+  password: String!
+}
+
+type Mutation {
+  createUser(data: InputCreateUser!): CreateUser!
+}
+
+"""Mongo object id scalar type"""
+scalar ObjectId
+
+type Order {
+  id: ObjectId
+  products: [User!]!
+  user: User!
+}
+
+type Product {
+  content: String!
+  creator: User!
+  id: ObjectId
+  orders: [Order!]!
+  price: Float!
+  title: String!
+}
+
 type Query {
+  hello: String!
   hello1: String!
+  hello2: String!
+}
+
+"""
+The javascript `Date` as integer. Type represents date and time as number of milliseconds from start of UNIX epoch.
+"""
+scalar Timestamp
+
+type User {
+  access_token: String
+  create_at: Timestamp
+  email: String!
+  id: ObjectId
+  name: String!
+  orders: [Order!]
+  password: String!
+  update_at: Timestamp
+}
+
+type UserAccessToken {
+  access_token: String
+}
+
+interface UserEmail {
+  email: String!
+}
+
+interface UserName {
+  name: String!
+}
+
+interface UserPassword {
+  password: String!
 }

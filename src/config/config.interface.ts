@@ -24,6 +24,9 @@ export interface OptionConfig {
     max: number;
   };
   dbOptions: IOptions;
+  apolloOptions: {
+    path: string;
+  };
 }
 
 export interface EnvConfig {
