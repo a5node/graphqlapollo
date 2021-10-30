@@ -1,5 +1,5 @@
 import 'reflect-metadata';
-import { Arg, FieldResolver, Query, Mutation, Resolver, Root } from 'type-graphql';
+import { Arg, Query, Mutation, Resolver, Root } from 'type-graphql';
 import UserServers from './user.servers';
 
 // import UserModel from './user.model';
@@ -14,8 +14,23 @@ export default class {
     return 'User';
   }
 
+  @Query(returns => CreateUser)
+  async findUser(@Arg('data') data: InputCreateUser): Promise<CreateUser> {
+    return await UserServers.createUser(data);
+  }
+
+  @Query(returns => CreateUser)
+  async getUsers(@Arg('data') data: InputCreateUser): Promise<CreateUser> {
+    return await UserServers.createUser(data);
+  }
+
   @Mutation(returns => CreateUser)
   async createUser(@Arg('data') data: InputCreateUser): Promise<CreateUser> {
+    return await UserServers.createUser(data);
+  }
+
+  @Mutation(returns => CreateUser)
+  async updateUser(@Arg('data') data: InputCreateUser): Promise<CreateUser> {
     return await UserServers.createUser(data);
   }
 }

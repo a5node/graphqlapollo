@@ -1,4 +1,11 @@
-import { IUserInstance, IInputUpdateUser, IInputCreateUser, IUserSchema, IUserDefault } from './user.interface';
+import {
+  IUserInstance,
+  IInputUpdateUser,
+  IInputCreateUser,
+  IUserSchema,
+  IUserDefault,
+  IInputFindUser,
+} from './user.interface';
 
 export type TRemoveItemFromUser = (input: {
   userId: string | number;
@@ -17,3 +24,4 @@ export type TFindUserByEmail = (email: string) => Promise<IUserInstance | null>;
 export type TFindUserById = (id: string) => Promise<IUserInstance | null>;
 export type TCreateUser = ({ email, password, name }: IInputCreateUser) => Promise<IUserSchema & IUserDefault>;
 export type TUpdateUser = (input: IInputUpdateUser) => Promise<IUserInstance | null>;
+export type TFindUser = ({ email, id }: IInputFindUser) => Promise<(IUserSchema & IUserDefault) | Error>;

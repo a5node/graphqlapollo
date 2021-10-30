@@ -1,15 +1,8 @@
 import { Schema, Document, Model } from 'mongoose';
 import { IOrderSchema } from '../../interface';
+import { Dictionary } from '../../interface';
 
-import {
-  TFindUserByEmail,
-  TFindUserById,
-  TCreateUser,
-  TUpdateUser,
-  TGetAllUser,
-  TRemoveItemFromUser,
-  TAddItemToUser,
-} from '@server/types';
+import { TCreateUser, TUpdateUser, TGetAllUser, TRemoveItemFromUser, TAddItemToUser, TFindUser } from '@server/types';
 
 export interface IInputCreateUser {
   name: string;
@@ -23,6 +16,11 @@ export interface IInputUpdateUser {
     password?: string;
     email?: string;
   };
+}
+
+export interface IInputFindUser {
+  id?: string | Schema.Types.ObjectId;
+  email?: string;
 }
 
 export interface IUserSchema extends Document {
@@ -45,6 +43,7 @@ export interface IUserDefault {
 export interface IUserInstance extends IUserSchema {
   token(): string;
   verifyPassword(password: string): Promise<boolean>;
+  jsonPayload<T = Dictionary>(payload?: T): IUserSchema & IUserDefault;
 }
 
 export interface IUserModel extends Model<IUserInstance> {
@@ -57,10 +56,9 @@ export interface IUserModel extends Model<IUserInstance> {
 
 export interface IUserServer {
   createUser: TCreateUser;
+  findUser: TFindUser;
   updateUser: TUpdateUser;
-  getAllUsers: TGetAllUser;
-  getUserByEmail: TFindUserByEmail;
-  getUserById: TFindUserById;
+  getUsers: TGetAllUser;
   addItemToUser: TAddItemToUser;
   removeItemFromUser: TRemoveItemFromUser;
 }

@@ -25,6 +25,7 @@ input InputCreateUser {
 
 type Mutation {
   createUser(data: InputCreateUser!): CreateUser!
+  updateUser(data: InputCreateUser!): CreateUser!
 }
 
 """Mongo object id scalar type"""
@@ -46,6 +47,8 @@ type Product {
 }
 
 type Query {
+  findUser(data: InputCreateUser!): CreateUser!
+  getUsers(data: InputCreateUser!): CreateUser!
   hello: String!
   hello1: String!
   hello2: String!
@@ -71,14 +74,14 @@ type UserAccessToken {
   access_token: String
 }
 
-interface UserEmail {
+type UserEmail {
   email: String!
 }
 
-interface UserName {
+type UserName {
   name: String!
 }
 
-interface UserPassword {
+type UserPassword {
   password: String!
 }

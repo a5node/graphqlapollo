@@ -36,6 +36,9 @@ export interface EnvConfig {
   DATABASE_URI: string;
   DATABASE_NAME: string;
   HOST: string;
+  CORS: string;
+  apolloKey: string;
+  apolloUsers: string;
 }
 
 export interface Config {

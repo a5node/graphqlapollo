@@ -1,31 +1,18 @@
 import UserModel from './user.model';
-import { Http409Error } from '../../errors/http-errors';
-import { IUserSchema, IUserDefault } from './user.interface';
+import { Http409Error, Http404Error } from '../../errors/http-errors';
+import { IUserSchema, IUserServer } from './user.interface';
 
-import {
-  TFindUserByEmail,
-  TFindUserById,
-  TCreateUser,
-  TUpdateUser,
-  TGetAllUser,
-  TRemoveItemFromUser,
-  TAddItemToUser,
-} from '@server/types';
+import { TFindUser, TCreateUser, TUpdateUser, TGetAllUser, TRemoveItemFromUser, TAddItemToUser } from '@server/types';
+import { ORDERS } from '../constants';
 
-class UserService {
+class UserService implements IUserServer {
   createUser: TCreateUser = async ({ name, email, password }) => {
     let user = await UserModel.findOne({ email });
 
     if (user) {
-      const error = {
-        message: 'User with email ${email} already exists',
-        code: 5,
-        status: 409,
-      };
-
       throw new Http409Error({
         code: 5,
-        message: JSON.stringify(error),
+        message: `User with email ${email} already exists`,
       });
     }
 
@@ -33,21 +20,26 @@ class UserService {
 
     const userNew = await UserModel.createUser(data);
 
-    const access_token = userNew.token();
-
-    return {
-      name,
-      email,
-      id: userNew._id,
-      access_token,
-      create_at: userNew.create_at,
-      update_at: userNew.update_at,
-    } as IUserSchema & IUserDefault;
+    return userNew.jsonPayload({ access_token: userNew.token() });
   };
 
-  getAllUsers: TGetAllUser = async () => await UserModel.find();
-  getUserByEmail: TFindUserByEmail = async email => await UserModel.findOne({ email });
-  getUserById: TFindUserById = async id => await UserModel.findOne({ id });
+  findUser: TFindUser = async ({ id, email }) => {
+    let user;
+
+    if (email) {
+      user = await UserModel.findOne({ email }).populate(ORDERS, { select: { user: { password: 0, orders: 0 } } });
+    } else {
+      user = await UserModel.findOne({ id }).populate(ORDERS, { select: { user: { password: 0, orders: 0 } } });
+    }
+
+    if (!user) {
+      throw new Http404Error({ code: 6 });
+    }
+
+    return user.jsonPayload({ access_token: user.token() });
+  };
+
+  getUsers: TGetAllUser = async () => await UserModel.find();
 
   updateUser: TUpdateUser = async ({ input }) =>
     await UserModel.findByIdAndUpdate(input.id, { $set: input }, { new: true });

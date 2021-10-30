@@ -2,6 +2,7 @@ import 'reflect-metadata';
 import { Arg, Field, ObjectType, InputType, ID, ArgsType, InterfaceType } from 'type-graphql';
 import { Length, IsArray, IsEmail, MinLength, IsDate, ValidationArguments } from 'class-validator';
 
+import applyMixins from '../../helpers/applyMixin.helper';
 import Order from '../order/order.schema';
 import { ObjectIdScalar } from '../../scalar/ObjectId.scalar';
 
@@ -16,8 +17,8 @@ export class Default {
   readonly update_at!: Date;
 }
 
-@InterfaceType()
-abstract class UserName {
+@ObjectType()
+export class UserName {
   @Field()
   @Length(3, 30, {
     groups: ['registration'],
@@ -25,16 +26,16 @@ abstract class UserName {
   name!: string;
 }
 
-@InterfaceType()
-abstract class UserEmail {
+@ObjectType()
+export class UserEmail {
   @Field()
   @IsEmail()
   @Length(5, 70)
   email!: string;
 }
 
-@InterfaceType()
-abstract class UserPassword {
+@ObjectType()
+export class UserPassword {
   @Field()
   @MinLength(5, {
     message: (args: ValidationArguments) => {
@@ -48,38 +49,6 @@ abstract class UserPassword {
 export class UserAccessToken {
   @Field({ nullable: true })
   access_token!: string;
-}
-
-@ObjectType()
-export default class User extends Default {
-  @Field(type => ObjectIdScalar, { nullable: true })
-  readonly id!: string;
-
-  @Field()
-  @Length(3, 30, {
-    groups: ['registration'],
-  })
-  name!: string;
-
-  @Field()
-  @IsEmail()
-  @Length(5, 70)
-  email!: string;
-
-  @Field()
-  @MinLength(4, {
-    message: (args: ValidationArguments) => {
-      return 'password is too short';
-    },
-  })
-  password!: string;
-
-  @Field({ nullable: true })
-  access_token!: string;
-
-  @Field(type => [Order], { nullable: true })
-  @IsArray()
-  orders!: Order[];
 }
 
 @ObjectType()
@@ -118,6 +87,38 @@ export class InputCreateUser {
     },
   })
   password!: string;
+}
+
+@ObjectType()
+export default class User extends Default {
+  @Field(type => ObjectIdScalar, { nullable: true })
+  readonly id!: string;
+
+  @Field()
+  @Length(3, 30, {
+    groups: ['registration'],
+  })
+  name!: string;
+
+  @Field()
+  @IsEmail()
+  @Length(5, 70)
+  email!: string;
+
+  @Field()
+  @MinLength(4, {
+    message: (args: ValidationArguments) => {
+      return 'password is too short';
+    },
+  })
+  password!: string;
+
+  @Field({ nullable: true })
+  access_token!: string;
+
+  @Field(type => [Order], { nullable: true })
+  @IsArray()
+  orders!: Order[];
 }
 
 //  `

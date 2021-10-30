@@ -5,7 +5,8 @@ import { generateToken } from '../../lib/token';
 import { checkPassword, hashPassword } from '../../lib/password';
 import { Http403Error } from '../../errors/http-errors';
 
-import { IUserSchema, IUserInstance, IUserModel } from './user.interface';
+import { IUserSchema, IUserInstance, IUserModel, IUserDefault } from './user.interface';
+import { Dictionary } from '../../interface';
 
 const UserSchema = new Schema<IUserSchema, IUserModel>(
   {
@@ -42,13 +43,24 @@ UserSchema.methods.token = function (): string {
   return generateToken({ id: this._id.toString(), email: this.email.toString() });
 };
 
-UserSchema.methods.verifyPassword = async function (password: string) {
+UserSchema.methods.verifyPassword = async function (password: string): Promise<boolean | Error> {
   try {
     await checkPassword(this.password, password);
     return true;
   } catch (error) {
     throw new Http403Error({ code: 4 });
   }
+};
+
+UserSchema.methods.jsonPayload = function <T = Dictionary>(payload?: T) {
+  return {
+    id: this._id,
+    email: this.email,
+    orders: this?.orders,
+    create_at: this?.create_at,
+    update_at: this?.update_at,
+    ...payload,
+  };
 };
 
 const User: IUserModel = model<IUserInstance, IUserModel>(USER, UserSchema, USERS);
