@@ -3,11 +3,19 @@
 # !!!   DO NOT MODIFY THIS FILE BY YOURSELF   !!!
 # -----------------------------------------------
 
+type CreateProduct {
+  content: String!
+  creator: ID!
+  id: ID!
+  price: Float!
+  title: String!
+}
+
 type CreateUser {
   access_token: String
   create_at: Timestamp
   email: String!
-  id: ObjectId
+  id: ID
   name: String!
   update_at: Timestamp
 }
@@ -17,41 +25,126 @@ type Default {
   update_at: Timestamp
 }
 
+type FindUser {
+  access_token: String
+  create_at: Timestamp
+  email: String!
+  id: ID
+  name: String!
+  orders: [Order!]
+  update_at: Timestamp
+}
+
+input InputAddOrRemoveOrder {
+  itemId: [ID!]!
+  orderId: ID!
+  where: String!
+}
+
+input InputCreateOrder {
+  customer: ID!
+  price: Float!
+  products: [ID!]!
+}
+
+input InputCreateProduct {
+  content: String!
+  creator: String!
+  price: Float!
+  title: String!
+}
+
 input InputCreateUser {
   email: String!
   name: String!
   password: String!
 }
 
+input InputFindUser {
+  email: String
+  id: ID
+}
+
+input InputOrderId {
+  id: ID!
+}
+
+input InputProductId {
+  id: ID!
+}
+
+input InputUpdateOrder {
+  id: ID!
+  paid: Boolean
+  processed: Boolean
+  sent: Boolean
+}
+
+input InputUpdateProduct {
+  content: String
+  id: ID!
+  price: Float
+  title: String
+}
+
+input InputUserEmail {
+  email: String!
+}
+
+input InputUserId {
+  id: ID!
+}
+
 type Mutation {
+  addToOrder(data: InputAddOrRemoveOrder!): Order!
+  createOrder(data: InputCreateOrder!): Order!
+  createProduct(data: InputCreateProduct!): CreateProduct!
   createUser(data: InputCreateUser!): CreateUser!
-  updateUser(data: InputCreateUser!): CreateUser!
+  removeFromOrder(data: InputAddOrRemoveOrder!): Order!
+  updateOrder(data: InputUpdateOrder!): Order!
+  updateProduct(data: InputUpdateProduct!): UpdateProduct!
 }
 
 """Mongo object id scalar type"""
 scalar ObjectId
 
 type Order {
+  _id: ObjectId
+  customer: User!
   id: ObjectId
-  products: [User!]!
-  user: User!
+  paid: Boolean!
+  price: Float!
+  processed: Boolean!
+  products: [Product!]!
+  sent: Boolean!
+}
+
+type OrderId {
+  id: ID!
 }
 
 type Product {
   content: String!
+  create_at: Timestamp
   creator: User!
-  id: ObjectId
-  orders: [Order!]!
+  id: ID!
   price: Float!
   title: String!
+  update_at: Timestamp
+}
+
+type ProductId {
+  id: ID!
 }
 
 type Query {
-  findUser(data: InputCreateUser!): CreateUser!
-  getUsers(data: InputCreateUser!): CreateUser!
-  hello: String!
-  hello1: String!
-  hello2: String!
+  findOrder(data: InputOrderId!): Order!
+  findProduct(data: InputProductId!): Product!
+  findUser(data: InputFindUser!): FindUser!
+  getOrders: [Order!]!
+  getOrdersUserId(data: InputOrderId!): [Order!]!
+  getProducts: [Product!]!
+  getUsers: [FindUser!]!
 }
 
 """
@@ -59,11 +152,19 @@ The javascript `Date` as integer. Type represents date and time as number of mil
 """
 scalar Timestamp
 
+type UpdateProduct {
+  content: String!
+  creator: User!
+  id: ID!
+  price: Float!
+  title: String!
+}
+
 type User {
   access_token: String
   create_at: Timestamp
   email: String!
-  id: ObjectId
+  id: ID
   name: String!
   orders: [Order!]
   password: String!
@@ -76,6 +177,10 @@ type UserAccessToken {
 
 type UserEmail {
   email: String!
+}
+
+type UserId {
+  id: ID!
 }
 
 type UserName {

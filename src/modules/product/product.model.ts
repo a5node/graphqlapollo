@@ -1,16 +1,17 @@
 'use strict';
 import { Schema, model } from 'mongoose';
 
-import { IProductSchema, IProductModel } from '../../interface';
-import { ORDER, PRODUCT, PRODUCTS, USER } from '../constants';
+import { IProductSchema, IProductModel, Dictionary } from '../../interface';
+import { PRODUCT, PRODUCTS } from '../constants';
+
+import User from '../user/user.model';
 
 const ProductSchema = new Schema<IProductSchema, IProductModel>(
   {
-    price: { type: String, required: true },
+    price: { type: Number, required: true },
     title: { type: String, required: true, unique: true },
     content: { type: String, required: true },
-    creator: { type: Schema.Types.ObjectId, ref: USER, required: false },
-    orders: [{ type: Schema.Types.ObjectId, ref: ORDER, required: false }],
+    creator: { type: Schema.Types.ObjectId, ref: User, required: false },
   },
   {
     timestamps: {
@@ -19,6 +20,19 @@ const ProductSchema = new Schema<IProductSchema, IProductModel>(
     },
   },
 );
+
+ProductSchema.methods.jsonPayload = function <T = Dictionary>(payload?: T) {
+  return {
+    id: this._id,
+    price: this.price,
+    title: this.title,
+    content: this.content,
+    creator: this.creator,
+    create_at: this?.create_at,
+    update_at: this?.update_at,
+    ...payload,
+  };
+};
 
 const Product = model<IProductSchema, IProductModel>(PRODUCT, ProductSchema, PRODUCTS);
 

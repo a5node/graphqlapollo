@@ -1,34 +1,42 @@
 'use strick';
-import { Model, Schema, Document } from 'mongoose';
+import { Model, Document, ObjectId } from 'mongoose';
 
-import { IOrderSchema, IUserSchema } from '../../interface';
+import { Dictionary, IOrderSchema, IUserSchema } from '../../interface';
+
+export interface IProductDefault {
+  readonly id: string | ObjectId;
+  readonly create_at: Date;
+  readonly update_at: Date;
+}
 
 export interface IInputCreateProduct {
-  input: {
-    id?: string;
-    name: string;
-    password: string;
-    email: string;
-  };
+  price: number;
+  title: string;
+  content: string;
+  creator: string;
 }
 
 export interface IInputUpdateProduct {
-  input: {
-    id: string;
-    password?: string;
-    email?: string;
-  };
+  id: ObjectId;
+  price?: number;
+  title?: string;
+  content?: string;
 }
 
 export interface IProductSchema extends Document {
-  price: string;
+  price: number;
   title: string;
   content: string;
-  creator?: IUserSchema | Schema.Types.ObjectId;
-  orders?: IOrderSchema[] | Schema.Types.ObjectId[];
+  creator: string | IUserSchema;
 }
 
-export interface IProductInstance extends IProductSchema {}
+export interface IFindProduct {
+  id: ObjectId;
+}
+
+export interface IProductInstance extends IProductSchema {
+  jsonPayload<T = Dictionary>(payload?: T): IProductSchema & IProductDefault;
+}
 
 export interface IProductModel extends Model<IProductInstance> {}
 

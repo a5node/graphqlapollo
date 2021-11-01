@@ -1,31 +1,40 @@
 'use strict';
-import { Schema, Document, Model } from 'mongoose';
+import { Document, Model, ObjectId } from 'mongoose';
 
-import { IProductSchema, IUserSchema } from '../../interface';
+import { IProductSchema, IUserSchema, Dictionary, IDefault, IFindById } from '../../interface';
 
 export interface IOrderSchema extends Document {
-  createData: Date;
-  user: IUserSchema | Schema.Types.ObjectId;
-  products: IProductSchema[] | Schema.Types.ObjectId[];
+  price: number;
+  paid: boolean;
+  sent: boolean;
+  processed: boolean;
+  products: IProductSchema[] | ObjectId[];
+  readonly customer: IUserSchema | ObjectId;
+  readonly create_at?: Date;
+  readonly update_at?: Date;
 }
 
 export interface IInputCreateOrder {
-  input: {
-    id?: string;
-    name: string;
-    password: string;
-    email: string;
-  };
+  price: number;
+  customer: ObjectId;
+  products: ObjectId[];
 }
 
-export interface IInputUpdateOrder {
-  input: {
-    id: string;
-    password?: string;
-    email?: string;
-  };
+export interface IInputUpdateOrder extends IFindById {
+  paid?: boolean;
+  sent?: boolean;
+  processed?: boolean;
+  products?: ObjectId[];
 }
 
-export interface IOrderInstance extends IOrderSchema {}
+export interface IAddOrRemove {
+  orderId: ObjectId;
+  where: string;
+  itemId: ObjectId[];
+}
+
+export interface IOrderInstance extends IOrderSchema {
+  jsonPayload<T = Dictionary>(payload?: T): IOrderSchema & IDefault;
+}
 
 export interface IOrderModel extends Model<IOrderInstance> {}

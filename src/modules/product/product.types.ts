@@ -1,8 +1,15 @@
 'use strick';
+import { ObjectId } from 'mongoose';
+import {
+  IInputCreateProduct,
+  IInputUpdateProduct,
+  IProductInstance,
+  IFindProduct,
+  IProductSchema,
+  IProductDefault,
+} from '../../interface';
 
-import { IProductSchema, IInputCreateProduct, IInputUpdateProduct } from '../../interface';
-
-export type TGetAllProduct = () => Promise<IProductSchema[]>;
-export type TFindProductById = (id: string) => Promise<IProductSchema | null>;
-export type TCreateProduct = (input: IInputCreateProduct) => Promise<IProductSchema | null>;
-export type TUpdateProduct = (input: IInputUpdateProduct) => Promise<IProductSchema | null>;
+export type TGetProducts = () => Promise<IProductInstance[]>;
+export type TFindProductById = (data: IFindProduct) => Promise<IProductSchema & IProductDefault>;
+export type TCreateProduct = (data: IInputCreateProduct) => Promise<IProductSchema & IProductDefault>;
+export type TUpdateProduct = (data: IInputUpdateProduct) => Promise<IProductSchema & IProductDefault>;

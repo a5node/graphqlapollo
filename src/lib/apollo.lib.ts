@@ -1,6 +1,6 @@
 import 'reflect-metadata';
 import type http from 'http';
-import path from 'path';
+
 import { Express } from 'express';
 import { ApolloServer, ExpressContext } from 'apollo-server-express';
 import { ApolloServerPluginDrainHttpServer } from 'apollo-server-core';
@@ -22,9 +22,6 @@ export default async (app: Express, httpServer: http.Server): Promise<ApolloServ
       if (!config.apolloUsers.split(' ').includes(apollo_user as string)) {
         throw new Error();
       }
-
-      console.dir(`User connect ${apollo_user}`);
-
       return {
         req,
       };
@@ -34,6 +31,7 @@ export default async (app: Express, httpServer: http.Server): Promise<ApolloServ
         httpServer,
       }),
     ],
+
     apollo: {
       key: config.apolloKey,
     },

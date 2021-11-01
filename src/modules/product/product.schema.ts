@@ -1,14 +1,92 @@
-'use strict';
-import { Field, ObjectType } from 'type-graphql';
 import 'reflect-metadata';
+import { Field, ObjectType, InputType, ID } from 'type-graphql';
+import { Length, IsArray, IsEmail, MinLength, IsDate, ValidationArguments } from 'class-validator';
+import { ObjectId } from 'mongoose';
+
 import User from '../user/user.schema';
-import Order from '../order/order.schema';
-import { ObjectIdScalar } from '../../scalar/ObjectId.scalar';
+
+@InputType()
+export class InputProductId {
+  @Field(type => ID)
+  readonly id!: ObjectId;
+}
+
+@ObjectType()
+export class ProductId {
+  @Field(type => ID)
+  readonly id!: ObjectId;
+}
+
+@ObjectType()
+export class CreateProduct {
+  @Field(type => ID)
+  readonly id!: ObjectId;
+
+  @Field()
+  price!: number;
+
+  @Field()
+  title!: string;
+
+  @Field()
+  content!: string;
+
+  @Field(type => ID)
+  creator!: ObjectId;
+}
+
+@InputType()
+export class InputCreateProduct {
+  @Field()
+  price!: number;
+
+  @Field()
+  title!: string;
+
+  @Field()
+  content!: string;
+
+  @Field()
+  creator!: string;
+}
+
+@ObjectType()
+export class UpdateProduct {
+  @Field(type => ID)
+  readonly id!: ObjectId;
+
+  @Field()
+  price!: number;
+
+  @Field()
+  title!: string;
+
+  @Field()
+  content!: string;
+
+  @Field(type => User)
+  creator!: User;
+}
+
+@InputType()
+export class InputUpdateProduct {
+  @Field(type => ID)
+  readonly id!: ObjectId;
+
+  @Field({ nullable: true })
+  price!: number;
+
+  @Field({ nullable: true })
+  title!: string;
+
+  @Field({ nullable: true })
+  content!: string;
+}
 
 @ObjectType()
 export default class Product {
-  @Field(type => ObjectIdScalar, { nullable: true })
-  readonly id!: string;
+  @Field(type => ID)
+  readonly id!: ObjectId;
 
   @Field()
   price!: number;
@@ -22,41 +100,11 @@ export default class Product {
   @Field(type => User)
   creator!: User;
 
-  @Field(type => [Order])
-  orders!: Order[];
+  @Field({ nullable: true })
+  @IsDate()
+  readonly create_at!: Date;
+
+  @Field({ nullable: true })
+  @IsDate()
+  readonly update_at!: Date;
 }
-
-// `
-// type Order {
-//     _id: ID!
-//     products: [Product!]
-//     user: User!
-// }
-
-// type Product {
-//     _id: ID!
-//     title: String!
-//     price: String!
-//     orders:[Order!]
-//     creator: User
-// }
-
-// type User {
-//     _id: ID!
-//     name: String!
-//     email: String!
-//     password: String
-//     orders: [Order!]
-// }
-
-// type RootQuery {
-//     user: [User!]!
-//     product: [Order!]!
-//     order: [Product!]!
-// }
-
-// schema {
-//     query: RootQuery
-// }
-
-// `;

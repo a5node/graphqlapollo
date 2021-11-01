@@ -5,15 +5,16 @@ import { generateToken } from '../../lib/token';
 import { checkPassword, hashPassword } from '../../lib/password';
 import { Http403Error } from '../../errors/http-errors';
 
-import { IUserSchema, IUserInstance, IUserModel, IUserDefault } from './user.interface';
+import { IUserSchema, IUserInstance, IUserModel } from './user.interface';
 import { Dictionary } from '../../interface';
+import Order from '../order/order.model';
 
 const UserSchema = new Schema<IUserSchema, IUserModel>(
   {
     name: { type: String, required: true },
     email: { type: String, required: true, unique: true },
     password: { type: String, required: true },
-    orders: [{ type: Schema.Types.ObjectId, ref: ORDER }],
+    orders: [{ type: Schema.Types.ObjectId, ref: Order, required: false }],
     access_token: { type: String, required: false },
   },
   {
@@ -55,6 +56,7 @@ UserSchema.methods.verifyPassword = async function (password: string): Promise<b
 UserSchema.methods.jsonPayload = function <T = Dictionary>(payload?: T) {
   return {
     id: this._id,
+    name: this.name,
     email: this.email,
     orders: this?.orders,
     create_at: this?.create_at,

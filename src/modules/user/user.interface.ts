@@ -1,8 +1,8 @@
-import { Schema, Document, Model } from 'mongoose';
+import { Document, Model, ObjectId } from 'mongoose';
 import { IOrderSchema } from '../../interface';
 import { Dictionary } from '../../interface';
 
-import { TCreateUser, TUpdateUser, TGetAllUser, TRemoveItemFromUser, TAddItemToUser, TFindUser } from '@server/types';
+import { TCreateUser, TUpdateUser, TGetUser, TRemoveItemFromUser, TAddItemToUser, TFindUser } from '@server/types';
 
 export interface IInputCreateUser {
   name: string;
@@ -19,7 +19,7 @@ export interface IInputUpdateUser {
 }
 
 export interface IInputFindUser {
-  id?: string | Schema.Types.ObjectId;
+  id?: string | ObjectId;
   email?: string;
 }
 
@@ -27,14 +27,14 @@ export interface IUserSchema extends Document {
   name: string;
   email: string;
   password: string | any;
-  orders?: IOrderSchema[] | Schema.Types.ObjectId[] | string[];
+  orders?: IOrderSchema[] | ObjectId[] | string[];
   access_token?: string;
   readonly create_at?: Date;
   readonly update_at?: Date;
 }
 
 export interface IUserDefault {
-  readonly id: string | Schema.Types.ObjectId;
+  readonly id: string | ObjectId;
   access_token: string;
   readonly create_at: Date;
   readonly update_at: Date;
@@ -58,7 +58,7 @@ export interface IUserServer {
   createUser: TCreateUser;
   findUser: TFindUser;
   updateUser: TUpdateUser;
-  getUsers: TGetAllUser;
+  getUsers: TGetUser;
   addItemToUser: TAddItemToUser;
   removeItemFromUser: TRemoveItemFromUser;
 }

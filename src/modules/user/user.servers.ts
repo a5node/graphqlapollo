@@ -2,7 +2,7 @@ import UserModel from './user.model';
 import { Http409Error, Http404Error } from '../../errors/http-errors';
 import { IUserSchema, IUserServer } from './user.interface';
 
-import { TFindUser, TCreateUser, TUpdateUser, TGetAllUser, TRemoveItemFromUser, TAddItemToUser } from '@server/types';
+import { TFindUser, TCreateUser, TUpdateUser, TGetUser, TRemoveItemFromUser, TAddItemToUser } from '@server/types';
 import { ORDERS } from '../constants';
 
 class UserService implements IUserServer {
@@ -25,11 +25,12 @@ class UserService implements IUserServer {
 
   findUser: TFindUser = async ({ id, email }) => {
     let user;
+    const select = { user: { password: 0, orders: 0 } };
 
     if (email) {
-      user = await UserModel.findOne({ email }).populate(ORDERS, { select: { user: { password: 0, orders: 0 } } });
+      user = await UserModel.findOne({ email }).populate(ORDERS, select);
     } else {
-      user = await UserModel.findOne({ id }).populate(ORDERS, { select: { user: { password: 0, orders: 0 } } });
+      user = await UserModel.findOne({ id }).populate(ORDERS, select);
     }
 
     if (!user) {
@@ -39,7 +40,7 @@ class UserService implements IUserServer {
     return user.jsonPayload({ access_token: user.token() });
   };
 
-  getUsers: TGetAllUser = async () => await UserModel.find();
+  getUsers: TGetUser = async () => await UserModel.find();
 
   updateUser: TUpdateUser = async ({ input }) =>
     await UserModel.findByIdAndUpdate(input.id, { $set: input }, { new: true });
