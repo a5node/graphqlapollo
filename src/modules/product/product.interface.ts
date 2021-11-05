@@ -28,6 +28,8 @@ export interface IProductSchema extends Document {
   title: string;
   content: string;
   creator: string | IUserSchema;
+  isRemove: boolean;
+  amount: number;
 }
 
 export interface IFindProduct {

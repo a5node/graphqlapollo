@@ -3,6 +3,16 @@
 # !!!   DO NOT MODIFY THIS FILE BY YOURSELF   !!!
 # -----------------------------------------------
 
+type AccessToken {
+  access_token: String!
+}
+
+type Auth {
+  access_token: String
+  email: String
+  password: String!
+}
+
 type CreateProduct {
   content: String!
   creator: ID!
@@ -12,6 +22,7 @@ type CreateProduct {
 }
 
 type CreateUser {
+  _id: ObjectId
   access_token: String
   create_at: Timestamp
   email: String!
@@ -20,24 +31,61 @@ type CreateUser {
   update_at: Timestamp
 }
 
+type Creator {
+  _id: ObjectId
+  create_at: Timestamp
+  email: String!
+  name: String!
+  roles: [Role!]
+  update_at: Timestamp
+}
+
+type Customer {
+  _id: ObjectId
+  create_at: Timestamp
+  email: String!
+  name: String!
+  orders: [String!]
+  roles: [Role!]
+  update_at: Timestamp
+}
+
 type Default {
+  _id: ObjectId
   create_at: Timestamp
   update_at: Timestamp
 }
 
 type FindUser {
+  _id: ObjectId
   access_token: String
   create_at: Timestamp
   email: String!
   id: ID
   name: String!
-  orders: [Order!]
+  orders: [TypeOrder!]
+  roles: [Role!]
   update_at: Timestamp
 }
 
+input InputAccessToken {
+  access_token: String!
+}
+
 input InputAddOrRemoveOrder {
+  id: ID!
   itemId: [ID!]!
-  orderId: ID!
+  where: String!
+}
+
+input InputAddOrRemoveRoleUser {
+  id: ID!
+  role: Role
+}
+
+input InputAddOrRemoveUser {
+  id: ID!
+  itemId: [ID!]!
   where: String!
 }
 
@@ -65,6 +113,15 @@ input InputFindUser {
   id: ID
 }
 
+input InputID {
+  id: ObjectId!
+}
+
+input InputLogin {
+  email: String!
+  password: String!
+}
+
 input InputOrderId {
   id: ID!
 }
@@ -87,22 +144,25 @@ input InputUpdateProduct {
   title: String
 }
 
-input InputUserEmail {
-  email: String!
-}
-
-input InputUserId {
+input InputUpdateUser {
+  email: String
   id: ID!
+  name: String
 }
 
 type Mutation {
+  addItemToUser(data: InputAddOrRemoveUser!): FindUser!
+  addRoleToUser(data: InputAddOrRemoveRoleUser!): FindUser!
   addToOrder(data: InputAddOrRemoveOrder!): Order!
   createOrder(data: InputCreateOrder!): Order!
   createProduct(data: InputCreateProduct!): CreateProduct!
   createUser(data: InputCreateUser!): CreateUser!
+  refresh(data: InputAccessToken!): AccessToken!
   removeFromOrder(data: InputAddOrRemoveOrder!): Order!
+  removeRoleToUser(data: InputAddOrRemoveRoleUser!): FindUser!
   updateOrder(data: InputUpdateOrder!): Order!
   updateProduct(data: InputUpdateProduct!): UpdateProduct!
+  updateUser(data: InputUpdateUser!): FindUser!
 }
 
 """Mongo object id scalar type"""
@@ -110,13 +170,15 @@ scalar ObjectId
 
 type Order {
   _id: ObjectId
-  customer: User!
-  id: ObjectId
+  create_at: Timestamp
+  customer: TypeUser!
+  id: ID
   paid: Boolean!
   price: Float!
   processed: Boolean!
-  products: [Product!]!
+  products: [Products!]!
   sent: Boolean!
+  update_at: Timestamp
 }
 
 type OrderId {
@@ -124,6 +186,7 @@ type OrderId {
 }
 
 type Product {
+  _id: ObjectId
   content: String!
   create_at: Timestamp
   creator: User!
@@ -137,20 +200,70 @@ type ProductId {
   id: ID!
 }
 
+type Products {
+  _id: ObjectId
+  content: String!
+  create_at: Timestamp
+  creator: Creator!
+  price: Float!
+  title: String!
+  update_at: Timestamp
+}
+
 type Query {
   findOrder(data: InputOrderId!): Order!
-  findProduct(data: InputProductId!): Product!
+  findProduct(data: InputID!): Product!
   findUser(data: InputFindUser!): FindUser!
   getOrders: [Order!]!
   getOrdersUserId(data: InputOrderId!): [Order!]!
   getProducts: [Product!]!
   getUsers: [FindUser!]!
+  login(data: InputLogin!): User!
+}
+
+"""The basic roles for users"""
+enum Role {
+  ADMIN
+  USER
 }
 
 """
 The javascript `Date` as integer. Type represents date and time as number of milliseconds from start of UNIX epoch.
 """
 scalar Timestamp
+
+type TypeOrder {
+  _id: ObjectId
+  create_at: Timestamp
+  customer: ObjectId!
+  paid: Boolean!
+  price: Float!
+  processed: Boolean!
+  products: [TypeProduct!]!
+  sent: Boolean!
+  update_at: Timestamp
+}
+
+type TypeProduct {
+  _id: ObjectId
+  content: String!
+  create_at: Timestamp
+  creator: ObjectId!
+  price: Float!
+  title: String!
+  update_at: Timestamp
+}
+
+type TypeUser {
+  _id: ObjectId
+  create_at: Timestamp
+  email: String!
+  id: ID
+  name: String!
+  orders: [String!]
+  roles: [Role!]
+  update_at: Timestamp
+}
 
 type UpdateProduct {
   content: String!
@@ -161,32 +274,13 @@ type UpdateProduct {
 }
 
 type User {
+  _id: ObjectId
   access_token: String
   create_at: Timestamp
   email: String!
   id: ID
   name: String!
-  orders: [Order!]
-  password: String!
+  orders: [TypeOrder!]
+  roles: [Role!]
   update_at: Timestamp
-}
-
-type UserAccessToken {
-  access_token: String
-}
-
-type UserEmail {
-  email: String!
-}
-
-type UserId {
-  id: ID!
-}
-
-type UserName {
-  name: String!
-}
-
-type UserPassword {
-  password: String!
 }

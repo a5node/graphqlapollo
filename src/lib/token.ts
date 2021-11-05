@@ -15,7 +15,6 @@ export const validateToken = (token: string): Dictionary => {
     if (error.name === 'TokenExpiredError') {
       return { valid: true, expired: true };
     }
-
     return { valid: false };
   }
 

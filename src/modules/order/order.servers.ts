@@ -1,29 +1,71 @@
 'use strict';
 
 import OrderModel from './order.model';
+import UserModel from '../user/user.model';
+import ProductModel from '../product/product.model';
 import { Http409Error, Http404Error, Http400Error } from '../../errors/http-errors';
 import { TCreateOrder, TGetOrders, TGetOrdersUserId, TFindOrderById, TAddOrRemove, TUpdateOrder } from './order.types';
+import { PRODUCTS, CUSTOMER, ORDERS, CREATOR } from '../constants';
 
 class OrderService {
+  private select: unknown = {
+    __v: 0,
+  };
+
+  private populateP = (selectP?: unknown, selectC?: unknown) => {
+    return {
+      path: PRODUCTS,
+      model: ProductModel,
+      select: selectP || this.select,
+      populate: {
+        path: CREATOR,
+        select: selectC || this.select,
+        model: UserModel,
+      },
+    };
+  };
+
+  private populateC = (select?: unknown) => {
+    return {
+      path: CUSTOMER,
+      model: UserModel,
+      select: select || this.select,
+    };
+  };
+
   createOrder: TCreateOrder = async data => {
-    let order = await OrderModel.create(data);
+    let order;
+
+    order = await OrderModel.create(data);
 
     if (!order) {
       throw new Http400Error({ code: 1200 });
     }
     const select = { password: 0 };
 
-    const orders = await OrderModel.findOne({ _id: order._id }).populate('customer', select).populate('products');
+    const addUser = order.addUserOrder({ itemId: order._id, id: data.customer });
 
-    if (!orders) {
+    const orderPopulate = OrderModel.findOne({ _id: order._id })
+      .populate(this.populateC(select))
+      .populate(this.populateP())
+      .exec();
+
+    const payload = await Promise.all([addUser, orderPopulate]);
+
+    if (!payload[1]) {
       throw new Http400Error({ code: 1200 });
     }
 
-    return orders.jsonPayload();
+    return payload[1].jsonPayload();
   };
 
   findOrder: TFindOrderById = async data => {
-    const order = await OrderModel.findOne({ _id: data.id });
+    const select = { password: 0 };
+
+    const order = await OrderModel.findOne({ _id: data.id })
+      .populate(this.populateC(select))
+      .populate(this.populateP())
+      .exec();
 
     if (!order) {
       throw new Http400Error({ code: 1201 });
@@ -32,45 +74,81 @@ class OrderService {
     return order.jsonPayload();
   };
 
-  getOrders: TGetOrders = async () => await OrderModel.find();
+  getOrders: TGetOrders = async () => {
+    const select = { password: 0 };
+
+    const orders = await OrderModel.find().populate(this.populateC(select)).populate(this.populateP()).exec();
+
+    return orders;
+  };
 
   getOrdersUserId: TGetOrdersUserId = async data => {
-    const orders = await OrderModel.find({ customer: data.id }).exec();
+    const select = { password: 0 };
+    const orders = await OrderModel.find({ customer: data.id })
+      .populate(this.populateC(select))
+      .populate(this.populateP())
+      .exec();
 
     if (!orders) {
-      throw new Http400Error({ code: 1201 });
+      throw new Http400Error({ code: 1202 });
     }
 
     return orders;
   };
 
   updateOrder: TUpdateOrder = async data => {
-    const order = await OrderModel.findByIdAndUpdate(data.id, { $set: data }, { new: true });
+    const select = { password: 0 };
+    const order = await OrderModel.findByIdAndUpdate(data.id, { $set: data }, { new: true })
+      .populate(this.populateC(select))
+      .populate(this.populateP())
+      .exec();
 
     if (!order) {
-      throw new Http400Error({ code: 1201 });
+      throw new Http400Error({ code: 1203 });
     }
 
     return order.jsonPayload();
   };
 
-  addToOrder: TAddOrRemove = async ({ orderId, where, itemId }) =>
-    await OrderModel.findByIdAndUpdate(
-      orderId,
+  addToOrder: TAddOrRemove = async ({ id, where, itemId }) => {
+    const select = { password: 0 };
+    const order = await OrderModel.findByIdAndUpdate(
+      id,
       {
-        $push: { [where]: itemId },
+        $push: { [where || PRODUCTS]: itemId },
       },
       { new: true },
-    );
+    )
+      .populate(this.populateC(select))
+      .populate(this.populateP())
+      .exec();
 
-  removeFromOrder: TAddOrRemove = async ({ orderId, where, itemId }) =>
-    await OrderModel.findByIdAndUpdate(
-      orderId,
+    if (!order) {
+      throw new Http400Error({ code: 1204 });
+    }
+
+    return order.jsonPayload();
+  };
+
+  removeFromOrder: TAddOrRemove = async ({ id, where, itemId }) => {
+    const select = { password: 0 };
+    const order = await OrderModel.findByIdAndUpdate(
+      id,
       {
-        $pull: { [where]: itemId },
+        $pull: { [where || PRODUCTS]: itemId },
       },
       { new: true },
-    );
+    )
+      .populate(this.populateC(select))
+      .populate(this.populateP())
+      .exec();
+
+    if (!order) {
+      throw new Http400Error({ code: 1205 });
+    }
+
+    return order.jsonPayload();
+  };
 }
 
 export default new OrderService();

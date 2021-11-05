@@ -2,6 +2,7 @@
 import { Document, Model, ObjectId } from 'mongoose';
 
 import { IProductSchema, IUserSchema, Dictionary, IDefault, IFindById } from '../../interface';
+import { IUserInstance } from '../user/user.interface';
 
 export interface IOrderSchema extends Document {
   price: number;
@@ -9,6 +10,7 @@ export interface IOrderSchema extends Document {
   sent: boolean;
   processed: boolean;
   products: IProductSchema[] | ObjectId[];
+  isRemove: boolean;
   readonly customer: IUserSchema | ObjectId;
   readonly create_at?: Date;
   readonly update_at?: Date;
@@ -27,14 +29,14 @@ export interface IInputUpdateOrder extends IFindById {
   products?: ObjectId[];
 }
 
-export interface IAddOrRemove {
-  orderId: ObjectId;
-  where: string;
+export interface IAddOrderToUser {
+  id: ObjectId;
   itemId: ObjectId[];
 }
 
 export interface IOrderInstance extends IOrderSchema {
   jsonPayload<T = Dictionary>(payload?: T): IOrderSchema & IDefault;
+  addUserOrder(data: IAddOrderToUser): Promise<IUserInstance>;
 }
 
 export interface IOrderModel extends Model<IOrderInstance> {}

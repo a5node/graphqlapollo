@@ -10,3 +10,9 @@ export interface IDefault {
 export interface IFindById {
   id: ObjectId;
 }
+
+export interface IAddOrRemove {
+  id: ObjectId;
+  where: string;
+  itemId: ObjectId[];
+}

@@ -1,55 +1,38 @@
-'use strict';
+import 'reflect-metadata';
+import { Field, ObjectType, InputType, ID } from 'type-graphql';
+import { Length, IsArray, IsEmail, MinLength, IsDate, ValidationArguments } from 'class-validator';
 
-import { buildSchema } from 'graphql';
+@InputType()
+export class InputLogin {
+  @Field()
+  @IsEmail()
+  @Length(5, 70)
+  email!: string;
 
-export const typeUser = `type User {
-  id: ID
-  name: String
-  email: String
-  password: String
-  order:[Order]
-}`;
-
-const schema = buildSchema(`
-  ${typeUser}
-  type Order {
-    id: ID!
-    products: [Product!]
-    user: User!
+  @Field()
+  @MinLength(4, {
+    message: (args: ValidationArguments) => {
+      return 'password is too short';
+    },
+  })
+  password!: string;
 }
 
-type Product {
-    id: ID!
-    title: String!
-    price: String!
-    creator: User
-    orders:[Order!]    
+@ObjectType()
+export default class Auth {
+  @Field({ nullable: true })
+  access_token!: string;
+
+  @Field({ nullable: true })
+  @IsEmail()
+  @Length(5, 70)
+  email!: string;
+
+  @Field()
+  @MinLength(4, {
+    message: (args: ValidationArguments) => {
+      return 'password is too short';
+    },
+  })
+  password!: string;
 }
-
-  input CreateInput {
-    name: String!
-    email: String!
-    password: String!
-  }
-
-  input LoginInput {
-    email: String!
-    password: String! 
-  }
-
-  type Query {  
-    login( input: LoginInput): User
-    logout(email: String!): User    
-  }
-
-  type Mutation {
-    createUser(input: CreateInput): User   
-  }
-
-schema {
-  query : Query
-  mutation : Mutation
-}
-`);
-
-export default schema;

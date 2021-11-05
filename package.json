@@ -25,6 +25,7 @@
     "express": "^4.17.1",
     "express-bearer-token": "^2.4.0",
     "express-graphql": "^0.12.0",
+    "express-jwt": "^6.1.0",
     "express-mongo-sanitize": "^2.1.0",
     "express-rate-limit": "^5.5.0",
     "graphql": "^15.6.1",
@@ -36,6 +37,7 @@
     "morgan": "^1.10.0",
     "ncp": "^2.0.0",
     "reflect-metadata": "^0.1.13",
+    "remove": "^0.1.5",
     "tedious": "^12.0.0",
     "type-graphql": "^1.1.1",
     "uuid": "^8.3.2"

@@ -1,28 +1,15 @@
-import {
-  IUserInstance,
-  IInputUpdateUser,
-  IInputCreateUser,
-  IUserSchema,
-  IUserDefault,
-  IInputFindUser,
-} from './user.interface';
-import { InputFindUser, FindUser } from './user.schema';
+import { IUserInstance, IInputCreateUser, IUserSchema, IUserDefault, IInputUpdateUser } from './user.interface';
+import { InputFindUser, FindUser, InputUpdateUser, InputCreateUser } from './user.schema';
+import { IAddOrRemove, IAddOrRemoveRole } from '../../interface';
 
-export type TRemoveItemFromUser = (input: {
-  userId: string;
-  where: string;
-  itemId: string;
-}) => Promise<IUserInstance | null>;
+export type TAddItemToUser = (data: IAddOrRemove) => Promise<FindUser | (IUserSchema & IUserDefault)>;
+export type TCreateUser = (data: IInputCreateUser | InputCreateUser) => Promise<IUserSchema & IUserDefault>;
+export type TUpdateUser = (
+  data: IInputUpdateUser | InputUpdateUser,
+) => Promise<FindUser | (IUserSchema & IUserDefault)>;
+export type TFindUser = (data: InputFindUser) => Promise<FindUser | (IUserSchema & IUserDefault)>;
 
-export type TAddItemToUser = (input: {
-  userId: string;
-  where: string;
-  itemId: string;
-}) => Promise<IUserInstance | null>;
+export type TAddOrRemoveRole = (data: IAddOrRemoveRole) => Promise<FindUser | (IUserSchema & IUserDefault)>;
 
-export type TGetUser = () => Promise<IUserInstance[]>;
-export type TFindUserByEmail = (email: string) => Promise<IUserInstance | null>;
-export type TFindUserById = (id: string) => Promise<IUserInstance | null>;
-export type TCreateUser = ({ email, password, name }: IInputCreateUser) => Promise<IUserSchema & IUserDefault>;
-export type TUpdateUser = (input: IInputUpdateUser) => Promise<IUserInstance | null>;
-export type TFindUser = ({ email, id }: InputFindUser) => Promise<FindUser | (IUserSchema & IUserDefault)>;
+//TODO:
+export type TGetUsers = () => Promise<IUserInstance[]>;

@@ -8,10 +8,9 @@ export interface ErrorPayload extends Dictionary {
 
 export abstract class HttpError extends Error {
   public readonly status!: number;
-  public readonly name!: string;
   public readonly code!: number | string;
   public readonly payload!: Dictionary;
-
+  protected stacktrace!: boolean;
   protected defaultCode!: number | string;
   protected defaultMessage!: string;
 
@@ -21,19 +20,12 @@ export abstract class HttpError extends Error {
     if (typeof payload === 'string') {
       this.message = payload;
     } else {
-      this.payload = {
-        success: false,
-        error: {
-          ...payload,
-        },
-      };
-
       this.code = payload.code || this.defaultCode;
       this.status = payload.status || this.status;
       this.message = payload.message || this.defaultMessage;
     }
-
-    this.name = this.constructor.name;
+    this.stacktrace = true;
+    this.message = payload.message || this.defaultMessage;
     Error.captureStackTrace(this, this.constructor);
   }
 

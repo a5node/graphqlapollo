@@ -3,93 +3,13 @@ import { Field, ObjectType, InputType, ID } from 'type-graphql';
 import { Length, IsArray, IsEmail, MinLength, IsDate, ValidationArguments } from 'class-validator';
 import { ObjectId } from 'mongoose';
 
-import Order from '../order/order.schema';
-import { IOrderSchema } from '../order/order.interface';
-
-@ObjectType()
-export class Default {
-  @Field({ nullable: true })
-  @IsDate()
-  readonly create_at!: Date;
-
-  @Field({ nullable: true })
-  @IsDate()
-  readonly update_at!: Date;
-}
-
-@ObjectType()
-export class UserId {
-  @Field(type => ID)
-  readonly id!: ObjectId;
-}
+import Order, { TypeOrder } from '../order/order.schema';
+import { Default } from '../default.schema';
+import { Role } from '../../interface';
+import { IAddOrRemove, IInputCreateUser, IInputFindUser, IInputUpdateUser, IAddOrRemoveRole } from '../../interface';
 
 @InputType()
-export class InputUserId {
-  @Field(type => ID)
-  readonly id!: ObjectId;
-}
-
-@ObjectType()
-export class UserName {
-  @Field()
-  @Length(3, 30, {
-    groups: ['registration'],
-  })
-  name!: string;
-}
-
-@InputType()
-export class InputUserEmail {
-  @Field()
-  @IsEmail()
-  @Length(5, 70)
-  email!: string;
-}
-
-@ObjectType()
-export class UserEmail {
-  @Field()
-  @IsEmail()
-  @Length(5, 70)
-  email!: string;
-}
-
-@ObjectType()
-export class UserPassword {
-  @Field()
-  @MinLength(5, {
-    message: (args: ValidationArguments) => {
-      return 'password is too short';
-    },
-  })
-  password!: string;
-}
-
-@ObjectType()
-export class UserAccessToken {
-  @Field({ nullable: true })
-  access_token!: string;
-}
-
-@ObjectType()
-export class CreateUser extends Default {
-  @Field(type => ID, { nullable: true })
-  readonly id!: ObjectId;
-
-  @Field()
-  @Length(3, 30)
-  name!: string;
-
-  @Field()
-  @IsEmail()
-  @Length(5, 70)
-  email!: string;
-
-  @Field({ nullable: true })
-  access_token!: string;
-}
-@InputType()
-export class InputCreateUser {
+export class InputCreateUser implements IInputCreateUser {
   @Field()
   @Length(3, 30)
   name!: string;
@@ -109,7 +29,19 @@ export class InputCreateUser {
 }
 
 @InputType()
-export class InputFindUser {
+export class InputAddOrRemoveUser implements IAddOrRemove {
+  @Field(type => ID)
+  id!: ObjectId;
+
+  @Field()
+  where!: string;
+
+  @Field(type => [ID])
+  itemId!: ObjectId[];
+}
+
+@InputType()
+export class InputFindUser implements IInputFindUser {
   @Field(type => ID, { nullable: true })
   readonly id!: ObjectId;
 
@@ -117,6 +49,27 @@ export class InputFindUser {
   @IsEmail()
   @Length(5, 70)
   email!: string;
+}
+
+@InputType()
+export class InputUpdateUser implements IInputUpdateUser {
+  @Field(type => ID)
+  readonly id!: ObjectId;
+
+  @Field({ nullable: true })
+  name!: string;
+
+  @Field({ nullable: true })
+  email!: string;
+}
+
+@InputType()
+export class InputAddOrRemoveRoleUser implements IAddOrRemoveRole {
+  @Field(type => ID)
+  readonly id!: ObjectId;
+
+  @Field(type => Role, { nullable: true })
+  role!: Role;
 }
 
 @ObjectType()
@@ -125,22 +78,79 @@ export class FindUser extends Default {
   readonly id!: ObjectId;
 
   @Field()
-  @Length(3, 30, {
-    groups: ['registration'],
-  })
   name!: string;
 
   @Field()
-  @IsEmail()
-  @Length(5, 70)
   email!: string;
 
   @Field({ nullable: true })
   access_token!: string;
 
-  @Field(type => [Order], { nullable: true })
-  @IsArray()
-  orders!: Order[] | IOrderSchema[] | ObjectId[] | string[];
+  @Field(type => [TypeOrder], { nullable: true })
+  orders!: TypeOrder[];
+
+  @Field(type => [Role], { nullable: true })
+  roles!: Role[];
+}
+
+@ObjectType()
+export class CreateUser extends Default {
+  @Field(type => ID, { nullable: true })
+  readonly id!: ObjectId;
+
+  @Field()
+  name!: string;
+
+  @Field()
+  email!: string;
+
+  @Field({ nullable: true })
+  access_token!: string;
+}
+
+@ObjectType()
+export class TypeUser extends Default {
+  @Field(type => ID, { nullable: true })
+  readonly id!: ObjectId;
+
+  @Field()
+  name!: string;
+
+  @Field()
+  email!: string;
+
+  @Field(type => [String], { nullable: true })
+  orders!: ObjectId[] | string[];
+
+  @Field(type => [Role], { nullable: true })
+  roles!: Role[];
+}
+
+@ObjectType()
+export class Creator extends Default {
+  @Field()
+  name!: string;
+
+  @Field()
+  email!: string;
+
+  @Field(type => [Role], { nullable: true })
+  roles!: Role[];
+}
+
+@ObjectType()
+export class Customer extends Default {
+  @Field()
+  name!: string;
+
+  @Field()
+  email!: string;
+
+  @Field(type => [String], { nullable: true })
+  orders!: ObjectId[] | string[];
+
+  @Field(type => [Role], { nullable: true })
+  roles!: Role[];
 }
 
 @ObjectType()
@@ -149,28 +159,17 @@ export default class User extends Default {
   readonly id!: ObjectId;
 
   @Field()
-  @Length(3, 30, {
-    groups: ['registration'],
-  })
   name!: string;
 
   @Field()
-  @IsEmail()
-  @Length(5, 70)
   email!: string;
-
-  @Field()
-  @MinLength(4, {
-    message: (args: ValidationArguments) => {
-      return 'password is too short';
-    },
-  })
-  password!: string;
 
   @Field({ nullable: true })
   access_token!: string;
 
-  @Field(type => [Order], { nullable: true })
-  @IsArray()
-  orders!: Order[];
+  @Field(type => [TypeOrder], { nullable: true })
+  orders!: TypeOrder[];
+
+  @Field(type => [Role], { nullable: true })
+  roles!: Role[];
 }

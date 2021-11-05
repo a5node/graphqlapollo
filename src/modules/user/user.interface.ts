@@ -1,8 +1,9 @@
 import { Document, Model, ObjectId } from 'mongoose';
-import { IOrderSchema } from '../../interface';
+
+import { IOrderSchema, Role } from '../../interface';
 import { Dictionary } from '../../interface';
 
-import { TCreateUser, TUpdateUser, TGetUser, TRemoveItemFromUser, TAddItemToUser, TFindUser } from '@server/types';
+import { TCreateUser, TUpdateUser, TGetUsers, TAddItemToUser, TFindUser } from '@server/types';
 
 export interface IInputCreateUser {
   name: string;
@@ -11,16 +12,19 @@ export interface IInputCreateUser {
 }
 
 export interface IInputUpdateUser {
-  input: {
-    id: string;
-    password?: string;
-    email?: string;
-  };
+  id: string | ObjectId;
+  password?: string;
+  email?: string;
 }
 
 export interface IInputFindUser {
   id?: string | ObjectId;
   email?: string;
+}
+
+export interface IAddOrRemoveRole {
+  id: string | ObjectId;
+  role: Role;
 }
 
 export interface IUserSchema extends Document {
@@ -29,6 +33,7 @@ export interface IUserSchema extends Document {
   password: string | any;
   orders?: IOrderSchema[] | ObjectId[] | string[];
   access_token?: string;
+  roles: string[];
   readonly create_at?: Date;
   readonly update_at?: Date;
 }
@@ -40,6 +45,17 @@ export interface IUserDefault {
   readonly update_at: Date;
 }
 
+export interface Context {
+  user?: {
+    id: ObjectId;
+    email: string;
+    roles: string[];
+    iat: number;
+    exp: number;
+    valid: boolean;
+  };
+}
+
 export interface IUserInstance extends IUserSchema {
   token(): string;
   verifyPassword(password: string): Promise<boolean>;
@@ -47,10 +63,6 @@ export interface IUserInstance extends IUserSchema {
 }
 
 export interface IUserModel extends Model<IUserInstance> {
-  findUserByIdAndUpdate: (id: string | number, newParams: string) => Promise<IUserSchema>;
-  findUserByEmail: (email: string) => Promise<IUserSchema>;
-  removeItemFromUser: (userId: string | number, where: string, itemId: string | number) => Promise<IUserSchema>;
-  addItemToUser: (userId: string | number, where: string, itemId: string | number) => Promise<IUserSchema>;
   createUser: (date: IUserSchema) => Promise<IUserInstance>;
 }
 
@@ -58,7 +70,6 @@ export interface IUserServer {
   createUser: TCreateUser;
   findUser: TFindUser;
   updateUser: TUpdateUser;
-  getUsers: TGetUser;
+  getUsers: TGetUsers;
   addItemToUser: TAddItemToUser;
-  removeItemFromUser: TRemoveItemFromUser;
 }

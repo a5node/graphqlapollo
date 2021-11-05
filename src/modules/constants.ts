@@ -8,3 +8,6 @@ export const PRODUCT: string = 'product';
 export const PRODUCTS: string = 'products';
 
 export const CREATOR: string = 'creator';
+export const CUSTOMER: string = 'customer';
+
+export const VISITOR: string = 'VISITOR';

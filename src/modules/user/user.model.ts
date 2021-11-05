@@ -1,10 +1,10 @@
 import { Schema, model } from 'mongoose';
 
-import { ORDER, USER, USERS } from '../constants';
+import { USER, USERS } from '../constants';
 import { generateToken } from '../../lib/token';
 import { checkPassword, hashPassword } from '../../lib/password';
 import { Http403Error } from '../../errors/http-errors';
-
+import { Role } from '../../interface';
 import { IUserSchema, IUserInstance, IUserModel } from './user.interface';
 import { Dictionary } from '../../interface';
 import Order from '../order/order.model';
@@ -12,9 +12,23 @@ import Order from '../order/order.model';
 const UserSchema = new Schema<IUserSchema, IUserModel>(
   {
     name: { type: String, required: true },
-    email: { type: String, required: true, unique: true },
-    password: { type: String, required: true },
-    orders: [{ type: Schema.Types.ObjectId, ref: Order, required: false }],
+    email: { type: String, required: true, unique: true, immutable: true },
+    password: {
+      type: String,
+      required: true,
+      // select: false  //Запрет на выдачу
+    },
+    roles: { type: [String], enum: Object.values(Role), required: true, default: [Role.USER] },
+    orders: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: Order,
+        required: false,
+        autopopulate: {
+          select: { customer: 0 },
+        },
+      },
+    ],
     access_token: { type: String, required: false },
   },
   {
@@ -27,7 +41,7 @@ const UserSchema = new Schema<IUserSchema, IUserModel>(
 
 UserSchema.statics.createUser = async function (date: Partial<IUserSchema>): Promise<IUserInstance> {
   if (!date.email || !date.password) {
-    throw new Error('Email or password not provided');
+    throw new Http403Error({ code: 13, message: 'Email or password not provided' });
   }
 
   const password = await hashPassword(date.password);
@@ -41,15 +55,15 @@ UserSchema.statics.createUser = async function (date: Partial<IUserSchema>): Pro
 };
 
 UserSchema.methods.token = function (): string {
-  return generateToken({ id: this._id.toString(), email: this.email.toString() });
+  return generateToken({ id: this._id.toString(), email: this.email.toString(), roles: this.roles });
 };
 
 UserSchema.methods.verifyPassword = async function (password: string): Promise<boolean | Error> {
   try {
-    await checkPassword(this.password, password);
-    return true;
+    const pass = await checkPassword(this.password, password);
+    return pass;
   } catch (error) {
-    throw new Http403Error({ code: 4 });
+    throw error;
   }
 };
 
@@ -58,9 +72,10 @@ UserSchema.methods.jsonPayload = function <T = Dictionary>(payload?: T) {
     id: this._id,
     name: this.name,
     email: this.email,
-    orders: this?.orders,
-    create_at: this?.create_at,
-    update_at: this?.update_at,
+    orders: this.orders,
+    roles: this.roles,
+    create_at: this.create_at,
+    update_at: this.update_at,
     ...payload,
   };
 };

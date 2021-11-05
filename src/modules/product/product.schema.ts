@@ -3,7 +3,9 @@ import { Field, ObjectType, InputType, ID } from 'type-graphql';
 import { Length, IsArray, IsEmail, MinLength, IsDate, ValidationArguments } from 'class-validator';
 import { ObjectId } from 'mongoose';
 
-import User from '../user/user.schema';
+import User, { Creator } from '../user/user.schema';
+import { Default } from '../default.schema';
+import { ObjectIdScalar } from '../../scalar/ObjectId.scalar';
 
 @InputType()
 export class InputProductId {
@@ -84,7 +86,37 @@ export class InputUpdateProduct {
 }
 
 @ObjectType()
-export default class Product {
+export class TypeProduct extends Default {
+  @Field()
+  price!: number;
+
+  @Field()
+  title!: string;
+
+  @Field()
+  content!: string;
+
+  @Field(type => ObjectIdScalar)
+  creator!: ObjectId;
+}
+
+@ObjectType()
+export class Products extends Default {
+  @Field()
+  price!: number;
+
+  @Field()
+  title!: string;
+
+  @Field()
+  content!: string;
+
+  @Field(type => Creator)
+  creator!: Creator;
+}
+
+@ObjectType()
+export default class Product extends Default {
   @Field(type => ID)
   readonly id!: ObjectId;
 
@@ -99,12 +131,4 @@ export default class Product {
 
   @Field(type => User)
   creator!: User;
-
-  @Field({ nullable: true })
-  @IsDate()
-  readonly create_at!: Date;
-
-  @Field({ nullable: true })
-  @IsDate()
-  readonly update_at!: Date;
 }

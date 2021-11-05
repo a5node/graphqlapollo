@@ -9,9 +9,16 @@ import User from '../user/user.model';
 const ProductSchema = new Schema<IProductSchema, IProductModel>(
   {
     price: { type: Number, required: true },
-    title: { type: String, required: true, unique: true },
+    title: { type: String, required: true, immutable: true },
     content: { type: String, required: true },
-    creator: { type: Schema.Types.ObjectId, ref: User, required: false },
+    creator: {
+      type: Schema.Types.ObjectId,
+      ref: User,
+      required: true,
+      immutable: true,
+    },
+    amount: { type: Number, default: 0, required: true },
+    isRemove: { type: Boolean, default: false, required: true },
   },
   {
     timestamps: {

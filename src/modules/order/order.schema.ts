@@ -1,13 +1,13 @@
-'use strict';
 import 'reflect-metadata';
 import { Field, ObjectType, InputType, ID } from 'type-graphql';
 import { Length, IsArray, IsEmail, MinLength, IsDate, ValidationArguments } from 'class-validator';
 import { ObjectId } from 'mongoose';
 
-import User from '../user/user.schema';
-import Product from '../product/product.schema';
+import User, { TypeUser } from '../user/user.schema';
+import Product, { TypeProduct, Products } from '../product/product.schema';
 import { ObjectIdScalar } from '../../scalar/ObjectId.scalar';
 
+import { Default } from '../default.schema';
 @InputType()
 export class InputOrderId {
   @Field(type => ID)
@@ -50,7 +50,7 @@ export class InputUpdateOrder {
 @InputType()
 export class InputAddOrRemoveOrder {
   @Field(type => ID)
-  orderId!: ObjectId;
+  id!: ObjectId;
 
   @Field()
   where!: string;
@@ -60,18 +60,36 @@ export class InputAddOrRemoveOrder {
 }
 
 @ObjectType()
-export default class Order {
-  @Field(type => ObjectIdScalar, { nullable: true })
+export class TypeOrder extends Default {
+  @Field(type => ObjectIdScalar)
+  customer!: ObjectId;
+
+  @Field(type => [TypeProduct])
+  products!: TypeProduct[];
+
+  @Field()
+  price!: number;
+
+  @Field()
+  paid!: boolean;
+
+  @Field()
+  sent!: boolean;
+
+  @Field()
+  processed!: boolean;
+}
+
+@ObjectType()
+export default class Order extends Default {
+  @Field(type => ID, { nullable: true })
   readonly id!: ObjectId;
 
-  @Field(type => ObjectIdScalar, { nullable: true })
-  readonly _id!: ObjectId;
+  @Field(type => TypeUser)
+  customer!: TypeUser;
 
-  @Field(type => User)
-  customer!: User;
-
-  @Field(type => [Product])
-  products!: Product[];
+  @Field(type => [Products])
+  products!: Products[];
 
   @Field()
   price!: number;
