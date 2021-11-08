@@ -17,7 +17,6 @@ export default async (app: Express, httpServer: http.Server): Promise<ApolloServ
 
   const server = new ApolloServer({
     schema,
-
     context: async ({ req, res }: { req: Request; res: Response }) => {
       const user = await authServers.auth(req);
 
@@ -27,7 +26,6 @@ export default async (app: Express, httpServer: http.Server): Promise<ApolloServ
         res,
       };
     },
-
     plugins: [
       ApolloServerPluginDrainHttpServer({
         httpServer,
@@ -50,11 +48,21 @@ export default async (app: Express, httpServer: http.Server): Promise<ApolloServ
     app,
     path: config.apolloOptions.path,
     cors: {
-      origin: (config.CORS || '*').split(' ').map(host => {
-        return new RegExp(host);
-      }),
       credentials: true,
-      optionsSuccessStatus: 200,
+      origin: (origin, callback) => {
+        const whitelist = [
+          'http://localhost:3307',
+          'http://a5node-graphql-apollo.herokuapp.com',
+          'https://a5node-graphql-apollo.herokuapp.com',
+          'https://studio.apollographql.com',
+        ];
+
+        if (whitelist.indexOf(origin as string) !== -1) {
+          callback(null, true);
+        } else {
+          callback(new Error('Not allowed by CORS'));
+        }
+      },
     },
   });
 
