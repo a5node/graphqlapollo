@@ -19,24 +19,6 @@ export class ProductId {
   readonly id!: ObjectId;
 }
 
-@ObjectType()
-export class CreateProduct {
-  @Field(type => ID)
-  readonly id!: ObjectId;
-
-  @Field()
-  price!: number;
-
-  @Field()
-  title!: string;
-
-  @Field()
-  content!: string;
-
-  @Field(type => ID)
-  creator!: ObjectId;
-}
-
 @InputType()
 export class InputCreateProduct {
   @Field()
@@ -49,7 +31,28 @@ export class InputCreateProduct {
   content!: string;
 
   @Field()
+  amount!: number;
+
+  @Field()
   creator!: string;
+}
+
+@InputType()
+export class InputUpdateProduct {
+  @Field(type => ID)
+  readonly id!: ObjectId;
+
+  @Field({ nullable: true })
+  price!: number;
+
+  @Field({ nullable: true })
+  title!: string;
+
+  @Field({ nullable: true })
+  content!: string;
+
+  @Field({ nullable: true })
+  amount!: number;
 }
 
 @ObjectType()
@@ -66,68 +69,59 @@ export class UpdateProduct {
   @Field()
   content!: string;
 
+  @Field()
+  amount!: number;
+
+  @Field()
+  isRemove!: boolean;
+
   @Field(type => User)
   creator!: User;
 }
 
-@InputType()
-export class InputUpdateProduct {
-  @Field(type => ID)
-  readonly id!: ObjectId;
-
-  @Field({ nullable: true })
+@ObjectType()
+export class ProductDefault extends Default {
+  @Field()
   price!: number;
 
-  @Field({ nullable: true })
+  @Field()
   title!: string;
 
-  @Field({ nullable: true })
+  @Field()
   content!: string;
+
+  @Field()
+  amount!: number;
+
+  @Field()
+  isRemove!: boolean;
 }
 
 @ObjectType()
-export class TypeProduct extends Default {
-  @Field()
-  price!: number;
+export class CreateProduct extends ProductDefault {
+  @Field(type => ID)
+  readonly id!: ObjectId;
 
-  @Field()
-  title!: string;
+  @Field(type => ID)
+  creator!: ObjectId;
+}
 
-  @Field()
-  content!: string;
-
+@ObjectType()
+export class TypeProduct extends ProductDefault {
   @Field(type => ObjectIdScalar)
   creator!: ObjectId;
 }
 
 @ObjectType()
-export class Products extends Default {
-  @Field()
-  price!: number;
-
-  @Field()
-  title!: string;
-
-  @Field()
-  content!: string;
-
+export class Products extends ProductDefault {
   @Field(type => Creator)
   creator!: Creator;
 }
 
 @ObjectType()
-export default class Product extends Default {
+export default class Product extends ProductDefault {
   @Field(type => ID)
   readonly id!: ObjectId;
-
-  @Field()
-  price!: number;
-
-  @Field()
-  title!: string;
-
-  @Field()
-  content!: string;
 
   @Field(type => User)
   creator!: User;

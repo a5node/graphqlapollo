@@ -1,0 +1,512 @@
+{
+	"info": {
+		"_postman_id": "620bf159-6f8b-4e58-96f0-15a5aba1661c",
+		"name": "a5_GraphQl",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "User",
+			"item": [
+				{
+					"name": "Update user",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "APOLLO_USER",
+								"value": "iO4z3C-2j3JHEUC8BIP1eQ",
+								"type": "text"
+							},
+							{
+								"key": "APOLLO_KEY",
+								"value": "3f585b27-32ab-4eee-95af-7292fcc74e38",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYxODM5YjUyNmUxZTQ0NjZlZWYwNDJlNSIsImVtYWlsIjoidGVzdEB0ZXN0LmNvbSIsInJvbGVzIjpbIkFETUlOIl0sImlhdCI6MTYzNjExOTUxMSwiZXhwIjoxNjM2NzI0MzExfQ.53sFUQmd93-nJ1hZN63zXJq1qZbbHFyA6M-2iL_3YUY",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "mutation CreateOrderMutation($updateUserData: InputUpdateUser!) {\r\n  updateUser(data: $updateUserData) {\r\n    id\r\n    create_at\r\n    update_at\r\n    name\r\n    email\r\n    access_token\r\n    roles\r\n    orders {\r\n      _id\r\n      create_at\r\n      update_at\r\n      customer\r\n      price\r\n      paid\r\n      sent\r\n      processed\r\n      products {\r\n        _id\r\n        create_at\r\n        update_at\r\n        price\r\n        title\r\n        content\r\n        creator\r\n      }\r\n    }\r\n  }\r\n}\r\n\r\n",
+								"variables": "{\r\n\"updateUserData\": {\r\n  \"id\": \"61839b526e1e4466eef042e5\",\r\n  \"name\": \"test change\",\r\n  \"email\": \"test@test.com\"\r\n}\r\n}"
+							}
+						},
+						"url": {
+							"raw": "https://a5node-graphql-apollo.herokuapp.com/api/graphql",
+							"protocol": "https",
+							"host": [
+								"a5node-graphql-apollo",
+								"herokuapp",
+								"com"
+							],
+							"path": [
+								"api",
+								"graphql"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Find user by id",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "APOLLO_USER",
+								"value": "iO4z3C-2j3JHEUC8BIP1eQ",
+								"type": "text"
+							},
+							{
+								"key": "APOLLO_KEY",
+								"value": "3f585b27-32ab-4eee-95af-7292fcc74e38",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "query Query($data: InputFindUser!) {\r\n  findUser(data: $data) {\r\n    create_at\r\n    update_at\r\n    id\r\n    name\r\n    email\r\n    access_token\r\n     roles\r\n    orders {\r\n      _id\r\n      customer\r\n      price\r\n      paid\r\n      sent\r\n      processed\r\n      products {\r\n        _id\r\n        update_at\r\n        create_at\r\n        price\r\n        title\r\n        content\r\n        creator\r\n      }\r\n    }\r\n    _id\r\n  }\r\n}",
+								"variables": "{\r\n\"data\": {\r\n  \"id\": \"61839b526e1e4466eef042e5\"\r\n}\r\n}"
+							}
+						},
+						"url": {
+							"raw": "https://a5node-graphql-apollo.herokuapp.com/api/graphql",
+							"protocol": "https",
+							"host": [
+								"a5node-graphql-apollo",
+								"herokuapp",
+								"com"
+							],
+							"path": [
+								"api",
+								"graphql"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create user",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYxNzJkMTI1MmI1ZWI0NWJlNmY1ODNlZCIsImVtYWlsIjoidGVzdDI0QHRlc3QuY29tIiwiaWF0IjoxNjM0OTE0NTk3LCJleHAiOjE2MzU1MTkzOTd9.AbiUDbNQvfVNGdK7cMS0r6TiR5vgx-ejc3KSktE-6Ug",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "APOLLO_USER",
+								"value": "iO4z3C-2j3JHEUC8BIP1eQ",
+								"type": "text"
+							},
+							{
+								"key": "",
+								"value": "3f585b27-32ab-4eee-95af-7292fcc74e38",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "mutation CreateUserMutation($data: InputCreateUser!){\r\n  createUser(data: $data) {\r\n    update_at\r\n    create_at\r\n    id\r\n    name\r\n    email\r\n    access_token\r\n  }\r\n}",
+								"variables": "{\r\n\"data\": {\r\n  \"name\": \"test\",\r\n  \"email\":\"test10015@test.com\",\r\n  \"password\": \"test1\"\r\n}\r\n}"
+							}
+						},
+						"url": {
+							"raw": "https://a5node-graphql-apollo.herokuapp.com/api/graphql",
+							"protocol": "https",
+							"host": [
+								"a5node-graphql-apollo",
+								"herokuapp",
+								"com"
+							],
+							"path": [
+								"api",
+								"graphql"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get users",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "APOLLO_KEY",
+								"value": "3f585b27-32ab-4eee-95af-7292fcc74e38",
+								"type": "text"
+							},
+							{
+								"key": "APOLLO_USER",
+								"value": "iO4z3C-2j3JHEUC8BIP1eQ",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYxODM5YjUyNmUxZTQ0NjZlZWYwNDJlNSIsImVtYWlsIjoidGVzdEB0ZXN0LmNvbSIsInJvbGVzIjpbIkFETUlOIl0sImlhdCI6MTYzNjExOTUxMSwiZXhwIjoxNjM2NzI0MzExfQ.53sFUQmd93-nJ1hZN63zXJq1qZbbHFyA6M-2iL_3YUY",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "\r\nquery Query {\r\n  getUsers {\r\n    id\r\n    email\r\n    orders {\r\n      _id\r\n      price\r\n      paid\r\n      sent\r\n      processed\r\n      customer\r\n      products {\r\n        price\r\n        title\r\n        content\r\n        update_at\r\n        create_at\r\n        creator     \r\n      }\r\n    }\r\n    name\r\n    access_token\r\n    update_at\r\n    create_at\r\n    roles\r\n  } \r\n}\r\n",
+								"variables": ""
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3307/api/graphql",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3307",
+							"path": [
+								"api",
+								"graphql"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Add role user",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "APOLLO_USER",
+								"value": "iO4z3C-2j3JHEUC8BIP1eQ",
+								"type": "text"
+							},
+							{
+								"key": "APOLLO_KEY",
+								"value": "3f585b27-32ab-4eee-95af-7292fcc74e38",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYxODM5YjUyNmUxZTQ0NjZlZWYwNDJlNSIsImVtYWlsIjoidGVzdEB0ZXN0LmNvbSIsInJvbGVzIjpbIkFETUlOIl0sImlhdCI6MTYzNjExOTUxMSwiZXhwIjoxNjM2NzI0MzExfQ.53sFUQmd93-nJ1hZN63zXJq1qZbbHFyA6M-2iL_3YUY",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "mutation AddItemToUserMutation($data: InputAddOrRemoveRoleUser!) {\r\n  addRoleToUser(data: $data) {\r\n    create_at\r\n    update_at\r\n    id\r\n    name\r\n    email\r\n    access_token\r\n    orders {\r\n      _id\r\n      customer\r\n    products {\r\n      create_at\r\n      update_at\r\n      _id\r\n      price\r\n      title\r\n      content\r\n      creator\r\n    }\r\n      paid\r\n      price\r\n      sent\r\n      processed\r\n    }\r\n  }\r\n}\r\n",
+								"variables": "{\r\n\"data\": {\r\n  \"role\": \"ADMIN\",\r\n  \"id\": \"6184f094dbeeb84e7dad8bb8\"\r\n}\r\n}"
+							}
+						},
+						"url": {
+							"raw": "https://a5node-graphql-apollo.herokuapp.com/api/graphql",
+							"protocol": "https",
+							"host": [
+								"a5node-graphql-apollo",
+								"herokuapp",
+								"com"
+							],
+							"path": [
+								"api",
+								"graphql"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Order",
+			"item": [
+				{
+					"name": "Create order",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "APOLLO_USER",
+								"value": "iO4z3C-2j3JHEUC8BIP1eQ",
+								"type": "text"
+							},
+							{
+								"key": "APOLLO_KEY",
+								"value": "3f585b27-32ab-4eee-95af-7292fcc74e38",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYxODM5YjUyNmUxZTQ0NjZlZWYwNDJlNSIsImVtYWlsIjoidGVzdEB0ZXN0LmNvbSIsInJvbGVzIjpbIkFETUlOIl0sImlhdCI6MTYzNjExOTUxMSwiZXhwIjoxNjM2NzI0MzExfQ.53sFUQmd93-nJ1hZN63zXJq1qZbbHFyA6M-2iL_3YUY",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "mutation CreateOrderMutation($createOrderData: InputCreateOrder!) {\r\n  createOrder(data: $createOrderData) {\r\n    _id\r\n    create_at\r\n    update_at\r\n    id\r\n    price\r\n    paid\r\n    sent\r\n    processed\r\n    customer {\r\n      _id\r\n      create_at\r\n      update_at\r\n      name\r\n      email\r\n      orders\r\n      roles\r\n    }\r\n    products {\r\n      _id\r\n      create_at\r\n      update_at\r\n      price\r\n      title\r\n      content\r\n      creator {\r\n        _id\r\n        create_at\r\n        update_at\r\n        name\r\n        email\r\n        roles\r\n      }\r\n    }\r\n  }\r\n}\r\n",
+								"variables": "{\r\n\"createOrderData\": {\r\n \"customer\": \"61839b526e1e4466eef042e5\",\r\n  \"products\": [\"6183fd9ec24c11fc763c6556\", \"6183fdb4c24c11fc763c655c\"],\r\n  \"price\": 4555\r\n}\r\n}"
+							}
+						},
+						"url": {
+							"raw": "https://a5node-graphql-apollo.herokuapp.com/api/graphql",
+							"protocol": "https",
+							"host": [
+								"a5node-graphql-apollo",
+								"herokuapp",
+								"com"
+							],
+							"path": [
+								"api",
+								"graphql"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Find order by id",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "APOLLO_USER",
+								"value": "iO4z3C-2j3JHEUC8BIP1eQ",
+								"type": "text"
+							},
+							{
+								"key": "APOLLO_KEY",
+								"value": "3f585b27-32ab-4eee-95af-7292fcc74e38",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYxODM5YjUyNmUxZTQ0NjZlZWYwNDJlNSIsImVtYWlsIjoidGVzdEB0ZXN0LmNvbSIsInJvbGVzIjpbIkFETUlOIl0sImlhdCI6MTYzNjExOTUxMSwiZXhwIjoxNjM2NzI0MzExfQ.53sFUQmd93-nJ1hZN63zXJq1qZbbHFyA6M-2iL_3YUY",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "query Query($data: InputOrderId!) {\r\n  findOrder(data: $data) {\r\n    _id\r\n    create_at\r\n    update_at\r\n    price\r\n    paid\r\n    sent\r\n    processed\r\n    customer {\r\n      _id\r\n      create_at\r\n      update_at\r\n      name\r\n      email\r\n      orders\r\n      roles\r\n    }\r\n    products {\r\n      _id\r\n      create_at\r\n      update_at\r\n      price\r\n      title\r\n      content\r\n      creator {\r\n        _id\r\n        create_at\r\n        update_at\r\n        name\r\n        email\r\n        roles\r\n      }\r\n    }\r\n    id\r\n  }\r\n}\r\n",
+								"variables": "{\r\n\"data\": {\r\n  \"id\": \"618550966ec77fb64231c073\"\r\n}\r\n}"
+							}
+						},
+						"url": {
+							"raw": "https://a5node-graphql-apollo.herokuapp.com/api/graphql",
+							"protocol": "https",
+							"host": [
+								"a5node-graphql-apollo",
+								"herokuapp",
+								"com"
+							],
+							"path": [
+								"api",
+								"graphql"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Find orders",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "APOLLO_USER",
+								"value": "iO4z3C-2j3JHEUC8BIP1eQ",
+								"type": "text"
+							},
+							{
+								"key": "APOLLO_KEY",
+								"value": "3f585b27-32ab-4eee-95af-7292fcc74e38",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYxODM5YjUyNmUxZTQ0NjZlZWYwNDJlNSIsImVtYWlsIjoidGVzdEB0ZXN0LmNvbSIsInJvbGVzIjpbIkFETUlOIl0sImlhdCI6MTYzNjExOTUxMSwiZXhwIjoxNjM2NzI0MzExfQ.53sFUQmd93-nJ1hZN63zXJq1qZbbHFyA6M-2iL_3YUY",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "query Query {\r\n  getOrders {\r\n    _id\r\n    create_at\r\n    update_at\r\n    id\r\n    price\r\n    paid\r\n    sent\r\n    processed\r\n    customer {\r\n      _id\r\n      create_at\r\n      update_at\r\n      id\r\n      name\r\n      email\r\n      orders\r\n      roles\r\n    }\r\n    products {\r\n      _id\r\n      create_at\r\n      update_at\r\n      price\r\n      title\r\n      content\r\n      creator {\r\n        _id\r\n        create_at\r\n        update_at\r\n        name\r\n        email\r\n        roles\r\n      }\r\n    }\r\n  }\r\n}",
+								"variables": ""
+							}
+						},
+						"url": {
+							"raw": "https://a5node-graphql-apollo.herokuapp.com/api/graphql",
+							"protocol": "https",
+							"host": [
+								"a5node-graphql-apollo",
+								"herokuapp",
+								"com"
+							],
+							"path": [
+								"api",
+								"graphql"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Find orders from user",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "APOLLO_USER",
+								"value": "iO4z3C-2j3JHEUC8BIP1eQ",
+								"type": "text"
+							},
+							{
+								"key": "APOLLO_KEY",
+								"value": "3f585b27-32ab-4eee-95af-7292fcc74e38",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYxODM5YjUyNmUxZTQ0NjZlZWYwNDJlNSIsImVtYWlsIjoidGVzdEB0ZXN0LmNvbSIsInJvbGVzIjpbIkFETUlOIl0sImlhdCI6MTYzNjExOTUxMSwiZXhwIjoxNjM2NzI0MzExfQ.53sFUQmd93-nJ1hZN63zXJq1qZbbHFyA6M-2iL_3YUY",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "query Query($data: InputOrderId!) {\r\n  getOrdersUserId(data: $data) {\r\n    _id\r\n    create_at\r\n    update_at\r\n    id\r\n    price\r\n    paid\r\n    sent\r\n    processed\r\n    customer {\r\n      _id\r\n      create_at\r\n      update_at\r\n      name\r\n      email\r\n      orders\r\n      roles\r\n    }\r\n    products {\r\n      _id\r\n      create_at\r\n      update_at\r\n      price\r\n      title\r\n      content\r\n      creator {\r\n        _id\r\n        create_at\r\n        update_at\r\n        name\r\n        email\r\n        roles\r\n      }\r\n    }\r\n  }\r\n}",
+								"variables": "{\r\n\"data\": {\r\n  \"id\": \"61839b526e1e4466eef042e5\"\r\n}\r\n}"
+							}
+						},
+						"url": {
+							"raw": "https://a5node-graphql-apollo.herokuapp.com/api/graphql",
+							"protocol": "https",
+							"host": [
+								"a5node-graphql-apollo",
+								"herokuapp",
+								"com"
+							],
+							"path": [
+								"api",
+								"graphql"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Product",
+			"item": [
+				{
+					"name": "Create product",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "APOLLO_USER",
+								"value": "iO4z3C-2j3JHEUC8BIP1eQ",
+								"type": "text"
+							},
+							{
+								"key": "APOLLO_KEY",
+								"value": "3f585b27-32ab-4eee-95af-7292fcc74e38",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYxODM5YjUyNmUxZTQ0NjZlZWYwNDJlNSIsImVtYWlsIjoidGVzdEB0ZXN0LmNvbSIsInJvbGVzIjpbIkFETUlOIl0sImlhdCI6MTYzNjExOTUxMSwiZXhwIjoxNjM2NzI0MzExfQ.53sFUQmd93-nJ1hZN63zXJq1qZbbHFyA6M-2iL_3YUY",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "mutation Mutation($data: InputCreateProduct!) {\r\n  createProduct(data: $data) {\r\n    id\r\n    price\r\n    title\r\n    content\r\n    creator\r\n  }\r\n}",
+								"variables": "{\r\n\"data\": {\r\n  \"price\": 666,\r\n  \"title\": \"test2\",\r\n  \"content\": \"test\",\r\n  \"creator\": \"61839b526e1e4466eef042e5\"\r\n}\r\n}"
+							}
+						},
+						"url": {
+							"raw": "https://a5node-graphql-apollo.herokuapp.com/api/graphql",
+							"protocol": "https",
+							"host": [
+								"a5node-graphql-apollo",
+								"herokuapp",
+								"com"
+							],
+							"path": [
+								"api",
+								"graphql"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Auth",
+			"item": [
+				{
+					"name": "Login",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "APOLLO_USER",
+								"value": "iO4z3C-2j3JHEUC8BIP1eQ",
+								"type": "text"
+							},
+							{
+								"key": "APOLLO_KEY",
+								"value": "3f585b27-32ab-4eee-95af-7292fcc74e38",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYxODM5YjUyNmUxZTQ0NjZlZWYwNDJlNSIsImVtYWlsIjoidGVzdEB0ZXN0LmNvbSIsInJvbGVzIjpbIkFETUlOIl0sImlhdCI6MTYzNjExOTUxMSwiZXhwIjoxNjM2NzI0MzExfQ.53sFUQmd93-nJ1hZN63zXJq1qZbbHFyA6M-2iL_3YUY",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "query Query($loginData: InputLogin!) {\r\n  login(data: $loginData) {\r\n    _id\r\n    create_at\r\n    update_at\r\n    id\r\n    name\r\n    email\r\n    access_token\r\n    roles\r\n    orders {\r\n      _id\r\n      create_at\r\n      update_at\r\n      price\r\n      paid\r\n      sent\r\n      processed\r\n      customer\r\n      products {\r\n        _id\r\n        create_at\r\n        update_at\r\n        price\r\n        title\r\n        content\r\n        creator\r\n      }\r\n    }\r\n  }\r\n}\r\n",
+								"variables": "{\r\n\"loginData\": {\r\n  \"email\": \"test@test.com\",\r\n  \"password\": \"test\"\r\n}\r\n}"
+							}
+						},
+						"url": {
+							"raw": "https://a5node-graphql-apollo.herokuapp.com/api/graphql",
+							"protocol": "https",
+							"host": [
+								"a5node-graphql-apollo",
+								"herokuapp",
+								"com"
+							],
+							"path": [
+								"api",
+								"graphql"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}

@@ -11,14 +11,14 @@ const ProductSchema = new Schema<IProductSchema, IProductModel>(
     price: { type: Number, required: true },
     title: { type: String, required: true, immutable: true },
     content: { type: String, required: true },
+    amount: { type: Number, default: 0, required: true },
+    isRemove: { type: Boolean, default: false, required: true },
     creator: {
       type: Schema.Types.ObjectId,
       ref: User,
       required: true,
       immutable: true,
     },
-    amount: { type: Number, default: 0, required: true },
-    isRemove: { type: Boolean, default: false, required: true },
   },
   {
     timestamps: {
@@ -37,6 +37,8 @@ ProductSchema.methods.jsonPayload = function <T = Dictionary>(payload?: T) {
     creator: this.creator,
     create_at: this?.create_at,
     update_at: this?.update_at,
+    amount: this.amount,
+    isRemove: this.isRemove,
     ...payload,
   };
 };

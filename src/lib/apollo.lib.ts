@@ -18,7 +18,8 @@ export default async (app: Express, httpServer: http.Server): Promise<ApolloServ
 
     context: async ({ req, res }: { req: Request; res: Response }) => {
       const user = await authServers.auth(req);
-      console.dir(req.token);
+      // console.dir(req.token);
+
       return {
         req,
         user,

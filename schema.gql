@@ -14,20 +14,26 @@ type Auth {
 }
 
 type CreateProduct {
+  _id: ObjectId
+  amount: Float!
   content: String!
+  create_at: Timestamp
   creator: ID!
   id: ID!
+  isRemove: Boolean!
   price: Float!
   title: String!
+  update_at: Timestamp
 }
 
 type CreateUser {
   _id: ObjectId
-  access_token: String
+  access_token: String!
   create_at: Timestamp
   email: String!
-  id: ID
+  id: ID!
   name: String!
+  roles: [Role!]!
   update_at: Timestamp
 }
 
@@ -36,7 +42,7 @@ type Creator {
   create_at: Timestamp
   email: String!
   name: String!
-  roles: [Role!]
+  roles: [Role!]!
   update_at: Timestamp
 }
 
@@ -46,7 +52,7 @@ type Customer {
   email: String!
   name: String!
   orders: [String!]
-  roles: [Role!]
+  roles: [Role!]!
   update_at: Timestamp
 }
 
@@ -58,13 +64,13 @@ type Default {
 
 type FindUser {
   _id: ObjectId
-  access_token: String
+  access_token: String!
   create_at: Timestamp
   email: String!
-  id: ID
+  id: ID!
   name: String!
-  orders: [TypeOrder!]
-  roles: [Role!]
+  orders: [TypeOrder!]!
+  roles: [Role!]!
   update_at: Timestamp
 }
 
@@ -96,6 +102,7 @@ input InputCreateOrder {
 }
 
 input InputCreateProduct {
+  amount: Float!
   content: String!
   creator: String!
   price: Float!
@@ -138,6 +145,7 @@ input InputUpdateOrder {
 }
 
 input InputUpdateProduct {
+  amount: Float
   content: String
   id: ID!
   price: Float
@@ -173,10 +181,22 @@ type Order {
   create_at: Timestamp
   customer: TypeUser!
   id: ID
+  isRemove: Boolean!
   paid: Boolean!
   price: Float!
   processed: Boolean!
   products: [Products!]!
+  sent: Boolean!
+  update_at: Timestamp
+}
+
+type OrderDefault {
+  _id: ObjectId
+  create_at: Timestamp
+  isRemove: Boolean!
+  paid: Boolean!
+  price: Float!
+  processed: Boolean!
   sent: Boolean!
   update_at: Timestamp
 }
@@ -187,10 +207,23 @@ type OrderId {
 
 type Product {
   _id: ObjectId
+  amount: Float!
   content: String!
   create_at: Timestamp
   creator: User!
   id: ID!
+  isRemove: Boolean!
+  price: Float!
+  title: String!
+  update_at: Timestamp
+}
+
+type ProductDefault {
+  _id: ObjectId
+  amount: Float!
+  content: String!
+  create_at: Timestamp
+  isRemove: Boolean!
   price: Float!
   title: String!
   update_at: Timestamp
@@ -202,9 +235,11 @@ type ProductId {
 
 type Products {
   _id: ObjectId
+  amount: Float!
   content: String!
   create_at: Timestamp
   creator: Creator!
+  isRemove: Boolean!
   price: Float!
   title: String!
   update_at: Timestamp
@@ -236,6 +271,7 @@ type TypeOrder {
   _id: ObjectId
   create_at: Timestamp
   customer: ObjectId!
+  isRemove: Boolean!
   paid: Boolean!
   price: Float!
   processed: Boolean!
@@ -246,9 +282,11 @@ type TypeOrder {
 
 type TypeProduct {
   _id: ObjectId
+  amount: Float!
   content: String!
   create_at: Timestamp
   creator: ObjectId!
+  isRemove: Boolean!
   price: Float!
   title: String!
   update_at: Timestamp
@@ -258,29 +296,40 @@ type TypeUser {
   _id: ObjectId
   create_at: Timestamp
   email: String!
-  id: ID
+  id: ID!
   name: String!
-  orders: [String!]
-  roles: [Role!]
+  orders: [String!]!
+  roles: [Role!]!
   update_at: Timestamp
 }
 
 type UpdateProduct {
+  amount: Float!
   content: String!
   creator: User!
   id: ID!
+  isRemove: Boolean!
   price: Float!
   title: String!
 }
 
 type User {
   _id: ObjectId
-  access_token: String
+  access_token: String!
   create_at: Timestamp
   email: String!
-  id: ID
+  id: ID!
   name: String!
-  orders: [TypeOrder!]
-  roles: [Role!]
+  orders: [TypeOrder!]!
+  roles: [Role!]!
+  update_at: Timestamp
+}
+
+type UserDefault {
+  _id: ObjectId
+  create_at: Timestamp
+  email: String!
+  name: String!
+  roles: [Role!]!
   update_at: Timestamp
 }

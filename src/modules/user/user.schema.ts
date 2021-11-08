@@ -73,103 +73,64 @@ export class InputAddOrRemoveRoleUser implements IAddOrRemoveRole {
 }
 
 @ObjectType()
-export class FindUser extends Default {
-  @Field(type => ID, { nullable: true })
-  readonly id!: ObjectId;
-
+export class UserDefault extends Default {
   @Field()
   name!: string;
 
   @Field()
   email!: string;
 
-  @Field({ nullable: true })
-  access_token!: string;
-
-  @Field(type => [TypeOrder], { nullable: true })
-  orders!: TypeOrder[];
-
-  @Field(type => [Role], { nullable: true })
+  @Field(type => [Role])
   roles!: Role[];
 }
 
 @ObjectType()
-export class CreateUser extends Default {
-  @Field(type => ID, { nullable: true })
+export class CreateUser extends UserDefault {
+  @Field(type => ID)
   readonly id!: ObjectId;
 
   @Field()
-  name!: string;
-
-  @Field()
-  email!: string;
-
-  @Field({ nullable: true })
   access_token!: string;
 }
 
 @ObjectType()
-export class TypeUser extends Default {
-  @Field(type => ID, { nullable: true })
+export class TypeUser extends UserDefault {
+  @Field(type => ID)
   readonly id!: ObjectId;
 
-  @Field()
-  name!: string;
+  @Field(type => [String])
+  orders!: ObjectId[] | string[];
+}
 
-  @Field()
-  email!: string;
+@ObjectType()
+export class Creator extends UserDefault {}
 
+@ObjectType()
+export class Customer extends UserDefault {
   @Field(type => [String], { nullable: true })
   orders!: ObjectId[] | string[];
-
-  @Field(type => [Role], { nullable: true })
-  roles!: Role[];
 }
 
 @ObjectType()
-export class Creator extends Default {
-  @Field()
-  name!: string;
-
-  @Field()
-  email!: string;
-
-  @Field(type => [Role], { nullable: true })
-  roles!: Role[];
-}
-
-@ObjectType()
-export class Customer extends Default {
-  @Field()
-  name!: string;
-
-  @Field()
-  email!: string;
-
-  @Field(type => [String], { nullable: true })
-  orders!: ObjectId[] | string[];
-
-  @Field(type => [Role], { nullable: true })
-  roles!: Role[];
-}
-
-@ObjectType()
-export default class User extends Default {
-  @Field(type => ID, { nullable: true })
+export class FindUser extends UserDefault {
+  @Field(type => ID)
   readonly id!: ObjectId;
 
   @Field()
-  name!: string;
-
-  @Field()
-  email!: string;
-
-  @Field({ nullable: true })
   access_token!: string;
 
-  @Field(type => [TypeOrder], { nullable: true })
+  @Field(type => [TypeOrder])
   orders!: TypeOrder[];
+}
 
-  @Field(type => [Role], { nullable: true })
-  roles!: Role[];
+@ObjectType()
+export default class User extends UserDefault {
+  @Field(type => ID)
+  readonly id!: ObjectId;
+
+  @Field()
+  access_token!: string;
+
+  @Field(type => [TypeOrder])
+  orders!: TypeOrder[];
 }

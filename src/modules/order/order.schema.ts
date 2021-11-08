@@ -60,13 +60,7 @@ export class InputAddOrRemoveOrder {
 }
 
 @ObjectType()
-export class TypeOrder extends Default {
-  @Field(type => ObjectIdScalar)
-  customer!: ObjectId;
-
-  @Field(type => [TypeProduct])
-  products!: TypeProduct[];
-
+export class OrderDefault extends Default {
   @Field()
   price!: number;
 
@@ -78,10 +72,22 @@ export class TypeOrder extends Default {
 
   @Field()
   processed!: boolean;
+
+  @Field()
+  isRemove!: boolean;
 }
 
 @ObjectType()
-export default class Order extends Default {
+export class TypeOrder extends OrderDefault {
+  @Field(type => ObjectIdScalar)
+  customer!: ObjectId;
+
+  @Field(type => [TypeProduct])
+  products!: TypeProduct[];
+}
+
+@ObjectType()
+export default class Order extends OrderDefault {
   @Field(type => ID, { nullable: true })
   readonly id!: ObjectId;
 
@@ -90,16 +96,4 @@ export default class Order extends Default {
 
   @Field(type => [Products])
   products!: Products[];
-
-  @Field()
-  price!: number;
-
-  @Field()
-  paid!: boolean;
-
-  @Field()
-  sent!: boolean;
-
-  @Field()
-  processed!: boolean;
 }

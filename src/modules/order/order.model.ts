@@ -11,6 +11,7 @@ const OrderSchema = new Schema<IOrderSchema, IOrderModel>(
     paid: { type: Boolean, default: false, required: true },
     sent: { type: Boolean, default: false, required: true },
     processed: { type: Boolean, default: false, required: true },
+    isRemove: { type: Boolean, default: false, required: true },
     customer: {
       type: Schema.Types.ObjectId,
       ref: USER,
@@ -30,7 +31,6 @@ const OrderSchema = new Schema<IOrderSchema, IOrderModel>(
         },
       },
     ],
-    isRemove: { type: Boolean, default: false, required: true },
   },
   {
     timestamps: {
@@ -52,6 +52,7 @@ OrderSchema.methods.jsonPayload = function <T = Dictionary>(payload?: T) {
     products: this.products,
     create_at: this?.create_at,
     update_at: this?.update_at,
+    isRemove: this.isRemove,
     ...payload,
   };
 };

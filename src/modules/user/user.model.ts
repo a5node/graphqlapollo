@@ -24,9 +24,7 @@ const UserSchema = new Schema<IUserSchema, IUserModel>(
         type: Schema.Types.ObjectId,
         ref: Order,
         required: false,
-        autopopulate: {
-          select: { customer: 0 },
-        },
+        autopopulate: true,
       },
     ],
     access_token: { type: String, required: false },
