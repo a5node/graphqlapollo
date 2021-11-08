@@ -45,7 +45,7 @@ export default async (app: Express, httpServer: http.Server): Promise<ApolloServ
       }),
     ],
     apollo: {
-      key: config.apolloKey,
+      key: config.apolloKeys,
     },
   });
 
