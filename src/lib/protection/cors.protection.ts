@@ -11,6 +11,10 @@ const option = {
   }),
   credentials: true,
   optionsSuccessStatus: 200,
+  allRoutes: true,
+  allowOrigins: '*',
+  allowCredentials: false,
+  allowRequestHeaders: 'content-type, authorization',
 };
 
 export default (server: express.Express): void => {

@@ -11,6 +11,7 @@ import { GraphQLSchema } from 'graphql';
 import config from '../config';
 import Builder from './builder.schema';
 import authServers from '../modules/auth/auth.servers';
+import cors from 'cors';
 
 export default async (app: Express, httpServer: http.Server): Promise<ApolloServer<ExpressContext>> => {
   const schema: GraphQLSchema = await Builder.initSchema();
@@ -27,6 +28,7 @@ export default async (app: Express, httpServer: http.Server): Promise<ApolloServ
         res,
       };
     },
+
     plugins: [
       ApolloServerPluginDrainHttpServer({
         httpServer,
@@ -38,7 +40,6 @@ export default async (app: Express, httpServer: http.Server): Promise<ApolloServ
         },
       }),
     ],
-
     apollo: {
       key: config.apolloKey,
     },
