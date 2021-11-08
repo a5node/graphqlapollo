@@ -1,4 +1,5 @@
-import { Request } from 'express';
+import 'reflect-metadata';
+import { Request, Response, NextFunction } from 'express';
 import { AuthChecker } from 'type-graphql';
 
 import config from '../../config';
@@ -70,22 +71,13 @@ class AuthService {
   };
 
   authChecker: AuthChecker<Context> = async ({ root, args, context: { user }, info: { fieldName, path } }, roles) => {
-    // console.log('--user-->', user);
-    console.log('--roles-->', roles);
-    // console.log('--fieldName-->', fieldName);
-    // console.log('--path-->', path);
-    // // console.log('--args-->', args);
-    // console.log('--root-->', root);
-
     const { key, prev, typename } = path;
 
     if (roles.length === 0) {
-      // if `@Authorized()`, check only if user exists
       return user !== undefined;
     }
-    // there are some roles defined now
+
     if (!user) {
-      // and if no user, restrict access
       throw new Http401Error({ code: 1004, message: "You have't allows" });
     }
 
@@ -94,8 +86,6 @@ class AuthService {
     }
 
     if (user.roles.some(role => roles.includes(role))) {
-      // grant access if the roles overlap
-
       if (!roles.includes(VISITOR) && user.id) {
         const auth = await UserModel.findById(user.id).select({ passport: 0 });
 
@@ -105,17 +95,12 @@ class AuthService {
 
         return true;
       }
+
       return true;
     }
-    // no roles matched, restrict access
+
     throw new Http401Error({ code: 1005, message: "You can't do it" });
   };
-
-  // logout = async (req: Request, res: Response): Promise<void> => {
-  //   req.token = '';
-  //   res.set('Authorization', `Bearer ''`);
-  //   res.status(204).end();
-  // };
 }
 
 export default new AuthService();

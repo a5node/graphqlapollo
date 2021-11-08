@@ -44,6 +44,12 @@ export class InputUpdateOrder {
   sent?: boolean;
 
   @Field({ nullable: true })
+  received!: boolean;
+
+  @Field({ nullable: true })
+  isRemove!: boolean;
+
+  @Field({ nullable: true })
   processed?: boolean;
 }
 
@@ -69,6 +75,9 @@ export class OrderDefault extends Default {
 
   @Field()
   sent!: boolean;
+
+  @Field()
+  received!: boolean;
 
   @Field()
   processed!: boolean;

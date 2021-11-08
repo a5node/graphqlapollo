@@ -16,13 +16,6 @@ export default class {
     return await AuthServers.login(data);
   }
 
-  //--------Mutation----
-  //   @Authorized(Object.values(Role))
-  //   @Mutation(returns => String)
-  //   async logout(@Arg('data') data: AccessToken) {
-  //     return await AuthServers.logout(data);
-  //   }
-
   @Authorized(VISITOR, ...Object.values(Role))
   @Mutation(returns => AccessToken)
   async refresh(@Arg('data') data: InputAccessToken) {

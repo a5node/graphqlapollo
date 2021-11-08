@@ -139,8 +139,10 @@ input InputProductId {
 
 input InputUpdateOrder {
   id: ID!
+  isRemove: Boolean
   paid: Boolean
   processed: Boolean
+  received: Boolean
   sent: Boolean
 }
 
@@ -186,6 +188,7 @@ type Order {
   price: Float!
   processed: Boolean!
   products: [Products!]!
+  received: Boolean!
   sent: Boolean!
   update_at: Timestamp
 }
@@ -197,6 +200,7 @@ type OrderDefault {
   paid: Boolean!
   price: Float!
   processed: Boolean!
+  received: Boolean!
   sent: Boolean!
   update_at: Timestamp
 }
@@ -247,7 +251,7 @@ type Products {
 
 type Query {
   findOrder(data: InputOrderId!): Order!
-  findProduct(data: InputID!): Product!
+  findProduct(data: InputID!): Products!
   findUser(data: InputFindUser!): FindUser!
   getOrders: [Order!]!
   getOrdersUserId(data: InputOrderId!): [Order!]!
@@ -276,6 +280,7 @@ type TypeOrder {
   price: Float!
   processed: Boolean!
   products: [TypeProduct!]!
+  received: Boolean!
   sent: Boolean!
   update_at: Timestamp
 }
@@ -304,13 +309,16 @@ type TypeUser {
 }
 
 type UpdateProduct {
+  _id: ObjectId
   amount: Float!
   content: String!
+  create_at: Timestamp
   creator: User!
   id: ID!
   isRemove: Boolean!
   price: Float!
   title: String!
+  update_at: Timestamp
 }
 
 type User {

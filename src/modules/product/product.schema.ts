@@ -56,30 +56,6 @@ export class InputUpdateProduct {
 }
 
 @ObjectType()
-export class UpdateProduct {
-  @Field(type => ID)
-  readonly id!: ObjectId;
-
-  @Field()
-  price!: number;
-
-  @Field()
-  title!: string;
-
-  @Field()
-  content!: string;
-
-  @Field()
-  amount!: number;
-
-  @Field()
-  isRemove!: boolean;
-
-  @Field(type => User)
-  creator!: User;
-}
-
-@ObjectType()
 export class ProductDefault extends Default {
   @Field()
   price!: number;
@@ -95,6 +71,15 @@ export class ProductDefault extends Default {
 
   @Field()
   isRemove!: boolean;
+}
+
+@ObjectType()
+export class UpdateProduct extends ProductDefault {
+  @Field(type => ID)
+  readonly id!: ObjectId;
+
+  @Field(type => User)
+  creator!: User;
 }
 
 @ObjectType()

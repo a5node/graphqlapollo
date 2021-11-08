@@ -10,6 +10,7 @@ const OrderSchema = new Schema<IOrderSchema, IOrderModel>(
     price: { type: Number, default: 0, required: true },
     paid: { type: Boolean, default: false, required: true },
     sent: { type: Boolean, default: false, required: true },
+    received: { type: Boolean, default: false, required: true },
     processed: { type: Boolean, default: false, required: true },
     isRemove: { type: Boolean, default: false, required: true },
     customer: {

@@ -1,11 +1,49 @@
 'use strict';
-
+import OrderModel from '../order/order.model';
+import UserModel from '../user/user.model';
 import ProductModel from './product.model';
 import { TCreateProduct, TUpdateProduct, TGetProducts, TFindProductById } from '@server/types';
-import { ORDERS, USERS } from '../constants';
+
+import { PRODUCTS, CUSTOMER, ORDERS, CREATOR, USERS } from '../constants';
 import { Http404Error, Http400Error } from '../../errors/http-errors';
 
 class ProductService {
+  private select: unknown = {
+    __v: 0,
+  };
+  private populateO = () => {
+    return {
+      path: ORDERS,
+      model: OrderModel,
+      select: this.select,
+      populate: {
+        path: PRODUCTS,
+        select: this.select,
+      },
+    };
+  };
+
+  private populateP = (selectP?: unknown, selectC?: unknown) => {
+    return {
+      path: PRODUCTS,
+      model: ProductModel,
+      select: selectP || this.select,
+      populate: {
+        path: CREATOR,
+        select: selectC || this.select,
+        model: UserModel,
+      },
+    };
+  };
+
+  private populateC = (select?: unknown) => {
+    return {
+      path: CREATOR,
+      model: UserModel,
+      select: select || this.select,
+    };
+  };
+
   createProduct: TCreateProduct = async data => {
     const product = await ProductModel.create(data);
 
@@ -17,9 +55,7 @@ class ProductService {
   };
 
   findProduct: TFindProductById = async data => {
-    const select = { user: { password: 0, orders: 0 } };
-
-    const product = await ProductModel.findById(data.id).populate(ORDERS, select).populate(USERS, select);
+    const product = await ProductModel.findById(data.id).populate(this.populateC()).exec();
 
     if (!product) {
       throw new Http404Error({ code: 1101 });

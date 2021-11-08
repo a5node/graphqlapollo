@@ -8,6 +8,7 @@ export interface IOrderSchema extends Document {
   price: number;
   paid: boolean;
   sent: boolean;
+  received: boolean;
   processed: boolean;
   products: IProductSchema[] | ObjectId[];
   isRemove: boolean;

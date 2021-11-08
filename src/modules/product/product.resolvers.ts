@@ -5,13 +5,19 @@ import { Arg, Query, Mutation, Resolver, Root, Authorized } from 'type-graphql';
 import { Role } from '../../interface';
 
 import { InputID } from '../default.schema';
-import Product, { CreateProduct, InputCreateProduct, UpdateProduct, InputUpdateProduct } from './product.schema';
+import Product, {
+  Products,
+  CreateProduct,
+  InputCreateProduct,
+  UpdateProduct,
+  InputUpdateProduct,
+} from './product.schema';
 import ProductServers from './product.servers';
 
 @Resolver(of => Product)
 export default class {
   @Authorized(Object.values(Role))
-  @Query(returns => Product)
+  @Query(returns => Products)
   async findProduct(@Arg('data') data: InputID) {
     return await ProductServers.findProduct(data);
   }
