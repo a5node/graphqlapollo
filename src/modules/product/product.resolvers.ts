@@ -23,7 +23,7 @@ export default class {
   }
 
   @Authorized(Object.values(Role))
-  @Query(returns => [Product])
+  @Query(returns => [Products])
   async getProducts() {
     return await ProductServers.getProducts();
   }

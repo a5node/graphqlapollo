@@ -255,7 +255,7 @@ type Query {
   findUser(data: InputFindUser!): FindUser!
   getOrders: [Order!]!
   getOrdersUserId(data: InputOrderId!): [Order!]!
-  getProducts: [Product!]!
+  getProducts: [Products!]!
   getUsers: [FindUser!]!
   login(data: InputLogin!): User!
 }
@@ -313,8 +313,7 @@ type UpdateProduct {
   amount: Float!
   content: String!
   create_at: Timestamp
-  creator: User!
-  id: ID!
+  creator: Creator!
   isRemove: Boolean!
   price: Float!
   title: String!

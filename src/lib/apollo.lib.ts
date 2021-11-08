@@ -56,8 +56,9 @@ export default async (app: Express, httpServer: http.Server): Promise<ApolloServ
           'https://a5node-graphql-apollo.herokuapp.com',
           'https://studio.apollographql.com',
         ];
-        console.dir(origin);
+
         callback(null, true);
+
         // if (whitelist.indexOf(origin as string) === -1) {
         //   callback(new Error('Not allowed by CORS'));
         // } else {

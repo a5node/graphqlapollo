@@ -64,10 +64,12 @@ class ProductService {
     return product.jsonPayload();
   };
 
-  getProducts: TGetProducts = async () => await ProductModel.find();
+  getProducts: TGetProducts = async () => await ProductModel.find().populate(this.populateC()).exec();
 
   updateProduct: TUpdateProduct = async data => {
-    const product = await ProductModel.findByIdAndUpdate(data.id, { $set: data }, { new: true });
+    const product = await ProductModel.findByIdAndUpdate(data.id, { $set: data }, { new: true })
+      .populate(this.populateC())
+      .exec();
 
     if (!product) {
       throw new Http404Error({ code: 1102 });

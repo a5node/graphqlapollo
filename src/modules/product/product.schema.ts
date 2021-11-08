@@ -75,11 +75,8 @@ export class ProductDefault extends Default {
 
 @ObjectType()
 export class UpdateProduct extends ProductDefault {
-  @Field(type => ID)
-  readonly id!: ObjectId;
-
-  @Field(type => User)
-  creator!: User;
+  @Field(type => Creator)
+  creator!: Creator;
 }
 
 @ObjectType()
