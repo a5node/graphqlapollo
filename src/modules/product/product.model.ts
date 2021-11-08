@@ -31,6 +31,7 @@ const ProductSchema = new Schema<IProductSchema, IProductModel>(
 ProductSchema.methods.jsonPayload = function <T = Dictionary>(payload?: T) {
   return {
     id: this._id,
+    _id: this._id,
     price: this.price,
     title: this.title,
     content: this.content,

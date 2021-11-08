@@ -16,7 +16,7 @@ const options: OptionConfig = {
   },
   reteLimit: {
     windowMs: 15 * 60 * 1000, // 15 minutes
-    max: 500, // limit each IP to 100 requests per windowMs
+    max: 5000, // limit each IP to 100 requests per windowMs
   },
   dbOptions: {
     useNewUrlParser: true,
