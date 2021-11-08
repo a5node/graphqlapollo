@@ -10,6 +10,7 @@ const env: EnvConfig = {
   HOST: process.env.HOST || 'localhost',
   CORS: process.env.CORS || '*',
   apolloKey: process.env.APOLLO_KEY || '',
+  apolloKeys: process.env.APOLLO_KEYS || '',
   apolloUsers: process.env.APOLLO_USERS || '',
 };
 

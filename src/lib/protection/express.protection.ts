@@ -8,7 +8,8 @@ import mongoSanitize from 'express-mongo-sanitize';
 import config from '../../config';
 
 const staticFileMiddleware: RequestHandler = express.static(config.staticClient);
-
+// Access-Control-Allow-Origin: https://studio.apollographql.com
+// Access-Control-Allow-Credentials: true
 export default (server: Express): void => {
   server.disable('x-powered-by');
   server.enable('trust proxy');

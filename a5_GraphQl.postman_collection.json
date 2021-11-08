@@ -32,7 +32,7 @@
 						"body": {
 							"mode": "graphql",
 							"graphql": {
-								"query": "mutation CreateOrderMutation($updateUserData: InputUpdateUser!) {\r\n  updateUser(data: $updateUserData) {\r\n    id\r\n    create_at\r\n    update_at\r\n    name\r\n    email\r\n    access_token\r\n    roles\r\n    orders {\r\n      _id\r\n      create_at\r\n      update_at\r\n      customer\r\n      price\r\n      paid\r\n      sent\r\n      processed\r\n      products {\r\n        _id\r\n        create_at\r\n        update_at\r\n        price\r\n        title\r\n        content\r\n        creator\r\n      }\r\n    }\r\n  }\r\n}\r\n\r\n",
+								"query": "mutation CreateOrderMutation($updateUserData: InputUpdateUser!) {\r\n  updateUser(data: $updateUserData) {\r\n    id\r\n    create_at\r\n    update_at\r\n    name\r\n    email\r\n    access_token\r\n    roles\r\n    orders {\r\n      _id\r\n      create_at\r\n      update_at\r\n      customer\r\n      price\r\n      paid\r\n      sent\r\n      processed\r\n      isRemove\r\n      products {\r\n        _id\r\n        create_at\r\n        update_at\r\n        price\r\n        title\r\n        content\r\n        creator\r\n        amount\r\n        isRemove\r\n      }\r\n    }\r\n  }\r\n}\r\n\r\n",
 								"variables": "{\r\n\"updateUserData\": {\r\n  \"id\": \"61839b526e1e4466eef042e5\",\r\n  \"name\": \"test change\",\r\n  \"email\": \"test@test.com\"\r\n}\r\n}"
 							}
 						},
@@ -71,7 +71,7 @@
 						"body": {
 							"mode": "graphql",
 							"graphql": {
-								"query": "query Query($data: InputFindUser!) {\r\n  findUser(data: $data) {\r\n    create_at\r\n    update_at\r\n    id\r\n    name\r\n    email\r\n    access_token\r\n     roles\r\n    orders {\r\n      _id\r\n      customer\r\n      price\r\n      paid\r\n      sent\r\n      processed\r\n      products {\r\n        _id\r\n        update_at\r\n        create_at\r\n        price\r\n        title\r\n        content\r\n        creator\r\n      }\r\n    }\r\n    _id\r\n  }\r\n}",
+								"query": "query Query($findUserData2: InputFindUser!) {\r\n  findUser(data: $findUserData2) {\r\n    _id\r\n    create_at\r\n    update_at\r\n    name\r\n    email\r\n    roles\r\n    id\r\n    access_token\r\n    orders {\r\n      _id\r\n      create_at\r\n      update_at\r\n      price\r\n      paid\r\n      sent\r\n      processed\r\n      isRemove\r\n      customer\r\n      products {\r\n        _id\r\n        create_at\r\n        update_at\r\n        price\r\n        title\r\n        content\r\n        amount\r\n        isRemove\r\n        creator\r\n      }\r\n    }\r\n  }\r\n}",
 								"variables": "{\r\n\"data\": {\r\n  \"id\": \"61839b526e1e4466eef042e5\"\r\n}\r\n}"
 							}
 						},
@@ -164,17 +164,18 @@
 						"body": {
 							"mode": "graphql",
 							"graphql": {
-								"query": "\r\nquery Query {\r\n  getUsers {\r\n    id\r\n    email\r\n    orders {\r\n      _id\r\n      price\r\n      paid\r\n      sent\r\n      processed\r\n      customer\r\n      products {\r\n        price\r\n        title\r\n        content\r\n        update_at\r\n        create_at\r\n        creator     \r\n      }\r\n    }\r\n    name\r\n    access_token\r\n    update_at\r\n    create_at\r\n    roles\r\n  } \r\n}\r\n",
+								"query": "\r\nquery Query {\r\n  getUsers {\r\n    id\r\n    email\r\n    orders {\r\n      _id\r\n      price\r\n      paid\r\n      sent\r\n      processed\r\n      customer\r\n      isRemove\r\n      products {\r\n        price\r\n        title\r\n        content\r\n        update_at\r\n        create_at\r\n        creator\r\n        amount\r\n        isRemove     \r\n      }\r\n    }\r\n    name\r\n    update_at\r\n    create_at\r\n    roles\r\n  } \r\n}\r\n",
 								"variables": ""
 							}
 						},
 						"url": {
-							"raw": "http://localhost:3307/api/graphql",
-							"protocol": "http",
+							"raw": "https://a5node-graphql-apollo.herokuapp.com/api/graphql",
+							"protocol": "https",
 							"host": [
-								"localhost"
+								"a5node-graphql-apollo",
+								"herokuapp",
+								"com"
 							],
-							"port": "3307",
 							"path": [
 								"api",
 								"graphql"
@@ -207,7 +208,7 @@
 						"body": {
 							"mode": "graphql",
 							"graphql": {
-								"query": "mutation AddItemToUserMutation($data: InputAddOrRemoveRoleUser!) {\r\n  addRoleToUser(data: $data) {\r\n    create_at\r\n    update_at\r\n    id\r\n    name\r\n    email\r\n    access_token\r\n    orders {\r\n      _id\r\n      customer\r\n    products {\r\n      create_at\r\n      update_at\r\n      _id\r\n      price\r\n      title\r\n      content\r\n      creator\r\n    }\r\n      paid\r\n      price\r\n      sent\r\n      processed\r\n    }\r\n  }\r\n}\r\n",
+								"query": "mutation Mutation($data: InputAddOrRemoveRoleUser!) {\r\n  addRoleToUser(data: $data) {\r\n    create_at\r\n    update_at\r\n    name\r\n    email\r\n    roles\r\n    id\r\n    access_token\r\n    orders {\r\n      _id\r\n      create_at\r\n      update_at\r\n      price\r\n      paid\r\n      sent\r\n      processed\r\n      isRemove\r\n      customer\r\n      products {\r\n        _id\r\n        create_at\r\n        update_at\r\n        price\r\n        title\r\n        content\r\n        amount\r\n        isRemove\r\n        creator\r\n      }\r\n    }\r\n  }\r\n}\r\n",
 								"variables": "{\r\n\"data\": {\r\n  \"role\": \"ADMIN\",\r\n  \"id\": \"6184f094dbeeb84e7dad8bb8\"\r\n}\r\n}"
 							}
 						},
@@ -407,6 +408,138 @@
 						}
 					},
 					"response": []
+				},
+				{
+					"name": "Update order",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "APOLLO_USER",
+								"value": "iO4z3C-2j3JHEUC8BIP1eQ",
+								"type": "text"
+							},
+							{
+								"key": "APOLLO_KEY",
+								"value": "3f585b27-32ab-4eee-95af-7292fcc74e38",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYxODM5YjUyNmUxZTQ0NjZlZWYwNDJlNSIsImVtYWlsIjoidGVzdEB0ZXN0LmNvbSIsInJvbGVzIjpbIkFETUlOIl0sImlhdCI6MTYzNjExOTUxMSwiZXhwIjoxNjM2NzI0MzExfQ.53sFUQmd93-nJ1hZN63zXJq1qZbbHFyA6M-2iL_3YUY",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "mutation UpdateOrderMutation($data: InputUpdateOrder!) {\r\n  updateOrder(data: $data) {\r\n    _id\r\n    create_at\r\n    update_at\r\n    price\r\n    paid\r\n    sent\r\n    processed\r\n    isRemove\r\n    id\r\n    customer {\r\n      _id\r\n      create_at\r\n      update_at\r\n      name\r\n      email\r\n      roles\r\n      id\r\n      orders\r\n    }\r\n    products {\r\n      _id\r\n      create_at\r\n      update_at\r\n      price\r\n      title\r\n      content\r\n      amount\r\n      isRemove\r\n      creator {\r\n        _id\r\n        create_at\r\n        update_at\r\n        name\r\n        email\r\n        roles\r\n      }\r\n    }\r\n  }\r\n}\r\n",
+								"variables": "{\r\n\"data\": {\r\n  \"id\": \"6183fdccc24c11fc763c655f\",\r\n  \"paid\": false,\r\n  \"sent\": true,\r\n  \"processed\": false,\r\n  \"received\":false,\r\n  \"isRemove\":false\r\n}\r\n}"
+							}
+						},
+						"url": {
+							"raw": "https://a5node-graphql-apollo.herokuapp.com/api/graphql",
+							"protocol": "https",
+							"host": [
+								"a5node-graphql-apollo",
+								"herokuapp",
+								"com"
+							],
+							"path": [
+								"api",
+								"graphql"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Add to order",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "APOLLO_USER",
+								"value": "iO4z3C-2j3JHEUC8BIP1eQ",
+								"type": "text"
+							},
+							{
+								"key": "APOLLO_KEY",
+								"value": "3f585b27-32ab-4eee-95af-7292fcc74e38",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYxODM5YjUyNmUxZTQ0NjZlZWYwNDJlNSIsImVtYWlsIjoidGVzdEB0ZXN0LmNvbSIsInJvbGVzIjpbIkFETUlOIl0sImlhdCI6MTYzNjExOTUxMSwiZXhwIjoxNjM2NzI0MzExfQ.53sFUQmd93-nJ1hZN63zXJq1qZbbHFyA6M-2iL_3YUY",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "mutation UpdateOrderMutation($data: InputAddOrRemoveOrder!) {\r\n  addToOrder(data: $data) {\r\n    _id\r\n    create_at\r\n    update_at\r\n    price\r\n    paid\r\n    sent\r\n    processed\r\n    isRemove\r\n    id\r\n    customer {\r\n      _id\r\n      create_at\r\n      update_at\r\n      name\r\n      email\r\n      roles\r\n      id\r\n      orders\r\n    }\r\n    products {\r\n      _id\r\n      create_at\r\n      update_at\r\n      price\r\n      title\r\n      content\r\n      amount\r\n      isRemove\r\n      creator {\r\n        _id\r\n        create_at\r\n        update_at\r\n        name\r\n        email\r\n        roles\r\n      }\r\n    }\r\n  }\r\n}\r\n\r\n",
+								"variables": "{\r\n\"data\": {\r\n \"id\": \"6183fdccc24c11fc763c655f\",\r\n  \"where\": \"products\",\r\n  \"itemId\": [\"6188d5a7ed671131764d6ec6\"]\r\n}\r\n}"
+							}
+						},
+						"url": {
+							"raw": "https://a5node-graphql-apollo.herokuapp.com/api/graphql",
+							"protocol": "https",
+							"host": [
+								"a5node-graphql-apollo",
+								"herokuapp",
+								"com"
+							],
+							"path": [
+								"api",
+								"graphql"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Remove from order",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "APOLLO_USER",
+								"value": "iO4z3C-2j3JHEUC8BIP1eQ",
+								"type": "text"
+							},
+							{
+								"key": "APOLLO_KEY",
+								"value": "3f585b27-32ab-4eee-95af-7292fcc74e38",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYxODM5YjUyNmUxZTQ0NjZlZWYwNDJlNSIsImVtYWlsIjoidGVzdEB0ZXN0LmNvbSIsInJvbGVzIjpbIkFETUlOIl0sImlhdCI6MTYzNjExOTUxMSwiZXhwIjoxNjM2NzI0MzExfQ.53sFUQmd93-nJ1hZN63zXJq1qZbbHFyA6M-2iL_3YUY",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "mutation RemoveFromOrderMutation($data: InputAddOrRemoveOrder!) {\r\n  removeFromOrder(data: $data) {\r\n    _id\r\n    create_at\r\n    update_at\r\n    price\r\n    paid\r\n    sent\r\n    processed\r\n    isRemove\r\n    id\r\n    customer {\r\n      _id\r\n      create_at\r\n      update_at\r\n      name\r\n      email\r\n      roles\r\n      id\r\n      orders\r\n    }\r\n    products {\r\n      _id\r\n      create_at\r\n      update_at\r\n      price\r\n      title\r\n      content\r\n      amount\r\n      isRemove\r\n      creator {\r\n        _id\r\n        create_at\r\n        update_at\r\n        name\r\n        email\r\n        roles\r\n      }\r\n    }\r\n  }\r\n}\r\n",
+								"variables": "{\r\n\"data\": {\r\n \"id\": \"6183fdccc24c11fc763c655f\",\r\n  \"where\": \"products\",\r\n  \"itemId\": [\"6188d5a7ed671131764d6ec6\",\"6188d5a7ed671131764d6ec6\"]\r\n}\r\n}"
+							}
+						},
+						"url": {
+							"raw": "https://a5node-graphql-apollo.herokuapp.com/api/graphql",
+							"protocol": "https",
+							"host": [
+								"a5node-graphql-apollo",
+								"herokuapp",
+								"com"
+							],
+							"path": [
+								"api",
+								"graphql"
+							]
+						}
+					},
+					"response": []
 				}
 			]
 		},
@@ -437,8 +570,140 @@
 						"body": {
 							"mode": "graphql",
 							"graphql": {
-								"query": "mutation Mutation($data: InputCreateProduct!) {\r\n  createProduct(data: $data) {\r\n    id\r\n    price\r\n    title\r\n    content\r\n    creator\r\n  }\r\n}",
-								"variables": "{\r\n\"data\": {\r\n  \"price\": 666,\r\n  \"title\": \"test2\",\r\n  \"content\": \"test\",\r\n  \"creator\": \"61839b526e1e4466eef042e5\"\r\n}\r\n}"
+								"query": "mutation Mutation($data: InputCreateProduct!) {\r\n  createProduct(data: $data) {\r\n    id\r\n    price\r\n    title\r\n    content\r\n    creator\r\n    isRemove\r\n    amount\r\n  }\r\n}",
+								"variables": "{\r\n\"data\": {\r\n  \"price\": 666,\r\n  \"title\": \"test2\",\r\n  \"content\": \"test\",\r\n  \"creator\": \"61839b526e1e4466eef042e5\",\r\n  \"amount\": 666\r\n}\r\n}"
+							}
+						},
+						"url": {
+							"raw": "https://a5node-graphql-apollo.herokuapp.com/api/graphql",
+							"protocol": "https",
+							"host": [
+								"a5node-graphql-apollo",
+								"herokuapp",
+								"com"
+							],
+							"path": [
+								"api",
+								"graphql"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Find products",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "APOLLO_USER",
+								"value": "iO4z3C-2j3JHEUC8BIP1eQ",
+								"type": "text"
+							},
+							{
+								"key": "APOLLO_KEY",
+								"value": "3f585b27-32ab-4eee-95af-7292fcc74e38",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYxODM5YjUyNmUxZTQ0NjZlZWYwNDJlNSIsImVtYWlsIjoidGVzdEB0ZXN0LmNvbSIsInJvbGVzIjpbIkFETUlOIl0sImlhdCI6MTYzNjExOTUxMSwiZXhwIjoxNjM2NzI0MzExfQ.53sFUQmd93-nJ1hZN63zXJq1qZbbHFyA6M-2iL_3YUY",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "query Query {\r\n  getProducts {\r\n    _id\r\n    create_at\r\n    update_at\r\n    price\r\n    title\r\n    content\r\n    amount\r\n    isRemove\r\n    creator {\r\n      _id\r\n      create_at\r\n      update_at\r\n      name\r\n      email\r\n      roles\r\n    }\r\n  }\r\n}\r\n\r\n\r\n",
+								"variables": "{\r\n\r\n}"
+							}
+						},
+						"url": {
+							"raw": "https://a5node-graphql-apollo.herokuapp.com/api/graphql",
+							"protocol": "https",
+							"host": [
+								"a5node-graphql-apollo",
+								"herokuapp",
+								"com"
+							],
+							"path": [
+								"api",
+								"graphql"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Find product by id",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "APOLLO_USER",
+								"value": "iO4z3C-2j3JHEUC8BIP1eQ",
+								"type": "text"
+							},
+							{
+								"key": "APOLLO_KEY",
+								"value": "3f585b27-32ab-4eee-95af-7292fcc74e38",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYxODM5YjUyNmUxZTQ0NjZlZWYwNDJlNSIsImVtYWlsIjoidGVzdEB0ZXN0LmNvbSIsInJvbGVzIjpbIkFETUlOIl0sImlhdCI6MTYzNjExOTUxMSwiZXhwIjoxNjM2NzI0MzExfQ.53sFUQmd93-nJ1hZN63zXJq1qZbbHFyA6M-2iL_3YUY",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "query Query($data: InputID!) {\r\n  findProduct(data: $data) {\r\n    _id\r\n    create_at\r\n    update_at\r\n    price\r\n    title\r\n    content\r\n    amount\r\n    isRemove\r\n    creator {\r\n      _id\r\n      create_at\r\n      update_at\r\n      name\r\n      email\r\n      roles\r\n    }\r\n  }\r\n}\r\n\r\n\r\n\r\n",
+								"variables": "{\r\n\"data\": {\r\n  \"id\": \"6183fdb4c24c11fc763c655c\"\r\n}\r\n}"
+							}
+						},
+						"url": {
+							"raw": "https://a5node-graphql-apollo.herokuapp.com/api/graphql",
+							"protocol": "https",
+							"host": [
+								"a5node-graphql-apollo",
+								"herokuapp",
+								"com"
+							],
+							"path": [
+								"api",
+								"graphql"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update product by id (no work)",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "APOLLO_USER",
+								"value": "iO4z3C-2j3JHEUC8BIP1eQ",
+								"type": "text"
+							},
+							{
+								"key": "APOLLO_KEY",
+								"value": "3f585b27-32ab-4eee-95af-7292fcc74e38",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYxODM5YjUyNmUxZTQ0NjZlZWYwNDJlNSIsImVtYWlsIjoidGVzdEB0ZXN0LmNvbSIsInJvbGVzIjpbIkFETUlOIl0sImlhdCI6MTYzNjExOTUxMSwiZXhwIjoxNjM2NzI0MzExfQ.53sFUQmd93-nJ1hZN63zXJq1qZbbHFyA6M-2iL_3YUY",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "mutation Mutation($data: InputUpdateProduct!) {\r\n  updateProduct(data: $data) {\r\n    _id\r\n    create_at\r\n    update_at\r\n    price\r\n    title\r\n    content\r\n    amount\r\n    isRemove\r\n    creator {\r\n      roles\r\n      email\r\n      name\r\n      update_at\r\n      create_at\r\n      _id\r\n    }\r\n  }\r\n}\r\n\r\n\r\n",
+								"variables": "{\r\n\"data\": {\r\n  \"id\": \"6183fdb4c24c11fc763c655c\",\r\n  \"price\": 3,\r\n  \"title\": \"sssssssssd232312313\",\r\n  \"content\": \"ssssssssssssssssss\",\r\n  \"amount\": 3.0\r\n}\r\n}"
 							}
 						},
 						"url": {

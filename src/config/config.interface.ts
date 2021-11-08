@@ -38,6 +38,7 @@ export interface EnvConfig {
   HOST: string;
   CORS: string;
   apolloKey: string;
+  apolloKeys: string;
   apolloUsers: string;
 }
 
