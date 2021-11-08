@@ -4,7 +4,11 @@ import type http from 'http';
 import { Express, Request, Response } from 'express';
 
 import { ApolloServer, ExpressContext } from 'apollo-server-express';
-import { ApolloServerPluginDrainHttpServer, ApolloServerPluginCacheControl } from 'apollo-server-core';
+import {
+  ApolloServerPluginDrainHttpServer,
+  ApolloServerPluginCacheControl,
+  ApolloServerPluginSchemaReporting,
+} from 'apollo-server-core';
 import responseCachePlugin from 'apollo-server-plugin-response-cache';
 
 import { GraphQLSchema } from 'graphql';
@@ -30,7 +34,8 @@ export default async (app: Express, httpServer: http.Server): Promise<ApolloServ
       ApolloServerPluginDrainHttpServer({
         httpServer,
       }),
-      ApolloServerPluginCacheControl({ defaultMaxAge: 5 }),
+      ApolloServerPluginSchemaReporting(),
+      ApolloServerPluginCacheControl({ defaultMaxAge: 10 }),
       responseCachePlugin({
         sessionId: requestContext => {
           return requestContext.context.user.id || null;
