@@ -115,7 +115,7 @@ class OrderService {
     const order = await OrderModel.findByIdAndUpdate(
       id,
       {
-        $push: { [where || PRODUCTS]: itemId },
+        $push: { [PRODUCTS]: { $in: itemId } },
       },
       { new: true },
     )
@@ -135,7 +135,7 @@ class OrderService {
     const order = await OrderModel.findByIdAndUpdate(
       id,
       {
-        $pull: { [where || PRODUCTS]: itemId },
+        $pull: { [PRODUCTS]: { $in: itemId } },
       },
       { new: true },
     )
