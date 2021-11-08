@@ -11,7 +11,6 @@ import { GraphQLSchema } from 'graphql';
 import config from '../config';
 import Builder from './builder.schema';
 import authServers from '../modules/auth/auth.servers';
-import cors from 'cors';
 
 export default async (app: Express, httpServer: http.Server): Promise<ApolloServer<ExpressContext>> => {
   const schema: GraphQLSchema = await Builder.initSchema();
@@ -47,7 +46,17 @@ export default async (app: Express, httpServer: http.Server): Promise<ApolloServ
 
   await server.start();
 
-  server.applyMiddleware({ app, path: config.apolloOptions.path });
+  server.applyMiddleware({
+    app,
+    path: config.apolloOptions.path,
+    cors: {
+      origin: (config.CORS || '*').split(' ').map(host => {
+        return new RegExp(host);
+      }),
+      credentials: true,
+      optionsSuccessStatus: 200,
+    },
+  });
 
   return server;
 };
