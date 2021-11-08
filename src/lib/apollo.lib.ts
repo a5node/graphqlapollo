@@ -57,11 +57,12 @@ export default async (app: Express, httpServer: http.Server): Promise<ApolloServ
           'https://studio.apollographql.com',
         ];
         console.dir(origin);
-        if (whitelist.indexOf(origin as string) === -1) {
-          callback(new Error('Not allowed by CORS'));
-        } else {
-          callback(null, true);
-        }
+        callback(null, true);
+        // if (whitelist.indexOf(origin as string) === -1) {
+        //   callback(new Error('Not allowed by CORS'));
+        // } else {
+        //   callback(null, true);
+        // }
       },
     },
   });

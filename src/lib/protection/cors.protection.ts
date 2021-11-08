@@ -6,9 +6,10 @@ import config from '../../config';
 
 //Cors option
 const option = {
-  origin: (config.CORS || '*').split(' ').map(host => {
-    return new RegExp(host);
-  }),
+  // origin: (config.CORS || '*').split(' ').map(host => {
+  //   return new RegExp(host);
+  // }),
+  origin: '*',
   credentials: true,
   optionsSuccessStatus: 200,
 };
