@@ -8,6 +8,7 @@ import {
   ApolloServerPluginDrainHttpServer,
   ApolloServerPluginCacheControl,
   ApolloServerPluginSchemaReporting,
+  ApolloServerPluginLandingPageGraphQLPlayground,
 } from 'apollo-server-core';
 import responseCachePlugin from 'apollo-server-plugin-response-cache';
 
@@ -34,8 +35,9 @@ export default async (app: Express, httpServer: http.Server): Promise<ApolloServ
       ApolloServerPluginDrainHttpServer({
         httpServer,
       }),
-      ApolloServerPluginSchemaReporting(),
-      ApolloServerPluginCacheControl({ defaultMaxAge: 10 }),
+      ApolloServerPluginCacheControl({
+        defaultMaxAge: 1000,
+      }),
       responseCachePlugin({
         sessionId: requestContext => {
           return requestContext.context.user.id || null;
@@ -43,7 +45,7 @@ export default async (app: Express, httpServer: http.Server): Promise<ApolloServ
       }),
     ],
     apollo: {
-      key: config.apolloKeys || config.apolloKey,
+      key: config.apolloKey,
     },
   });
 
@@ -55,20 +57,7 @@ export default async (app: Express, httpServer: http.Server): Promise<ApolloServ
     cors: {
       credentials: true,
       origin: (origin, callback) => {
-        const whitelist = [
-          'http://localhost:3307',
-          'http://a5node-graphql-apollo.herokuapp.com',
-          'https://a5node-graphql-apollo.herokuapp.com',
-          'https://studio.apollographql.com',
-        ];
-
         callback(null, true);
-
-        // if (whitelist.indexOf(origin as string) === -1) {
-        //   callback(new Error('Not allowed by CORS'));
-        // } else {
-        //   callback(null, true);
-        // }
       },
     },
   });

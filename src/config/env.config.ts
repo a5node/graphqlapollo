@@ -11,6 +11,7 @@ const env: EnvConfig = {
   CORS: process.env.CORS || '*',
   apolloKey: process.env.APOLLO_KEY || '',
   apolloKeys: process.env.APOLLO_KEYS || '',
+  apolloId: process.env.APOLLO_GRAPH_ID || '',
   apolloUsers: process.env.APOLLO_USERS || '',
 };
 

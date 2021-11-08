@@ -40,6 +40,7 @@ export interface EnvConfig {
   apolloKey: string;
   apolloKeys: string;
   apolloUsers: string;
+  apolloId: string;
 }
 
 export interface Config {
