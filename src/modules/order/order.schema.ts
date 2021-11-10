@@ -1,6 +1,6 @@
 import 'reflect-metadata';
 import { Field, ObjectType, InputType, ID } from 'type-graphql';
-import { Length, IsArray, IsEmail, MinLength, IsDate, ValidationArguments } from 'class-validator';
+import { Length, IsArray, MinLength } from 'class-validator';
 import { ObjectId } from 'mongoose';
 
 import User, { TypeUser } from '../user/user.schema';
@@ -26,9 +26,11 @@ export class InputCreateOrder {
   customer!: ObjectId;
 
   @Field(type => [ID])
+  @IsArray()
   products!: ObjectId[];
 
   @Field()
+  @MinLength(1)
   price!: number;
 }
 

@@ -44,15 +44,6 @@ export default async (app: Express, httpServer: http.Server): Promise<ApolloServ
       key: config.apolloKeys,
     },
     formatError: err => {
-      // Don't give the specific errors to the client.
-      // if (err.message.startsWith('Database Error: ')) {
-      //   return new Error('Internal server error');
-      // }
-
-      console.dir(err);
-      // Otherwise return the original error. The error can also
-      // be manipulated in other ways, as long as it's returned.
-
       return new HttpApolloErrors({ code: 1 }).json(err);
     },
   });

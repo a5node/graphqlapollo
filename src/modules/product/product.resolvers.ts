@@ -28,6 +28,12 @@ export default class {
     return await ProductServers.getProducts();
   }
 
+  @Authorized(Object.values(Role))
+  @Query(returns => [Products])
+  async getProductsUserId(@Arg('data') data: InputID) {
+    return await ProductServers.getProductsUserId(data);
+  }
+
   //--------Mutation----
   @Authorized(Object.values(Role))
   @Mutation(returns => CreateProduct)

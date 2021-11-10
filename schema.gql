@@ -255,6 +255,7 @@ type Query {
   getOrders: [Order!]!
   getOrdersUserId(data: InputOrderId!): [Order!]!
   getProducts: [Products!]!
+  getProductsUserId(data: InputID!): [Products!]!
   getUsers: [TypeUser!]!
   login(data: InputLogin!): User!
 }

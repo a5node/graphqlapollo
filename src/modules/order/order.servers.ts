@@ -1,38 +1,12 @@
 'use strict';
 
 import OrderModel from './order.model';
-import UserModel from '../user/user.model';
-import ProductModel from '../product/product.model';
-import { Http409Error, Http404Error, Http400Error } from '../../errors/http-errors';
+import { Http400Error } from '../../errors/http-errors';
 import { TCreateOrder, TGetOrders, TGetOrdersUserId, TFindOrderById, TAddOrRemove, TUpdateOrder } from './order.types';
-import { PRODUCTS, CUSTOMER, ORDERS, CREATOR } from '../constants';
+import { PRODUCTS } from '../constants';
+import Populate from '../../db/populate.db';
 
-class OrderService {
-  private select: unknown = {
-    __v: 0,
-  };
-
-  private populateP = (selectP?: unknown, selectC?: unknown) => {
-    return {
-      path: PRODUCTS,
-      model: ProductModel,
-      select: selectP || this.select,
-      populate: {
-        path: CREATOR,
-        select: selectC || this.select,
-        model: UserModel,
-      },
-    };
-  };
-
-  private populateC = (select?: unknown) => {
-    return {
-      path: CUSTOMER,
-      model: UserModel,
-      select: select || this.select,
-    };
-  };
-
+class OrderService extends Populate {
   createOrder: TCreateOrder = async data => {
     let order;
 
@@ -46,7 +20,7 @@ class OrderService {
     const addUser = order.addUserOrder({ itemId: order._id, id: data.customer });
 
     const orderPopulate = OrderModel.findOne({ _id: order._id })
-      .populate(this.populateC(select))
+      .populate(this.populateCu(select))
       .populate(this.populateP())
       .exec();
 
@@ -63,7 +37,7 @@ class OrderService {
     const select = { password: 0 };
 
     const order = await OrderModel.findOne({ _id: data.id })
-      .populate(this.populateC(select))
+      .populate(this.populateCu(select))
       .populate(this.populateP())
       .exec();
 
@@ -77,7 +51,7 @@ class OrderService {
   getOrders: TGetOrders = async () => {
     const select = { password: 0 };
 
-    const orders = await OrderModel.find().populate(this.populateC(select)).populate(this.populateP()).exec();
+    const orders = await OrderModel.find().populate(this.populateCu(select)).populate(this.populateP()).exec();
 
     return orders;
   };
@@ -85,7 +59,7 @@ class OrderService {
   getOrdersUserId: TGetOrdersUserId = async data => {
     const select = { password: 0 };
     const orders = await OrderModel.find({ customer: data.id })
-      .populate(this.populateC(select))
+      .populate(this.populateCu(select))
       .populate(this.populateP())
       .exec();
 
@@ -99,7 +73,7 @@ class OrderService {
   updateOrder: TUpdateOrder = async data => {
     const select = { password: 0 };
     const order = await OrderModel.findByIdAndUpdate(data.id, { $set: data }, { new: true })
-      .populate(this.populateC(select))
+      .populate(this.populateCu(select))
       .populate(this.populateP())
       .exec();
 
@@ -119,7 +93,7 @@ class OrderService {
       },
       { new: true },
     )
-      .populate(this.populateC(select))
+      .populate(this.populateCu(select))
       .populate(this.populateP())
       .exec();
 
@@ -139,7 +113,7 @@ class OrderService {
       },
       { new: true },
     )
-      .populate(this.populateC(select))
+      .populate(this.populateCu(select))
       .populate(this.populateP())
       .exec();
 

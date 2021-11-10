@@ -1,49 +1,11 @@
-'use strict';
-import OrderModel from '../order/order.model';
-import UserModel from '../user/user.model';
 import ProductModel from './product.model';
-import { TCreateProduct, TUpdateProduct, TGetProducts, TFindProductById } from '@server/types';
+import { TCreateProduct, TUpdateProduct, TGetProducts, TFindProductById, TGetProductsUserId } from '@server/types';
 
-import { PRODUCTS, CUSTOMER, ORDERS, CREATOR, USERS } from '../constants';
+import { CREATOR } from '../constants';
 import { Http404Error, Http400Error } from '../../errors/http-errors';
+import Populate from '../../db/populate.db';
 
-class ProductService {
-  private select: unknown = {
-    __v: 0,
-  };
-  private populateO = () => {
-    return {
-      path: ORDERS,
-      model: OrderModel,
-      select: this.select,
-      populate: {
-        path: PRODUCTS,
-        select: this.select,
-      },
-    };
-  };
-
-  private populateP = (selectP?: unknown, selectC?: unknown) => {
-    return {
-      path: PRODUCTS,
-      model: ProductModel,
-      select: selectP || this.select,
-      populate: {
-        path: CREATOR,
-        select: selectC || this.select,
-        model: UserModel,
-      },
-    };
-  };
-
-  private populateC = (select?: unknown) => {
-    return {
-      path: CREATOR,
-      model: UserModel,
-      select: select || this.select,
-    };
-  };
-
+class ProductService extends Populate {
   createProduct: TCreateProduct = async data => {
     const product = await ProductModel.create(data);
 
@@ -55,7 +17,7 @@ class ProductService {
   };
 
   findProduct: TFindProductById = async data => {
-    const product = await ProductModel.findById(data.id).populate(this.populateC()).exec();
+    const product = await ProductModel.findById(data.id).populate(this.populateCr()).exec();
 
     if (!product) {
       throw new Http404Error({ code: 1101 });
@@ -64,11 +26,11 @@ class ProductService {
     return product.jsonPayload();
   };
 
-  getProducts: TGetProducts = async () => await ProductModel.find().populate(this.populateC()).exec();
+  getProducts: TGetProducts = async () => await ProductModel.find().populate(this.populateCr()).exec();
 
   updateProduct: TUpdateProduct = async data => {
     const product = await ProductModel.findByIdAndUpdate(data.id, { $set: data }, { new: true })
-      .populate(this.populateC())
+      .populate(this.populateCr())
       .exec();
 
     if (!product) {
@@ -76,6 +38,18 @@ class ProductService {
     }
 
     return product.jsonPayload();
+  };
+
+  getProductsUserId: TGetProductsUserId = async data => {
+    const orders = await ProductModel.find({ [CREATOR]: data.id })
+      .populate(this.populateCr())
+      .exec();
+
+    if (!orders) {
+      throw new Http400Error({ code: 1103 });
+    }
+
+    return orders;
   };
 }
 

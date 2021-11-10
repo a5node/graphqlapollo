@@ -1,6 +1,7 @@
 import 'reflect-metadata';
 import { Field, ObjectType, InputType, ID } from 'type-graphql';
 import { Length, IsArray, IsEmail, MinLength, IsDate, ValidationArguments } from 'class-validator';
+
 import { ObjectId } from 'mongoose';
 
 import User, { Creator } from '../user/user.schema';
@@ -22,15 +23,19 @@ export class ProductId {
 @InputType()
 export class InputCreateProduct {
   @Field()
+  @MinLength(1)
   price!: number;
 
   @Field()
+  @Length(1, 30)
   title!: string;
 
   @Field()
+  @MinLength(10)
   content!: string;
 
   @Field()
+  @MinLength(0)
   amount!: number;
 
   @Field()
@@ -43,15 +48,19 @@ export class InputUpdateProduct {
   readonly id!: ObjectId;
 
   @Field({ nullable: true })
+  @MinLength(1)
   price!: number;
 
   @Field({ nullable: true })
+  @Length(1, 30)
   title!: string;
 
   @Field({ nullable: true })
+  @MinLength(10)
   content!: string;
 
   @Field({ nullable: true })
+  @MinLength(0)
   amount!: number;
 }
 
