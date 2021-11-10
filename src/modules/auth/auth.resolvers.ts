@@ -15,10 +15,4 @@ export default class {
   async login(@Arg('data') data: InputLogin) {
     return await AuthServers.login(data);
   }
-
-  @Authorized(VISITOR, ...Object.values(Role))
-  @Mutation(returns => AccessToken)
-  async refresh(@Arg('data') data: InputAccessToken) {
-    return data;
-  }
 }

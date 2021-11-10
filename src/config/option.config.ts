@@ -4,7 +4,7 @@ import { OptionConfig } from './config.interface';
 
 const options: OptionConfig = {
   jwtOptions: {
-    expiresIn: '7d',
+    expiresIn: '15s', //7d
   },
 
   staticClient: path.join(__dirname, '../../client'),

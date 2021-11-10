@@ -7,6 +7,7 @@ import User, {
   InputCreateUser,
   CreateUser,
   FindUser,
+  TypeUser,
   InputFindUser,
   InputUpdateUser,
   InputAddOrRemoveUser,
@@ -24,7 +25,7 @@ export default class {
   }
 
   @Authorized(Object.values(Role))
-  @Query(returns => [FindUser])
+  @Query(returns => [TypeUser])
   async getUsers() {
     return await UserServers.getUsers();
   }

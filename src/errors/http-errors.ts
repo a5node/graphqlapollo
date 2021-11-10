@@ -1,16 +1,18 @@
 import { Dictionary } from '@server/interface';
+import { ApolloError } from 'apollo-server-errors';
+import { GraphQLError } from 'graphql';
 
 export interface ErrorPayload extends Dictionary {
   message?: string;
   code?: number | string;
-  stack?: number | string;
+  status?: number | string;
 }
 
-export abstract class HttpError extends Error {
-  public readonly status!: number;
+export class HttpError extends Error {
+  public readonly status!: number | string;
   public readonly code!: number | string;
-  public readonly payload!: Dictionary;
-  protected stacktrace!: boolean;
+  public payload!: ErrorPayload;
+
   protected defaultCode!: number | string;
   protected defaultMessage!: string;
 
@@ -19,29 +21,54 @@ export abstract class HttpError extends Error {
 
     if (typeof payload === 'string') {
       this.message = payload;
-    } else {
-      this.code = payload.code || this.defaultCode;
-      this.status = payload.status || this.status;
-      this.message = payload.message || this.defaultMessage;
     }
-    this.stacktrace = true;
-    this.message = payload.message || this.defaultMessage;
+
+    this.payload = {
+      code: payload.code || this.defaultCode,
+      status: payload.status || this.status,
+      message: this.message || payload.message || this.defaultMessage,
+    };
+
+    this.code = payload.code || this.defaultCode;
+    this.status = payload.status || this.status;
+    this.message = this.message || payload.message || this.defaultMessage;
+
     Error.captureStackTrace(this, this.constructor);
   }
 
-  public json(): Dictionary {
-    if (!this.payload) {
-      return {
-        success: false,
-        error: {
-          message: this.message,
-          code: this.code,
-          stack: this.stack,
+  public json<T extends GraphQLError>(err?: GraphQLError): Dictionary & T {
+    if (err) {
+      const { extensions, path, message } = err;
+      const { code, exception } = extensions as { code?: number | string; exception?: Dictionary };
+      const { validationErrors } = exception as { validationErrors: Dictionary[] };
+
+      const p = path as string[];
+
+      this.payload = {
+        messages: message || exception?.message || exception?.defaultMessage,
+        ...this.payload,
+        code,
+        defaultCode: exception?.code || exception?.defaultCode || this.code,
+        defaultMessage: exception?.defaultMessage || this.defaultMessage,
+        status: exception?.status || this.status,
+        extensions: {
+          errors: validationErrors || [],
         },
+        path: p || [],
       };
     }
 
-    return this.payload;
+    return this.payload as T & Dictionary;
+  }
+}
+
+export class HttpApolloErrors extends HttpError {
+  public readonly status = 400;
+  protected defaultMessage = 'Bad Request';
+  protected defaultCode = 400;
+
+  public constructor(payload: ErrorPayload) {
+    super(payload);
   }
 }
 

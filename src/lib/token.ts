@@ -13,6 +13,7 @@ export const validateToken = (token: string): Dictionary => {
     decoded = jwt.verify(token, env.appKey) as Dictionary;
   } catch (error: any) {
     if (error.name === 'TokenExpiredError') {
+      console.dir(error);
       return { valid: true, expired: true };
     }
     return { valid: false };

@@ -167,7 +167,6 @@ type Mutation {
   createOrder(data: InputCreateOrder!): Order!
   createProduct(data: InputCreateProduct!): CreateProduct!
   createUser(data: InputCreateUser!): CreateUser!
-  refresh(data: InputAccessToken!): AccessToken!
   removeFromOrder(data: InputAddOrRemoveOrder!): Order!
   removeRoleToUser(data: InputAddOrRemoveRoleUser!): FindUser!
   updateOrder(data: InputUpdateOrder!): Order!
@@ -256,7 +255,7 @@ type Query {
   getOrders: [Order!]!
   getOrdersUserId(data: InputOrderId!): [Order!]!
   getProducts: [Products!]!
-  getUsers: [FindUser!]!
+  getUsers: [TypeUser!]!
   login(data: InputLogin!): User!
 }
 

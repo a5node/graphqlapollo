@@ -68,6 +68,7 @@ UserSchema.methods.verifyPassword = async function (password: string): Promise<b
 UserSchema.methods.jsonPayload = function <T = Dictionary>(payload?: T) {
   return {
     id: this._id,
+    _id: this._id,
     name: this.name,
     email: this.email,
     orders: this.orders,
