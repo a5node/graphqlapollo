@@ -1,10 +1,8 @@
-'use strict';
-
 import OrderModel from './order.model';
+import Populate from '../../db/populate.db';
 import { Http400Error } from '../../errors/http-errors';
 import { TCreateOrder, TGetOrders, TGetOrdersUserId, TFindOrderById, TAddOrRemove, TUpdateOrder } from './order.types';
 import { PRODUCTS } from '../constants';
-import Populate from '../../db/populate.db';
 
 class OrderService extends Populate {
   createOrder: TCreateOrder = async data => {

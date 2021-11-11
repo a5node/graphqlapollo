@@ -1,14 +1,29 @@
-function applyMixins(derivedCtor: any, baseCtors: any[]) {
+type AnyConstructor<T = object> = new (...input: any[]) => T;
+
+export function MixinClass<T extends AnyConstructor>(listClass: T[]): AnyConstructor {
   try {
-    baseCtors.forEach(baseCtor => {
-      Object.getOwnPropertyNames(baseCtor.prototype).forEach(name => {
-        let descriptor = Object.getOwnPropertyDescriptor(baseCtor.prototype, name);
-        Object.defineProperty(derivedCtor.prototype, name, <PropertyDescriptor & ThisType<any>>descriptor);
+    class base {}
+    listClass.forEach(item => {
+      Object.getOwnPropertyNames(item.prototype).forEach(name => {
+        let descriptor = Object.getOwnPropertyDescriptor(item.prototype, name);
+        Object.defineProperty(base.prototype, name, <PropertyDescriptor & ThisType<any>>descriptor);
+      });
+    });
+    return class extends base {};
+  } catch (error) {
+    throw error;
+  }
+}
+
+export function applyMixins<T extends AnyConstructor>(ownerClass: T, listClass: T[]) {
+  try {
+    listClass.forEach(item => {
+      Object.getOwnPropertyNames(item.prototype).forEach(name => {
+        let descriptor = Object.getOwnPropertyDescriptor(item.prototype, name);
+        Object.defineProperty(ownerClass.prototype, name, <PropertyDescriptor & ThisType<any>>descriptor);
       });
     });
   } catch (error) {
     throw error;
   }
 }
-
-export default applyMixins;

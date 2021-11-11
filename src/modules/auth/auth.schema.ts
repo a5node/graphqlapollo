@@ -24,15 +24,8 @@ export default class Auth {
   access_token!: string;
 
   @Field({ nullable: true })
-  @IsEmail()
-  @Length(5, 70)
   email!: string;
 
   @Field()
-  @MinLength(4, {
-    message: (args: ValidationArguments) => {
-      return 'password is too short';
-    },
-  })
   password!: string;
 }

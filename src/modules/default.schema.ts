@@ -1,6 +1,6 @@
 import 'reflect-metadata';
-import { Field, ObjectType, InputType, ID, InterfaceType } from 'type-graphql';
-import { IsDate, ValidationArguments } from 'class-validator';
+import { Field, ObjectType, InputType } from 'type-graphql';
+import { IsDate } from 'class-validator';
 import { ObjectId } from 'mongoose';
 import { ObjectIdScalar } from '../scalar/ObjectId.scalar';
 
