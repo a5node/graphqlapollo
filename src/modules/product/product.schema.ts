@@ -1,6 +1,6 @@
 import 'reflect-metadata';
 import { Field, ObjectType, InputType, ID } from 'type-graphql';
-import { Length, IsArray, IsEmail, MinLength, IsDate, ValidationArguments } from 'class-validator';
+import { Length, MinLength, IsNumber,  IsString } from 'class-validator';
 
 import { ObjectId } from 'mongoose';
 
@@ -11,6 +11,7 @@ import { ObjectIdScalar } from '../../scalar/ObjectId.scalar';
 @InputType()
 export class InputProductId {
   @Field(type => ID)
+  @IsString()
   readonly id!: ObjectId;
 }
 
@@ -23,19 +24,21 @@ export class ProductId {
 @InputType()
 export class InputCreateProduct {
   @Field()
-  @MinLength(1)
+  @IsNumber()
   price!: number;
 
   @Field()
   @Length(1, 30)
+  @IsString()
   title!: string;
 
   @Field()
   @MinLength(10)
+  @IsString()
   content!: string;
 
   @Field()
-  @MinLength(0)
+  @IsNumber()
   amount!: number;
 
   @Field()
@@ -48,19 +51,21 @@ export class InputUpdateProduct {
   readonly id!: ObjectId;
 
   @Field({ nullable: true })
-  @MinLength(1)
+  @IsNumber()
   price!: number;
 
   @Field({ nullable: true })
   @Length(1, 30)
+  @IsString()
   title!: string;
 
   @Field({ nullable: true })
   @MinLength(10)
+  @IsString()
   content!: string;
 
   @Field({ nullable: true })
-  @MinLength(0)
+  @IsNumber()
   amount!: number;
 }
 

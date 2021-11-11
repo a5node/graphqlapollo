@@ -81,7 +81,7 @@ input InputAccessToken {
 input InputAddOrRemoveOrder {
   id: ID!
   itemId: [ID!]!
-  where: String!
+  where: SchemaDB!
 }
 
 input InputAddOrRemoveRoleUser {
@@ -92,7 +92,7 @@ input InputAddOrRemoveRoleUser {
 input InputAddOrRemoveUser {
   id: ID!
   itemId: [ID!]!
-  where: String!
+  where: SchemaDB!
 }
 
 input InputCreateOrder {
@@ -264,6 +264,15 @@ type Query {
 enum Role {
   ADMIN
   USER
+}
+
+"""The basic schema for db"""
+enum SchemaDB {
+  CREATOR
+  CUSTOMER
+  ORDERS
+  PRODUCTS
+  ROLES
 }
 
 """

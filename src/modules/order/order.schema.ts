@@ -1,6 +1,6 @@
 import 'reflect-metadata';
 import { Field, ObjectType, InputType, ID } from 'type-graphql';
-import { Length, IsArray, MinLength } from 'class-validator';
+import { Length, IsArray, IsNumber } from 'class-validator';
 import { ObjectId } from 'mongoose';
 
 import User, { TypeUser } from '../user/user.schema';
@@ -8,6 +8,7 @@ import Product, { TypeProduct, Products } from '../product/product.schema';
 import { ObjectIdScalar } from '../../scalar/ObjectId.scalar';
 
 import { Default } from '../default.schema';
+import { SchemaDB } from '../../interface/enum.interface';
 @InputType()
 export class InputOrderId {
   @Field(type => ID)
@@ -30,7 +31,7 @@ export class InputCreateOrder {
   products!: ObjectId[];
 
   @Field()
-  @MinLength(1)
+  @IsNumber()
   price!: number;
 }
 
@@ -60,8 +61,8 @@ export class InputAddOrRemoveOrder {
   @Field(type => ID)
   id!: ObjectId;
 
-  @Field()
-  where!: string;
+  @Field(type => SchemaDB)
+  where!: SchemaDB;
 
   @Field(type => [ID])
   itemId!: ObjectId[];

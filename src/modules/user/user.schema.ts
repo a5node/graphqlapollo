@@ -1,12 +1,13 @@
 import 'reflect-metadata';
 import { Field, ObjectType, InputType, ID } from 'type-graphql';
-import { Length, IsArray, IsEmail, MinLength, IsDate, ValidationArguments } from 'class-validator';
+import { Length, IsArray, IsEmail, MinLength, IsDate, ValidationArguments, Contains, IsString } from 'class-validator';
 import { ObjectId } from 'mongoose';
 
-import Order, { TypeOrder } from '../order/order.schema';
+import { TypeOrder } from '../order/order.schema';
 import { Default } from '../default.schema';
 import { Role } from '../../interface';
 import { IAddOrRemove, IInputCreateUser, IInputFindUser, IInputUpdateUser, IAddOrRemoveRole } from '../../interface';
+import { SchemaDB } from '../../interface/enum.interface';
 
 @InputType()
 export class InputCreateUser implements IInputCreateUser {
@@ -16,7 +17,7 @@ export class InputCreateUser implements IInputCreateUser {
 
   @Field()
   @IsEmail()
-  @Length(5, 70)
+  @Length(4, 70)
   email!: string;
 
   @Field()
@@ -33,8 +34,9 @@ export class InputAddOrRemoveUser implements IAddOrRemove {
   @Field(type => ID)
   id!: ObjectId;
 
-  @Field()
-  where!: string;
+  @Field(type => SchemaDB)
+  @IsString()
+  where!: SchemaDB;
 
   @Field(type => [ID])
   itemId!: ObjectId[];
@@ -47,7 +49,6 @@ export class InputFindUser implements IInputFindUser {
 
   @Field({ nullable: true })
   @IsEmail()
-  @Length(5, 70)
   email!: string;
 }
 
@@ -57,9 +58,11 @@ export class InputUpdateUser implements IInputUpdateUser {
   readonly id!: ObjectId;
 
   @Field({ nullable: true })
+  @Length(3, 30)
   name!: string;
 
   @Field({ nullable: true })
+  @IsEmail()
   email!: string;
 }
 
@@ -69,6 +72,7 @@ export class InputAddOrRemoveRoleUser implements IAddOrRemoveRole {
   readonly id!: ObjectId;
 
   @Field(type => Role, { nullable: true })
+  @IsString()
   role!: Role;
 }
 

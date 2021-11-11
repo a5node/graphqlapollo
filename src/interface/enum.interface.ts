@@ -19,4 +19,18 @@ export enum DB {
   PRODUCTS = 'products',
   CREATOR = 'creator',
   CUSTOMER = 'customer',
+  ROLES = 'roles',
 }
+
+export enum SchemaDB {
+  ORDERS = 'orders',
+  PRODUCTS = 'products',
+  CREATOR = 'creator',
+  CUSTOMER = 'customer',
+  ROLES = 'roles',
+}
+
+registerEnumType(SchemaDB, {
+  name: 'SchemaDB',
+  description: 'The basic schema for db',
+});

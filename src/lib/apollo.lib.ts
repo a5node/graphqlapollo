@@ -21,6 +21,11 @@ export default async (app: Express, httpServer: http.Server): Promise<ApolloServ
     introspection: process.env.NODE_ENV !== 'production',
     context: async ({ req, res }: { req: Request; res: Response }) => {
       const user = await authServers.auth(req);
+
+      if (user.id) {
+        req.headers.sessionid = user.id;
+      }
+
       return {
         req,
         user,
@@ -32,7 +37,7 @@ export default async (app: Express, httpServer: http.Server): Promise<ApolloServ
         httpServer,
       }),
       ApolloServerPluginCacheControl({
-        defaultMaxAge: 1000,
+        defaultMaxAge: 100,
       }),
       responseCachePlugin({
         sessionId: requestContext => {

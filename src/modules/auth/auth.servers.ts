@@ -72,7 +72,6 @@ class AuthService {
 
   authChecker: AuthChecker<Context> = async ({ root, args, context: { user }, info: { fieldName, path } }, roles) => {
     const { key, prev, typename } = path;
-
     if (roles.length === 0) {
       return user !== undefined;
     }

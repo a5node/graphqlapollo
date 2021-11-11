@@ -57,7 +57,7 @@ export default class {
     return await UserServers.addRoleToUser(data);
   }
 
-  @Authorized(Role.ADMIN)
+  @Authorized(Object.values(Role.ADMIN))
   @Mutation(returns => FindUser)
   async removeRoleToUser(@Arg('data') data: InputAddOrRemoveRoleUser) {
     return await UserServers.removeRoleToUser(data);
