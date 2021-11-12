@@ -50,7 +50,7 @@ export default async (app: Express, httpServer: http.Server): Promise<ApolloServ
       key: config.apolloKeys,
     },
     formatError: err => {
-      console.dir('err -->', err);
+      console.log('err -->', err);
 
       if (err.message?.startsWith('Database Error: ')) {
         throw new MyError('My error message');
