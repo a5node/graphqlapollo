@@ -8,6 +8,14 @@ export interface ErrorPayload extends Dictionary {
   status?: number | string;
 }
 
+export class MyError extends ApolloError {
+  constructor(message: string) {
+    super(message, 'MY_ERROR_CODE');
+
+    Object.defineProperty(this, 'name', { value: 'MyError' });
+  }
+}
+
 export class HttpError extends Error {
   public readonly status!: number | string;
   public readonly code!: number | string;
