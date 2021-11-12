@@ -1,6 +1,6 @@
 import 'reflect-metadata';
 import { Field, ObjectType, InputType, ID } from 'type-graphql';
-import { Length, IsArray, IsNumber } from 'class-validator';
+import { Length, IsArray, IsNumber, IsBoolean } from 'class-validator';
 import { ObjectId } from 'mongoose';
 
 import User, { TypeUser } from '../user/user.schema';
@@ -41,18 +41,23 @@ export class InputUpdateOrder {
   readonly id!: ObjectId;
 
   @Field({ nullable: true })
+  @IsBoolean()
   paid?: boolean;
 
   @Field({ nullable: true })
+  @IsBoolean()
   sent?: boolean;
 
   @Field({ nullable: true })
+  @IsBoolean()
   received!: boolean;
 
   @Field({ nullable: true })
+  @IsBoolean()
   isRemove!: boolean;
 
   @Field({ nullable: true })
+  @IsBoolean()
   processed?: boolean;
 }
 

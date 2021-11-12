@@ -150,6 +150,7 @@ input InputUpdateProduct {
   amount: Float
   content: String
   id: ID!
+  isRemove: Boolean!
   price: Float
   title: String
 }

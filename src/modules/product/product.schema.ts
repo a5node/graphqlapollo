@@ -1,6 +1,6 @@
 import 'reflect-metadata';
 import { Field, ObjectType, InputType, ID } from 'type-graphql';
-import { Length, MinLength, IsNumber,  IsString } from 'class-validator';
+import { Length, MinLength, IsNumber, IsString, IsBoolean } from 'class-validator';
 
 import { ObjectId } from 'mongoose';
 
@@ -67,6 +67,10 @@ export class InputUpdateProduct {
   @Field({ nullable: true })
   @IsNumber()
   amount!: number;
+
+  @Field()
+  @IsBoolean()
+  isRemove!: boolean;
 }
 
 @ObjectType()

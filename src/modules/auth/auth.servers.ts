@@ -42,11 +42,11 @@ class AuthService {
     const { apollo_user, apollo_key, authorization } = req.headers;
 
     if (apollo_key !== config.apolloKey) {
-      throw new Error();
+      throw new Http401Error({ code: 1001, message: "You have't allows" });
     }
 
     if (!config.apolloUsers.split(' ').includes(apollo_user as string)) {
-      throw new Error();
+      throw new Http401Error({ code: 1001, message: "You have't allows" });
     }
 
     if (!authorization) {
@@ -59,7 +59,7 @@ class AuthService {
       const { valid, data } = validateToken(authorization);
 
       if (!valid) {
-        throw new Error();
+        throw new Http401Error({ code: 1001, message: 'You need log in!' });
       }
 
       return { ...data, valid };
@@ -77,7 +77,7 @@ class AuthService {
     }
 
     if (!user) {
-      throw new Http401Error({ code: 1004, message: "You have't allows" });
+      throw new Http401Error({ code: 1002, message: "You have't allows" });
     }
 
     if (key === 'createUser' && typename === 'Mutation' && user.roles.some(role => role === VISITOR)) {
@@ -89,7 +89,7 @@ class AuthService {
         const auth = await UserModel.findById(user.id).select({ passport: 0 });
 
         if (!auth) {
-          throw new Http401Error({ code: 1004, message: "You have't allows" });
+          throw new Http401Error({ code: 1002, message: "You have't allows" });
         }
 
         return true;
@@ -98,7 +98,7 @@ class AuthService {
       return true;
     }
 
-    throw new Http401Error({ code: 1005, message: "You can't do it" });
+    throw new Http401Error({ code: 1002, message: "You can't do it" });
   };
 }
 
