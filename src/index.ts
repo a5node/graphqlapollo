@@ -43,8 +43,8 @@ export default class Server {
 
   private initLogger() {
     // If development mode in console is not writing messages about logs
-    if (config.NODE_DEV === 'dev') {
-      this.app.use(logger('dev'));
+    if (config.NODE_ENV === 'development') {
+      this.app.use(logger('development'));
     }
   }
 

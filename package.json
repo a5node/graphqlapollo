@@ -7,9 +7,9 @@
     "test": "nyc --all --reporter=html jest test/**/*.spec.js",
     "test:watch": "jest --verbose --detectOpenHandles",
     "build": "tsc -p . && ncp src dist ",
-    "start": "node dist/index.js",
+    "start": "cross-env NODE_ENV=production node dist/index.js",
     "postinstall": "npm run build",
-    "dev": "ts-node-dev --rs --respawn -r tsconfig-paths/register --transpile-only  src/index.ts "
+    "dev": "cross-env NODE_ENV=development ts-node-dev --rs --respawn -r tsconfig-paths/register --transpile-only  src/index.ts "
   },
   "author": "a5_node",
   "license": "ISC",
@@ -23,6 +23,7 @@
     "compression": "^1.7.4",
     "cookie-parser": "^1.4.5",
     "cors": "^2.8.5",
+    "cross-env": "^7.0.3",
     "dotenv": "^10.0.0",
     "express": "^4.17.1",
     "express-bearer-token": "^2.4.0",
@@ -45,6 +46,7 @@
     "uuid": "^8.3.2"
   },
   "devDependencies": {
+    "@apollo/rover": "^0.4.0",
     "@types/body-parser": "^1.19.1",
     "@types/compression": "^1.7.2",
     "@types/cookie-parser": "^1.4.2",

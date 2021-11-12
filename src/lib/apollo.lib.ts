@@ -4,10 +4,15 @@ import type http from 'http';
 import { Express, Request, Response } from 'express';
 
 import { ApolloServer, ExpressContext } from 'apollo-server-express';
-import { ApolloServerPluginDrainHttpServer, ApolloServerPluginCacheControl } from 'apollo-server-core';
+import {
+  ApolloServerPluginDrainHttpServer,
+  ApolloServerPluginCacheControl,
+  ApolloServerPluginLandingPageProductionDefault,
+  ApolloServerPluginLandingPageLocalDefault,
+} from 'apollo-server-core';
 import responseCachePlugin from 'apollo-server-plugin-response-cache';
 
-import { GraphQLSchema } from 'graphql';
+import { GraphQLSchema, printSchema } from 'graphql';
 import config from '../config';
 import Builder from './builder.schema';
 import authServers from '../modules/auth/auth.servers';
@@ -20,7 +25,6 @@ export default async (app: Express, httpServer: http.Server): Promise<ApolloServ
     schema,
     introspection: process.env.NODE_ENV !== 'production',
     context: async ({ req, res }: { req: Request; res: Response }) => {
-      console.dir('context -->');
       const user = await authServers.auth(req);
 
       if (user.id) {
@@ -34,6 +38,9 @@ export default async (app: Express, httpServer: http.Server): Promise<ApolloServ
       };
     },
     plugins: [
+      process.env.NODE_ENV === 'production'
+        ? ApolloServerPluginLandingPageProductionDefault({ footer: false })
+        : ApolloServerPluginLandingPageLocalDefault({ footer: false }),
       ApolloServerPluginDrainHttpServer({
         httpServer,
       }),
@@ -48,10 +55,10 @@ export default async (app: Express, httpServer: http.Server): Promise<ApolloServ
     ],
     apollo: {
       key: config.apolloKeys,
+      graphVariant: 'current',
+      graphId: config.apolloId,
     },
     formatError: err => {
-      console.log('err -->', err);
-
       if (err.message?.startsWith('Database Error: ')) {
         throw new MyError('My error message');
       }

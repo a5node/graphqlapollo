@@ -13,6 +13,7 @@ const env: EnvConfig = {
   apolloKeys: process.env.APOLLO_KEYS || '',
   apolloId: process.env.APOLLO_GRAPH_ID || '',
   apolloUsers: process.env.APOLLO_USERS || '',
+  NODE_ENV: process.env.NODE_ENV || '',
 };
 
 export default env;
