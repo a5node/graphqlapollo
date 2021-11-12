@@ -1,6 +1,6 @@
 import { Express, Request, Response, NextFunction, ErrorRequestHandler } from 'express';
 
-import { HttpError, ErrorPayload } from '@errors/http-errors';
+import { HttpError, ErrorPayload } from './http-errors';
 
 export default (app: Express): void => {
   app.use((req: Request, res: Response, next: NextFunction): void => {

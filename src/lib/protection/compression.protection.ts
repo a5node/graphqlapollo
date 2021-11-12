@@ -1,5 +1,3 @@
-'use strict';
-
 import express, { RequestHandler } from 'express';
 
 import compression from 'compression';

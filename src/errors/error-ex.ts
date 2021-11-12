@@ -1,4 +1,4 @@
-import { Dictionary } from '@server/interface';
+import { Dictionary } from '../interface';
 
 export interface ErrorData extends Dictionary {
   code?: number;

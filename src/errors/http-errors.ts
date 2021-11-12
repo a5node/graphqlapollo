@@ -1,4 +1,4 @@
-import { Dictionary } from '@server/interface';
+import { Dictionary } from '../interface';
 import { ApolloError } from 'apollo-server-errors';
 import { GraphQLError } from 'graphql';
 
