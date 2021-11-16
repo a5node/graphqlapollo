@@ -9,6 +9,7 @@ import {
   ApolloServerPluginCacheControl,
   ApolloServerPluginLandingPageProductionDefault,
   ApolloServerPluginLandingPageLocalDefault,
+  ApolloServerPluginSchemaReporting,
 } from 'apollo-server-core';
 import responseCachePlugin from 'apollo-server-plugin-response-cache';
 
@@ -28,19 +29,16 @@ export default async (app: Express, httpServer: http.Server): Promise<ApolloServ
       const user = await authServers.auth(req);
 
       if (user.id) {
-        req.headers.sessionid = user.id;
+        req.headers.sessionId = user.id;
       }
 
-      return {
-        req,
-        user,
-        res,
-      };
+      return { req, user, res };
     },
     plugins: [
       process.env.NODE_ENV === 'production'
         ? ApolloServerPluginLandingPageProductionDefault({ footer: false })
         : ApolloServerPluginLandingPageLocalDefault({ footer: false }),
+      ApolloServerPluginSchemaReporting(),
       ApolloServerPluginDrainHttpServer({
         httpServer,
       }),
@@ -54,10 +52,11 @@ export default async (app: Express, httpServer: http.Server): Promise<ApolloServ
       }),
     ],
     apollo: {
-      key: config.apolloKeys,
+      key: config.apolloKey,
       graphVariant: 'current',
       graphId: config.apolloId,
     },
+
     formatError: err => {
       if (err.message?.startsWith('Database Error: ')) {
         throw new MyError('My error message');
