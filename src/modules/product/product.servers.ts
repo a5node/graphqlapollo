@@ -4,6 +4,7 @@ import { TCreateProduct, TUpdateProduct, TGetProducts, TFindProductById, TGetPro
 import { CREATOR } from '../constants';
 import { Http404Error, Http400Error } from '../../errors/http-errors';
 import Populate from '../../db/populate.db';
+import { filterDB } from '../../db/filter.db';
 
 class ProductService extends Populate {
   createProduct: TCreateProduct = async data => {
@@ -26,7 +27,14 @@ class ProductService extends Populate {
     return product.jsonPayload();
   };
 
-  getProducts: TGetProducts = async () => await ProductModel.find().populate(this.populateCr()).exec();
+  getProducts: TGetProducts = async data => {
+    const { skip, limit } = filterDB({ ...data, ...data?.filter });
+
+    return await ProductModel.find({}, null, { skip, limit })
+      .sort({ create_at: -1 })
+      .populate(this.populateCr())
+      .exec();
+  };
 
   updateProduct: TUpdateProduct = async data => {
     const product = await ProductModel.findByIdAndUpdate(data.id, { $set: data }, { new: true })
@@ -41,7 +49,10 @@ class ProductService extends Populate {
   };
 
   getProductsUserId: TGetProductsUserId = async data => {
-    const orders = await ProductModel.find({ [CREATOR]: data.id })
+    const { skip, limit } = filterDB({ ...data, ...data?.filter });
+
+    const orders = await ProductModel.find({ [CREATOR]: data.id }, null, { skip, limit })
+      .sort({ create_at: -1 })
       .populate(this.populateCr())
       .exec();
 

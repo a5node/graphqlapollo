@@ -1,5 +1,3 @@
-'use strict';
-
 import config from '../config';
 import { Http503Error } from '../errors/http-errors';
 import mongoose from 'mongoose';

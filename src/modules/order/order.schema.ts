@@ -1,18 +1,22 @@
 import 'reflect-metadata';
 import { Field, ObjectType, InputType, ID } from 'type-graphql';
-import { Length, IsArray, IsNumber, IsBoolean } from 'class-validator';
+import { IsArray, IsNumber, IsBoolean } from 'class-validator';
 import { ObjectId } from 'mongoose';
 
-import User, { TypeUser } from '../user/user.schema';
-import Product, { TypeProduct, Products } from '../product/product.schema';
+import { TypeUser } from '../user/user.schema';
+import { TypeProduct, Products } from '../product/product.schema';
 import { ObjectIdScalar } from '../../scalar/ObjectId.scalar';
 
-import { Default } from '../default.schema';
+import { Default, InputFilter } from '../default.schema';
 import { SchemaDB } from '../../interface/enum.interface';
+
 @InputType()
 export class InputOrderId {
   @Field(type => ID)
   readonly id!: ObjectId;
+
+  @Field(type => InputFilter, { nullable: true })
+  filter!: InputFilter;
 }
 
 @ObjectType()

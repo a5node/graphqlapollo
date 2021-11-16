@@ -4,7 +4,7 @@ import { Arg, Query, Mutation, Resolver, Root, Authorized } from 'type-graphql';
 
 import { Role } from '../../interface';
 
-import { InputID } from '../default.schema';
+import { InputID, InputFilter } from '../default.schema';
 import Product, {
   Products,
   CreateProduct,
@@ -24,8 +24,8 @@ export default class {
 
   @Authorized(Object.values(Role))
   @Query(returns => [Products])
-  async getProducts() {
-    return await ProductServers.getProducts();
+  async getProducts(@Arg('data') data: InputFilter) {
+    return await ProductServers.getProducts(data);
   }
 
   @Authorized(Object.values(Role))

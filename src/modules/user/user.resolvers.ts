@@ -2,6 +2,7 @@ import 'reflect-metadata';
 import { Arg, Query, Mutation, Resolver, Root, Authorized } from 'type-graphql';
 import UserServers from './user.servers';
 
+import { InputFilter } from '../default.schema';
 import { Role } from '../../interface';
 import User, {
   InputCreateUser,
@@ -25,9 +26,9 @@ export default class {
   }
 
   @Authorized(Object.values(Role))
-  @Query(returns => [TypeUser])
-  async getUsers() {
-    return await UserServers.getUsers();
+  @Query(returns => [FindUser])
+  async getUsers(@Arg('data') data: InputFilter) {
+    return await UserServers.getUsers(data);
   }
 
   //--------Mutation--Visitor--

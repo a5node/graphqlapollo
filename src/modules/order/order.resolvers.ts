@@ -1,14 +1,9 @@
 import 'reflect-metadata';
-import { Arg, Query, Mutation, Resolver, Root, Authorized } from 'type-graphql';
+import { Arg, Query, Mutation, Resolver, Authorized } from 'type-graphql';
 import { Role } from '../../interface';
-import Order, {
-  InputCreateOrder,
-  InputOrderId,
-  InputAddOrRemoveOrder,
-  InputUpdateOrder,
-  TypeOrder,
-} from './order.schema';
+import Order, { InputCreateOrder, InputOrderId, InputAddOrRemoveOrder, InputUpdateOrder } from './order.schema';
 import OrderServers from './order.servers';
+import { InputFilter } from '../default.schema';
 
 @Resolver(of => Order)
 export default class {
@@ -20,8 +15,8 @@ export default class {
 
   @Authorized(Object.values(Role))
   @Query(returns => [Order])
-  async getOrders() {
-    return await OrderServers.getOrders();
+  async getOrders(@Arg('data') data: InputFilter) {
+    return await OrderServers.getOrders(data);
   }
 
   @Authorized(Object.values(Role))

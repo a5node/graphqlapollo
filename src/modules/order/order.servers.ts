@@ -3,6 +3,7 @@ import Populate from '../../db/populate.db';
 import { Http400Error } from '../../errors/http-errors';
 import { TCreateOrder, TGetOrders, TGetOrdersUserId, TFindOrderById, TAddOrRemove, TUpdateOrder } from './order.types';
 import { PRODUCTS } from '../constants';
+import { filterDB } from '../../db/filter.db';
 
 class OrderService extends Populate {
   createOrder: TCreateOrder = async data => {
@@ -46,17 +47,23 @@ class OrderService extends Populate {
     return order.jsonPayload();
   };
 
-  getOrders: TGetOrders = async () => {
+  getOrders: TGetOrders = async data => {
     const select = { password: 0 };
 
-    const orders = await OrderModel.find().populate(this.populateCu(select)).populate(this.populateP()).exec();
-
+    const { skip, limit } = filterDB({ ...data, ...data?.filter });
+    const orders = await OrderModel.find({}, null, { skip, limit })
+      .sort({ create_at: -1 })
+      .populate(this.populateCu(select))
+      .populate(this.populateP())
+      .exec();
     return orders;
   };
 
   getOrdersUserId: TGetOrdersUserId = async data => {
     const select = { password: 0 };
-    const orders = await OrderModel.find({ customer: data.id })
+    const { skip, limit } = filterDB({ ...data, ...data?.filter });
+    const orders = await OrderModel.find({ customer: data.id }, null, { skip, limit })
+      .sort({ create_at: -1 })
       .populate(this.populateCu(select))
       .populate(this.populateP())
       .exec();

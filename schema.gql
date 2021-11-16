@@ -115,12 +115,18 @@ input InputCreateUser {
   password: String!
 }
 
+input InputFilter {
+  limit: Float
+  skip: Float
+}
+
 input InputFindUser {
   email: String
   id: ID
 }
 
 input InputID {
+  filter: InputFilter
   id: ObjectId!
 }
 
@@ -130,6 +136,7 @@ input InputLogin {
 }
 
 input InputOrderId {
+  filter: InputFilter
   id: ID!
 }
 
@@ -159,6 +166,11 @@ input InputUpdateUser {
   email: String
   id: ID!
   name: String
+}
+
+input Limit {
+  limit: Float
+  skip: Float
 }
 
 type Mutation {
@@ -253,11 +265,11 @@ type Query {
   findOrder(data: InputOrderId!): Order!
   findProduct(data: InputID!): Products!
   findUser(data: InputFindUser!): FindUser!
-  getOrders: [Order!]!
+  getOrders(data: InputFilter!): [Order!]!
   getOrdersUserId(data: InputOrderId!): [Order!]!
-  getProducts: [Products!]!
+  getProducts(data: InputFilter!): [Products!]!
   getProductsUserId(data: InputID!): [Products!]!
-  getUsers: [TypeUser!]!
+  getUsers(data: InputFilter!): [FindUser!]!
   login(data: InputLogin!): User!
 }
 
@@ -274,6 +286,12 @@ enum SchemaDB {
   ORDERS
   PRODUCTS
   ROLES
+}
+
+input Sort {
+  create_at: Boolean
+  price: Boolean
+  update_at: Boolean
 }
 
 """

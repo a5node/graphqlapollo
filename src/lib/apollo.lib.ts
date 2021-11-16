@@ -45,7 +45,7 @@ export default async (app: Express, httpServer: http.Server): Promise<ApolloServ
         httpServer,
       }),
       ApolloServerPluginCacheControl({
-        defaultMaxAge: 100,
+        defaultMaxAge: 5,
       }),
       responseCachePlugin({
         sessionId: requestContext => {

@@ -5,24 +5,9 @@ import { IUserSchema, IUserServer } from './user.interface';
 
 import { TFindUser, TCreateUser, TUpdateUser, TGetUsers, TAddItemToUser, TAddOrRemoveRole } from '@server/types';
 import { ORDERS, PRODUCTS, USERS } from '../constants';
-
-class UserService implements IUserServer {
-  private select: unknown = {
-    __v: 0,
-  };
-
-  private populate = () => {
-    return {
-      path: ORDERS,
-      model: OrderModel,
-      select: this.select,
-      populate: {
-        path: PRODUCTS,
-        select: this.select,
-      },
-    };
-  };
-
+import { filterDB } from '../../db/filter.db';
+import Populate from '../../db/populate.db';
+class UserService extends Populate {
   createUser: TCreateUser = async ({ name, email, password }) => {
     const user = await UserModel.findOne({ email });
 
@@ -44,9 +29,9 @@ class UserService implements IUserServer {
     let user;
 
     if (email) {
-      user = await UserModel.findOne({ email }).populate(this.populate()).exec();
+      user = await UserModel.findOne({ email }).populate(this.populateO()).exec();
     } else {
-      user = await UserModel.findOne({ id }).populate(this.populate()).exec();
+      user = await UserModel.findOne({ id }).populate(this.populateO()).exec();
     }
 
     if (!user) {
@@ -56,15 +41,15 @@ class UserService implements IUserServer {
     return user.jsonPayload({ access_token: user.token() });
   };
 
-  getUsers: TGetUsers = async () => {
-    const users = await UserModel.find().select({ password: 0 }).populate(this.populate());
+  getUsers: TGetUsers = async data => {
+    const { skip, limit } = filterDB(data);
 
-    return users;
+    return await UserModel.find({}, null, { skip, limit }).select({ password: 0 }).populate(this.populateO());
   };
 
   updateUser: TUpdateUser = async data => {
     const user = await UserModel.findByIdAndUpdate(data.id, { $set: data }, { new: true })
-      .populate(this.populate())
+      .populate(this.populateO())
       .exec();
 
     if (!user) {
@@ -82,7 +67,7 @@ class UserService implements IUserServer {
       },
       { new: true },
     )
-      .populate(this.populate())
+      .populate(this.populateO())
       .exec();
 
     if (!user) {
@@ -100,7 +85,7 @@ class UserService implements IUserServer {
       },
       { new: true },
     )
-      .populate(this.populate())
+      .populate(this.populateO())
       .exec();
 
     if (!user) {
@@ -118,7 +103,7 @@ class UserService implements IUserServer {
       },
       { new: true },
     )
-      .populate(this.populate())
+      .populate(this.populateO())
       .exec();
 
     if (!user) {
