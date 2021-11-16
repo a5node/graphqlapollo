@@ -40,7 +40,7 @@ class AuthService {
 
   auth = async (req: Request): Promise<any> => {
     const { apollo_user, apollo_key, authorization } = req.headers;
-
+    console.log('--header-->', req.headers);
     if (apollo_key !== config.apolloKeys) {
       throw new Http401Error({ code: 1001, message: "You have't allows" });
     }

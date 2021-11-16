@@ -18,6 +18,7 @@ import config from '../config';
 import Builder from './builder.schema';
 import authServers from '../modules/auth/auth.servers';
 import { HttpApolloErrors, MyError } from '../errors/http-errors';
+import { DataSources } from 'apollo-server-core/dist/graphqlOptions';
 
 export default async (app: Express, httpServer: http.Server): Promise<ApolloServer<ExpressContext>> => {
   const schema: GraphQLSchema = await Builder.initSchema();
@@ -34,6 +35,7 @@ export default async (app: Express, httpServer: http.Server): Promise<ApolloServ
 
       return { req, user, res };
     },
+
     plugins: [
       process.env.NODE_ENV === 'production'
         ? ApolloServerPluginLandingPageProductionDefault({ footer: false })
@@ -56,8 +58,8 @@ export default async (app: Express, httpServer: http.Server): Promise<ApolloServ
       graphVariant: 'current',
       graphId: config.apolloId,
     },
-
     formatError: err => {
+      console.dir(err);
       if (err.message?.startsWith('Database Error: ')) {
         throw new MyError('My error message');
       }

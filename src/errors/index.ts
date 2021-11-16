@@ -12,8 +12,8 @@ export default (app: Express): void => {
     next(err);
   });
   app.use((err: ErrorPayload & ErrorRequestHandler & { status: number }, req: Request, res: Response): void => {
-    const code = err.code || err.status || 500;
-    const status = err.status || 500;
+    const code = err.code || err.status;
+    const status = err.status;
     const message = err.message || 'Internal Server Error';
     req.on('error', () => {});
     if (err instanceof HttpError) {
@@ -44,10 +44,10 @@ export default (app: Express): void => {
         });
         return;
       } else {
-        res.status(err.status || 500).send({
+        res.status(err.status).send({
           success: false,
           error: {
-            code: err.code || 500,
+            code: err.code || 400,
             message: err.message,
             stack: err.stack,
           },
