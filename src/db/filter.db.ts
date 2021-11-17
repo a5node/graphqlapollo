@@ -1,28 +1,35 @@
-import { IComposer } from '../interface/default.interface';
+import { simileEnum, validateSelect, validateSort } from '../helpers/db.helper';
+import { ESortDB } from '../interface';
+import { TFilterDB, TSortDB, TSelectDB } from './db.type';
 
-enum FILTER {
-  FALSE = 1, // -1  - от большого к меньшему
-  TRUE = -1, //  1  - от меньшего к большему
-  NOTHING = 0, //  0  - ничего не делать
-}
-
-type TFilterDB = (data: IComposer) => { skip: number; limit: number };
-
-const validateFilterBoolean = (value: boolean | undefined | null | number): FILTER =>
-  Math.round(Number(value ? 1 : value === false ? -1 : 0));
-
-const validateFilterNumber = (value: number | null | undefined): number => Math.round(Number(value ? value : 0));
-
-export const filterDB: TFilterDB = ({ sort, skip, limit = 0 }) => {
+export const filterDB: TFilterDB = data => {
   return {
-    // sort: sort
-    //   ? {
-    //       create_at: validateFilterBoolean(sort?.create_at),
-    //       update_at: validateFilterBoolean(sort?.update_at),
-    //       price: validateFilterBoolean(sort?.price),
-    //     }
-    //   : {},
-    skip: validateFilterNumber(skip ? limit * skip : 0),
-    limit: validateFilterNumber(limit ? limit : 0),
+    ...selectDB(data),
+    ...sortDB(data),
+  };
+};
+
+export const sortDB: TSortDB = ({ sort = {} }) => {
+  try {
+    const map = new Map(Object.entries(sort.data));
+
+    let sortList = {};
+
+    for (let entry of map) {
+      if (simileEnum(ESortDB, entry[1])) {
+        sortList = { ...sortList, [entry[0]]: validateSort(entry[1]) };
+      }
+    }
+
+    return sortList;
+  } catch (error) {
+    return {};
+  }
+};
+
+export const selectDB: TSelectDB = ({ skip = 0, limit = 0 }) => {
+  return {
+    skip: validateSelect(skip ? limit * skip : 0),
+    limit: validateSelect(limit ? limit : 0),
   };
 };

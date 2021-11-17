@@ -1,6 +1,6 @@
+import mongoose from 'mongoose';
 import config from '../config';
 import { Http503Error } from '../errors/http-errors';
-import mongoose from 'mongoose';
 
 //Function for connection to database
 const connectMongoDB = async (): Promise<void> => {

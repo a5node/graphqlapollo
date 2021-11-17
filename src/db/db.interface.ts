@@ -1,17 +1,22 @@
+import { Dictionary, ESortDB } from '../interface';
 import { ObjectId } from 'mongoose';
-import { Dictionary } from '../interface';
+
+export interface ISelectDB {
+  skip: number;
+  limit: number;
+}
+
+export interface IFilterDB extends ISelectDB, Dictionary {}
+
+export interface DictionarySort<V = ESortDB> {
+  [key: string]: V;
+}
 
 export interface IDefault {
   readonly id?: string | ObjectId;
   readonly _id?: string | ObjectId;
   readonly create_at: Date;
   readonly update_at: Date;
-}
-
-export interface ISort {
-  create_at?: boolean | number;
-  update_at?: boolean | number;
-  price?: boolean | number;
 }
 
 export interface IComposer {

@@ -1,12 +1,11 @@
 import UserModel from './user.model';
-import OrderModel from '../order/order.model';
-import { Http409Error, Http404Error } from '../../errors/http-errors';
-import { IUserSchema, IUserServer } from './user.interface';
+import { TFindUser, TCreateUser, TUpdateUser, TGetUsers, TAddItemToUser, TAddOrRemoveRole } from './user.types';
+import { IUserSchema } from './user.interface';
 
-import { TFindUser, TCreateUser, TUpdateUser, TGetUsers, TAddItemToUser, TAddOrRemoveRole } from '@server/types';
-import { ORDERS, PRODUCTS, USERS } from '../constants';
+import { Http409Error, Http404Error } from '../../errors/http-errors';
 import { filterDB } from '../../db/filter.db';
 import Populate from '../../db/populate.db';
+
 class UserService extends Populate {
   createUser: TCreateUser = async ({ name, email, password }) => {
     const user = await UserModel.findOne({ email });
