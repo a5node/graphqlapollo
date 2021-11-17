@@ -3,8 +3,32 @@ import { Field, ObjectType, InputType } from 'type-graphql';
 import { IsDate } from 'class-validator';
 import { ObjectId } from 'mongoose';
 import { ObjectIdScalar } from '../scalar/ObjectId.scalar';
-import { IComposer, ISort } from '../interface/default.interface';
+import { IComposer, Dictionary } from '../interface';
 
+@InputType()
+export class Sort {
+  @Field(type => Number, { nullable: true })
+  create_at!: number;
+
+  @Field(type => Number, { nullable: true })
+  update_at!: number;
+
+  @Field(type => Number, { nullable: true })
+  price!: number;
+
+  get data(): Dictionary {
+    return this;
+  }
+}
+
+@InputType()
+export class Limit {
+  @Field(type => Number, { nullable: true })
+  skip!: number;
+
+  @Field(type => Number, { nullable: true })
+  limit!: number;
+}
 @ObjectType()
 export class Default {
   @Field(type => ObjectIdScalar, { nullable: true })
@@ -30,8 +54,8 @@ export class InputFilter {
   // @Field(type => Limit, { nullable: true })
   // Limit!: Limit;
 
-  // @Field(type => Sort, { nullable: true })
-  // sort!: Sort;
+  @Field(type => Sort, { nullable: true })
+  sort!: Sort;
 }
 
 @InputType()
@@ -53,25 +77,4 @@ export class InputAccessToken {
 export class AccessToken {
   @Field(type => String)
   access_token!: string;
-}
-
-@InputType()
-export class Sort implements ISort {
-  @Field(type => Boolean, { nullable: true })
-  create_at!: boolean;
-
-  @Field(type => Boolean, { nullable: true })
-  update_at!: boolean;
-
-  @Field(type => Boolean, { nullable: true })
-  price!: boolean;
-}
-
-@InputType()
-export class Limit {
-  @Field(type => Number, { nullable: true })
-  skip!: number;
-
-  @Field(type => Number, { nullable: true })
-  limit!: number;
 }

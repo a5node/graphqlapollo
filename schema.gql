@@ -118,6 +118,7 @@ input InputCreateUser {
 input InputFilter {
   limit: Float
   skip: Float
+  sort: Sort
 }
 
 input InputFindUser {
@@ -289,9 +290,9 @@ enum SchemaDB {
 }
 
 input Sort {
-  create_at: Boolean
-  price: Boolean
-  update_at: Boolean
+  create_at: Float
+  price: Float
+  update_at: Float
 }
 
 """

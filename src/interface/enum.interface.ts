@@ -34,3 +34,9 @@ registerEnumType(SchemaDB, {
   name: 'SchemaDB',
   description: 'The basic schema for db',
 });
+
+export enum ESortDB {
+  FALSE = 1, // -1  - от большого к меньшему
+  TRUE = -1, //  1  - от меньшего к большему
+  NOTHING = 0, //  0  - ничего не делать
+}
