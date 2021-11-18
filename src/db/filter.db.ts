@@ -29,7 +29,7 @@ export const sortDB: TSortDB = ({ sort = {} }) => {
 
 export const selectDB: TSelectDB = ({ skip = 0, limit = 0 }) => {
   return {
-    skip: validateSelect(skip ? limit * skip : 0),
+    skip: validateSelect(skip ? (limit !== 0 ? limit * skip : skip) : 0),
     limit: validateSelect(limit ? limit : 0),
   };
 };

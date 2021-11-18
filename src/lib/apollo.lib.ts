@@ -40,7 +40,7 @@ export default async (app: Express, httpServer: http.Server): Promise<ApolloServ
       process.env.NODE_ENV === 'production'
         ? ApolloServerPluginLandingPageProductionDefault({ footer: false })
         : ApolloServerPluginLandingPageLocalDefault({ footer: false }),
-      ApolloServerPluginSchemaReporting(),
+      // ApolloServerPluginSchemaReporting(),
       ApolloServerPluginDrainHttpServer({
         httpServer,
       }),
@@ -65,23 +65,7 @@ export default async (app: Express, httpServer: http.Server): Promise<ApolloServ
 
       return new HttpApolloErrors({ code: 1 }).json(err);
     },
-    formatResponse: (res, req) => {
-      const { user } = req.context as GraphQLResponse & { user: { access_token: string } & Dictionary };
-
-      if (user.access_token) {
-        const { access_token } = user;
-        const { data } = res;
-        res.data = { access_token, ...data };
-      }
-
-      if (res?.data?.login?.access_token) {
-        const { access_token } = res.data?.login;
-        const { data } = res;
-        res.data = { access_token, ...data };
-      }
-
-      return res;
-    },
+    formatResponse: (res, req) => res,
   });
 
   await server.start();
