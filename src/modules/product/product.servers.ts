@@ -28,9 +28,9 @@ class ProductService extends Populate {
   };
 
   getProducts: TGetProducts = async data => {
-    const { skip, limit } = filterDB({ ...data, ...data?.filter });
+    const { skip, limit, price } = filterDB({ ...data, ...data?.filter });
 
-    return await ProductModel.find({}, null, { skip, limit })
+    return await ProductModel.find(price, null, { skip, limit })
       .sort({ create_at: -1 })
       .populate(this.populateCr())
       .exec();

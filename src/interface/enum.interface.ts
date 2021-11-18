@@ -36,7 +36,12 @@ registerEnumType(SchemaDB, {
 });
 
 export enum ESortDB {
-  FALSE = 1, // -1  - от большого к меньшему
-  TRUE = -1, //  1  - от меньшего к большему
-  NOTHING = 0, //  0  - ничего не делать
+  //  сортировать по убыванию (-1 ,desc ,descending )
+  //  сортировать по возрастанию (1 , asc ,ascending)
+  asc = 'asc',
+  desc = 'desc',
+  ascending = 'ascending',
+  descending = 'descending',
+  once = 1,
+  minusOnce = -1,
 }

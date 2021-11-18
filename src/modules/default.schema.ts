@@ -3,7 +3,7 @@ import { Field, ObjectType, InputType } from 'type-graphql';
 import { IsDate } from 'class-validator';
 import { ObjectId } from 'mongoose';
 import { ObjectIdScalar } from '../scalar/ObjectId.scalar';
-import { IComposer, Dictionary } from '../interface';
+import { Dictionary } from '../interface';
 
 @InputType()
 export class Sort {
@@ -30,6 +30,19 @@ export class Limit {
   limit!: number;
 }
 
+@InputType()
+export class PriceRange {
+  @Field(type => Number, { nullable: true })
+  from!: number;
+
+  @Field(type => Number, { nullable: true })
+  to!: number;
+
+  get data(): Dictionary {
+    return this;
+  }
+}
+
 @ObjectType()
 export class Default {
   @Field(type => ObjectIdScalar, { nullable: true })
@@ -52,11 +65,11 @@ export class InputFilter {
   @Field(type => Number, { nullable: true })
   limit!: number;
 
-  // @Field(type => Limit, { nullable: true })
-  // Limit!: Limit;
-
   @Field(type => Sort, { nullable: true })
   sort!: Sort;
+
+  @Field(type => PriceRange, { nullable: true })
+  price!: PriceRange;
 }
 
 @InputType()

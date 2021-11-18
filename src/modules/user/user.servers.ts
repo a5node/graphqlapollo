@@ -43,7 +43,9 @@ class UserService extends Populate {
   getUsers: TGetUsers = async data => {
     const { skip, limit } = filterDB(data);
 
-    return await UserModel.find({}, null, { skip, limit }).select({ password: 0 }).populate(this.populateO());
+    const users = await UserModel.find().skip(skip).limit(limit).select({ password: 0 }).populate(this.populateO());
+
+    return users;
   };
 
   updateUser: TUpdateUser = async data => {

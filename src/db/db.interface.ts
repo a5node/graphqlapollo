@@ -19,10 +19,16 @@ export interface IDefault {
   readonly update_at: Date;
 }
 
+export interface IPrice {
+  from?: number;
+  to?: number;
+}
+
 export interface IComposer {
   skip?: number;
   limit?: number;
   sort?: Dictionary;
+  price?: Dictionary;
 }
 
 export interface IFilter {

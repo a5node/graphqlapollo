@@ -61,8 +61,10 @@ class OrderService extends Populate {
 
   getOrdersUserId: TGetOrdersUserId = async data => {
     const select = { password: 0 };
+
     const { skip, limit } = filterDB({ ...data, ...data?.filter });
-    const orders = await OrderModel.find({ customer: data.id }, null, { skip, limit })
+
+    const orders = await OrderModel.find({ customer: data.id }, {}, { skip, limit })
       .sort({ create_at: -1 })
       .populate(this.populateCu(select))
       .populate(this.populateP())

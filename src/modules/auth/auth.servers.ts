@@ -1,30 +1,19 @@
 import 'reflect-metadata';
-import { Request, Response, NextFunction } from 'express';
+import { Request } from 'express';
 import { AuthChecker } from 'type-graphql';
 
 import config from '../../config';
 import UserModel from '../user/user.model';
-import OrderModel from '../order/order.model';
 import { validateToken } from '../../lib/token';
 import { Http401Error, Http404Error, HttpError } from '../../errors/http-errors';
 import { Context } from '../../interface';
-import { VISITOR, ORDERS, PRODUCTS } from '../constants';
+import { VISITOR } from '../constants';
 import { generateToken } from '../../lib/token';
+import Populate from '../../db/populate.db';
 
-class AuthService {
+class AuthService extends Populate {
   login = async ({ email, password }: { email: string; password: string }): Promise<any | HttpError> => {
-    const select = { __v: 0 };
-
-    const options = {
-      path: ORDERS,
-      model: OrderModel,
-      select,
-      populate: {
-        path: PRODUCTS,
-        select,
-      },
-    };
-    const user = await UserModel.findOne({ email }).populate(options);
+    const user = await UserModel.findOne({ email }).populate(this.populateO());
 
     if (!user) {
       throw new Http404Error({ code: 1000 });
@@ -62,12 +51,8 @@ class AuthService {
       if (!valid) {
         throw new Http401Error({ code: 1001, message: 'You need log in!' });
       }
-      const { id, email, roles } = data;
-      return {
-        ...data,
-        valid,
-        access_token: generateToken({ id, email, roles }),
-      };
+
+      return { ...data, valid };
     } catch (error) {
       return {
         roles: [VISITOR],
