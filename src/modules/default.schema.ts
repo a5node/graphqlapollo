@@ -29,6 +29,7 @@ export class Limit {
   @Field(type => Number, { nullable: true })
   limit!: number;
 }
+
 @ObjectType()
 export class Default {
   @Field(type => ObjectIdScalar, { nullable: true })

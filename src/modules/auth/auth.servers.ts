@@ -9,6 +9,7 @@ import { validateToken } from '../../lib/token';
 import { Http401Error, Http404Error, HttpError } from '../../errors/http-errors';
 import { Context } from '../../interface';
 import { VISITOR, ORDERS, PRODUCTS } from '../constants';
+import { generateToken } from '../../lib/token';
 
 class AuthService {
   login = async ({ email, password }: { email: string; password: string }): Promise<any | HttpError> => {
@@ -61,8 +62,12 @@ class AuthService {
       if (!valid) {
         throw new Http401Error({ code: 1001, message: 'You need log in!' });
       }
-
-      return { ...data, valid };
+      const { id, email, roles } = data;
+      return {
+        ...data,
+        valid,
+        access_token: generateToken({ id, email, roles }),
+      };
     } catch (error) {
       return {
         roles: [VISITOR],

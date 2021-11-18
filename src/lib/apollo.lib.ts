@@ -2,7 +2,6 @@ import 'reflect-metadata';
 import type http from 'http';
 
 import { Express, Request, Response } from 'express';
-
 import { ApolloServer, ExpressContext } from 'apollo-server-express';
 import {
   ApolloServerPluginDrainHttpServer,
@@ -12,13 +11,14 @@ import {
   ApolloServerPluginSchemaReporting,
 } from 'apollo-server-core';
 import responseCachePlugin from 'apollo-server-plugin-response-cache';
+import { GraphQLSchema } from 'graphql';
 
-import { GraphQLSchema, printSchema } from 'graphql';
 import config from '../config';
 import Builder from './builder.schema';
 import authServers from '../modules/auth/auth.servers';
 import { HttpApolloErrors, MyError } from '../errors/http-errors';
-import { DataSources } from 'apollo-server-core/dist/graphqlOptions';
+import { GraphQLResponse } from 'apollo-server-core';
+import { Dictionary } from '../interface';
 
 export default async (app: Express, httpServer: http.Server): Promise<ApolloServer<ExpressContext>> => {
   const schema: GraphQLSchema = await Builder.initSchema();
@@ -59,12 +59,28 @@ export default async (app: Express, httpServer: http.Server): Promise<ApolloServ
       graphId: config.apolloId,
     },
     formatError: err => {
-      console.dir(err);
       if (err.message?.startsWith('Database Error: ')) {
         throw new MyError('My error message');
       }
 
       return new HttpApolloErrors({ code: 1 }).json(err);
+    },
+    formatResponse: (res, req) => {
+      const { user } = req.context as GraphQLResponse & { user: { access_token: string } & Dictionary };
+
+      if (user.access_token) {
+        const { access_token } = user;
+        const { data } = res;
+        res.data = { access_token, ...data };
+      }
+
+      if (res?.data?.login?.access_token) {
+        const { access_token } = res.data?.login;
+        const { data } = res;
+        res.data = { access_token, ...data };
+      }
+
+      return res;
     },
   });
 
@@ -73,6 +89,7 @@ export default async (app: Express, httpServer: http.Server): Promise<ApolloServ
   server.applyMiddleware({
     app,
     path: config.apolloOptions.path,
+    bodyParserConfig: true,
     cors: {
       credentials: true,
       origin: (origin, callback) => {
@@ -83,6 +100,3 @@ export default async (app: Express, httpServer: http.Server): Promise<ApolloServ
 
   return server;
 };
-
-//rover graph introspect   http://localhost:3307/api/graphql --header="APOLLO_KEY:service:iO4z3C-2j3JHEUC8BIP1eQ:6P3sWMSR0N51rx6RzH9fPg" --header="APOLLO_USER:iO4z3C-2j3JHEUC8BIP1eQ" --header="Authorization:eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYxODM5YjUyNmUxZTQ0NjZlZWYwNDJlNSIsImVtYWlsIjoidGVzdEB0ZXN0LmNvbSIsInJvbGVzIjpbIkFETUlOIiwiVVNFUiJdLCJpYXQiOjE2MzcwNTY3MzcsImV4cCI6MTYzNzY2MTUzN30.LLqM4dw5Fa9gU4FrtUo1q6KoBOjuSdYH_niUx437rLE" --header="Access-Control-Allow-Credentials: true" --header="Access-Control-Allow-Origin: https://studio.apollographql.com"|   rover graph publish iO4z3C-2j3JHEUC8BIP1eQ@current --schema -
-//rover graph introspect   https://a5node-graphql-apollo.herokuapp.com/api/graphql --header="APOLLO_KEY:service:iO4z3C-2j3JHEUC8BIP1eQ:6P3sWMSR0N51rx6RzH9fPg" --header="APOLLO_USER:iO4z3C-2j3JHEUC8BIP1eQ" --header="Authorization:eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYxODM5YjUyNmUxZTQ0NjZlZWYwNDJlNSIsImVtYWlsIjoidGVzdEB0ZXN0LmNvbSIsInJvbGVzIjpbIkFETUlOIiwiVVNFUiJdLCJpYXQiOjE2MzcwNTY3MzcsImV4cCI6MTYzNzY2MTUzN30.LLqM4dw5Fa9gU4FrtUo1q6KoBOjuSdYH_niUx437rLE" --header="Access-Control-Allow-Credentials: true" --header="Access-Control-Allow-Origin: https://studio.apollographql.com"|   rover graph publish iO4z3C-2j3JHEUC8BIP1eQ@current --schema -
