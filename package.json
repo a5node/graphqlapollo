@@ -2,7 +2,7 @@
   "name": "a5_node_graphql",
   "version": "1.0.0",
   "description": "",
-  "main": "dist/start.js",
+  "main": "dist/index.js",
   "scripts": {
     "test": "nyc --all --reporter=html jest --coverage ",
     "test:watch": "jest --verbose --detectOpenHandles",
