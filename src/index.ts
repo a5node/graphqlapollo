@@ -17,21 +17,33 @@ import initApollo from './lib/apollo.lib';
 //Error handler
 import error from './errors';
 
-export default class Server {
+export class Server {
   private app!: express.Express;
   private httpServer!: http.Server;
   private apollo!: ApolloServer<ExpressContext>;
 
   constructor() {}
 
-  public async start(): Promise<void> {
+  public async start(): Promise<http.Server> {
     await this.initServer();
     this.initDB();
     this.initLogger();
     this.initMiddleware();
     this.initRoutes();
 
-    return this.startListening();
+    return await this.startListening();
+  }
+
+  public get _apollo() {
+    return this.apollo;
+  }
+
+  public get _app() {
+    return this.app;
+  }
+
+  public get _httpServer() {
+    return this.httpServer;
   }
 
   private async initServer() {
@@ -69,12 +81,14 @@ export default class Server {
     }
   }
 
-  private startListening(): void {
+  private startListening(): http.Server | any {
     try {
       this.httpServer.listen({ port: config.PORT || 5000 }, () => {
         console.log(`🚀 Server ready at http://localhost:${config.PORT || 5000}${this.apollo.graphqlPath}`);
         console.log('\x1b[33m%s\x1b[0m', `Server started on port : ${config.PORT || 5000}`);
       });
+
+      return this.httpServer;
     } catch (error) {
       // Close server & exit process
       process.on('unhandledRejection', async (err: Error) => {
@@ -86,4 +100,12 @@ export default class Server {
   }
 }
 
-new Server().start();
+process.on('unhandledRejection', async (err: Error) => {
+  // MongooseServerSelectionError
+
+  console.log('\x1b[31m%s\x1b[0m', `Error: ${err.message}`);
+});
+
+const ServerStart = new Server();
+ServerStart.start();
+export default ServerStart;

@@ -1,9 +1,7 @@
 import { Document, Model, ObjectId } from 'mongoose';
 
-import { IOrderSchema, Role } from '../../interface';
-import { Dictionary } from '../../interface';
-
-import { TCreateUser, TUpdateUser, TGetUsers, TAddItemToUser, TFindUser } from '@server/types';
+import { IOrderSchema, Role, Dictionary } from '../../interface';
+import { TCreateUser, TUpdateUser, TGetUsers, TAddItemToUser, TFindUser } from '../../types';
 
 export interface IInputCreateUser {
   name: string;

@@ -36,12 +36,14 @@ export const priceDB: TPriceDB = ({ price = {} }) => {
 
     for (let entry of map) {
       const { price } = priceList;
+
       if (entry[0] === 'from' && entry[1]) {
         if (!price) {
           priceList = { price: {} };
         }
         priceList = { price: { ...price, $gte: Number(entry[1]) } };
       }
+
       if (entry[0] === 'to' && entry[1]) {
         if (!price) {
           priceList = { price: {} };

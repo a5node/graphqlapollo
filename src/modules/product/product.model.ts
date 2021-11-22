@@ -1,4 +1,3 @@
-'use strict';
 import { Schema, model } from 'mongoose';
 
 import { IProductSchema, IProductModel, Dictionary } from '../../interface';

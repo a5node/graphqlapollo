@@ -1,14 +1,10 @@
+import 'reflect-metadata';
 import { registerEnumType } from 'type-graphql';
 
 export enum Role {
   ADMIN = 'ADMIN',
   USER = 'USER',
 }
-
-registerEnumType(Role, {
-  name: 'Role',
-  description: 'The basic roles for users',
-});
 
 export enum DB {
   USER = 'user',
@@ -30,11 +26,6 @@ export enum SchemaDB {
   ROLES = 'roles',
 }
 
-registerEnumType(SchemaDB, {
-  name: 'SchemaDB',
-  description: 'The basic schema for db',
-});
-
 export enum ESortDB {
   //  сортировать по убыванию (-1 ,desc ,descending )
   //  сортировать по возрастанию (1 , asc ,ascending)
@@ -45,3 +36,18 @@ export enum ESortDB {
   once = 1,
   minusOnce = -1,
 }
+
+registerEnumType(ESortDB, {
+  name: 'ESortDB',
+  description: 'The basic sort for db',
+});
+
+registerEnumType(SchemaDB, {
+  name: 'SchemaDB',
+  description: 'The basic schema for db',
+});
+
+registerEnumType(Role, {
+  name: 'Role',
+  description: 'The basic roles for users',
+});

@@ -1,5 +1,5 @@
 import ProductModel from './product.model';
-import { TCreateProduct, TUpdateProduct, TGetProducts, TFindProductById, TGetProductsUserId } from '@server/types';
+import { TCreateProduct, TUpdateProduct, TGetProducts, TFindProductById, TGetProductsUserId } from './product.types';
 
 import { CREATOR } from '../constants';
 import { Http404Error, Http400Error } from '../../errors/http-errors';

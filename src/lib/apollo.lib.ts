@@ -17,8 +17,6 @@ import config from '../config';
 import Builder from './builder.schema';
 import authServers from '../modules/auth/auth.servers';
 import { HttpApolloErrors, MyError } from '../errors/http-errors';
-import { GraphQLResponse } from 'apollo-server-core';
-import { Dictionary } from '../interface';
 
 export default async (app: Express, httpServer: http.Server): Promise<ApolloServer<ExpressContext>> => {
   const schema: GraphQLSchema = await Builder.initSchema();
@@ -37,9 +35,9 @@ export default async (app: Express, httpServer: http.Server): Promise<ApolloServ
     },
 
     plugins: [
-      process.env.NODE_ENV === 'production'
-        ? ApolloServerPluginLandingPageProductionDefault({ footer: false })
-        : ApolloServerPluginLandingPageLocalDefault({ footer: false }),
+      // process.env.NODE_ENV === 'production'
+      //   ? ApolloServerPluginLandingPageProductionDefault({ footer: false })
+      //   : ApolloServerPluginLandingPageLocalDefault({ footer: false }),
       // ApolloServerPluginSchemaReporting(),
       ApolloServerPluginDrainHttpServer({
         httpServer,
