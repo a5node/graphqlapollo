@@ -11,6 +11,7 @@ import {
   ApolloServerPluginSchemaReporting,
 } from 'apollo-server-core';
 import responseCachePlugin from 'apollo-server-plugin-response-cache';
+import 'reflect-metadata';
 import { GraphQLSchema } from 'graphql';
 
 import config from '../config';
@@ -35,10 +36,10 @@ export default async (app: Express, httpServer: http.Server): Promise<ApolloServ
     },
 
     plugins: [
-      // process.env.NODE_ENV === 'production'
-      //   ? ApolloServerPluginLandingPageProductionDefault({ footer: false })
-      //   : ApolloServerPluginLandingPageLocalDefault({ footer: false }),
-      // ApolloServerPluginSchemaReporting(),
+      process.env.NODE_ENV === 'production'
+        ? ApolloServerPluginLandingPageProductionDefault({ footer: false })
+        : ApolloServerPluginLandingPageLocalDefault({ footer: false }),
+      ApolloServerPluginSchemaReporting(),
       ApolloServerPluginDrainHttpServer({
         httpServer,
       }),

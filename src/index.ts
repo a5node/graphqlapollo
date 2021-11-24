@@ -18,9 +18,9 @@ import initApollo from './lib/apollo.lib';
 import error from './errors';
 
 export class Server {
-  private app!: express.Express;
-  private httpServer!: http.Server;
-  private apollo!: ApolloServer<ExpressContext>;
+  public app!: express.Express;
+  public httpServer!: http.Server;
+  public apollo!: ApolloServer<ExpressContext>;
 
   constructor() {}
 

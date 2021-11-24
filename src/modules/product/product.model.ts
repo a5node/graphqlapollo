@@ -1,7 +1,7 @@
 import { Schema, model } from 'mongoose';
 
 import { IProductSchema, IProductModel, Dictionary } from '../../interface';
-import { PRODUCT, PRODUCTS } from '../constants';
+import { ORDER, ORDERS, PRODUCT, PRODUCTS, USER, USERS } from '../constants';
 
 import User from '../user/user.model';
 
@@ -14,7 +14,7 @@ const ProductSchema = new Schema<IProductSchema, IProductModel>(
     isRemove: { type: Boolean, default: false, required: true },
     creator: {
       type: Schema.Types.ObjectId,
-      ref: User,
+      ref: USER,
       required: true,
       immutable: true,
     },
