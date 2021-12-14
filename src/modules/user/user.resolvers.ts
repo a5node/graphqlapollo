@@ -8,6 +8,7 @@ import User, {
   InputCreateUser,
   CreateUser,
   FindUser,
+  FindUsers,
   TypeUser,
   InputFindUser,
   InputUpdateUser,
@@ -26,8 +27,8 @@ export default class {
   }
 
   @Authorized(Object.values(Role))
-  @Query(returns => [FindUser])
-  async getUsers(@Arg('data') data: InputFilter) {
+  @Query(returns => [FindUsers])
+  async getUsers(@Arg('data', { nullable: true }) data: InputFilter) {
     return await UserServers.getUsers(data);
   }
 

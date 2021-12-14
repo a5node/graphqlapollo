@@ -128,6 +128,12 @@ export class FindUser extends UserDefault {
 }
 
 @ObjectType()
+export class FindUsers extends UserDefault {
+  @Field(type => [TypeOrder])
+  orders!: TypeOrder[];
+}
+
+@ObjectType()
 export default class User extends UserDefault {
   @Field(type => ID)
   readonly id!: ObjectId;

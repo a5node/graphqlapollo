@@ -15,7 +15,7 @@ export default class {
 
   @Authorized(Object.values(Role))
   @Query(returns => [Order])
-  async getOrders(@Arg('data') data: InputFilter) {
+  async getOrders(@Arg('data', { nullable: true }) data: InputFilter) {
     return await OrderServers.getOrders(data);
   }
 
