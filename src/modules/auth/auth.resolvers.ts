@@ -10,7 +10,6 @@ import { AccessToken, InputAccessToken } from '../default.schema';
 
 @Resolver(of => User)
 export default class {
-  @Authorized(VISITOR, ...Object.values(Role))
   @Query(returns => User)
   async login(@Arg('data') data: InputLogin) {
     return await AuthServers.login(data);

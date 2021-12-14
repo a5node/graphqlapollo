@@ -49,11 +49,9 @@ export class Default {
   readonly _id!: ObjectId;
 
   @Field({ nullable: true })
-  @IsDate()
   readonly create_at!: Date;
 
   @Field({ nullable: true })
-  @IsDate()
   readonly update_at!: Date;
 }
 

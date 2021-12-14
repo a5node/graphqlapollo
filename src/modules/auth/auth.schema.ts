@@ -5,16 +5,9 @@ import { Length, IsArray, IsEmail, MinLength, IsDate, ValidationArguments } from
 @InputType()
 export class InputLogin {
   @Field()
-  @IsEmail()
-  @Length(5, 70)
   email!: string;
 
   @Field()
-  @MinLength(4, {
-    message: (args: ValidationArguments) => {
-      return 'password is too short';
-    },
-  })
   password!: string;
 }
 
