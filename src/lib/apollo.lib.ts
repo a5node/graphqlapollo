@@ -36,9 +36,6 @@ export default async (app: Express, httpServer: http.Server): Promise<ApolloServ
     },
 
     plugins: [
-      process.env.NODE_ENV === 'production'
-        ? ApolloServerPluginLandingPageProductionDefault({ footer: false })
-        : ApolloServerPluginLandingPageLocalDefault({ footer: false }),
       ApolloServerPluginSchemaReporting(),
       ApolloServerPluginDrainHttpServer({
         httpServer,
@@ -61,10 +58,10 @@ export default async (app: Express, httpServer: http.Server): Promise<ApolloServ
       if (err.message?.startsWith('Database Error: ')) {
         throw new MyError('My error message');
       }
-
+      console.dir(err);
       return new HttpApolloErrors({ code: 1 }).json(err);
     },
-    formatResponse: (res, req) => res,
+    // formatResponse: (res, req) => res,
   });
 
   await server.start();
@@ -73,12 +70,12 @@ export default async (app: Express, httpServer: http.Server): Promise<ApolloServ
     app,
     path: config.apolloOptions.path,
     bodyParserConfig: true,
-    cors: {
-      credentials: true,
-      origin: (origin, callback) => {
-        callback(null, true);
-      },
-    },
+    // cors: {
+    //   credentials: true,
+    //   origin: (origin, callback) => {
+    //     callback(null, true);
+    //   },
+    //},
   });
 
   return server;

@@ -14,7 +14,7 @@ import Populate from '../../db/populate.db';
 class AuthService extends Populate {
   login = async ({ email, password }: { email: string; password: string }): Promise<any | HttpError> => {
     const user = await UserModel.findOne({ email }).populate(this.populateO());
-
+    console.dir(user);
     if (!user) {
       throw new Http404Error({ code: 1000 });
     }

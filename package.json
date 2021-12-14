@@ -7,7 +7,7 @@
     "test": "nyc --all --reporter=html jest --coverage ",
     "test:watch": "jest --verbose --detectOpenHandles",
     "build": "tsc -p . && ncp src dist ",
-    "start": "cross-env NODE_ENV=production node dist/index.js",
+    "start": "node dist/index.js",
     "postinstall": "npm run build",
     "dev": "cross-env NODE_ENV=development ts-node-dev --rs --respawn -r tsconfig-paths/register --transpile-only  src/index.ts "
   },
