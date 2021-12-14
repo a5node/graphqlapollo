@@ -1,17 +1,17 @@
 import 'reflect-metadata';
-import { Arg, Query, Mutation, Resolver, Root, Authorized } from 'type-graphql';
+import { Arg, Query, Resolver } from 'type-graphql';
 
 import AuthServers from './auth.servers';
-import { Role } from '../../interface';
-import User, { FindUser, TypeUser } from '../user/user.schema';
-import { VISITOR } from '../constants';
+
+import User from '../user/user.schema';
+
 import { InputLogin } from './auth.schema';
-import { AccessToken, InputAccessToken } from '../default.schema';
 
 @Resolver(of => User)
 export default class {
   @Query(returns => User)
   async login(@Arg('data') data: InputLogin) {
+    console.dir(data);
     return await AuthServers.login(data);
   }
 }
