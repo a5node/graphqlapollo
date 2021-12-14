@@ -24,7 +24,7 @@ export default async (app: Express, httpServer: http.Server): Promise<ApolloServ
 
   const server = new ApolloServer({
     schema,
-    introspection: process.env.NODE_ENV !== 'production',
+    // introspection: process.env.NODE_ENV !== 'production',
     context: async ({ req, res }: { req: Request; res: Response }) => {
       const user = await authServers.auth(req);
 

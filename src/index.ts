@@ -106,6 +106,4 @@ process.on('unhandledRejection', async (err: Error) => {
   console.log('\x1b[31m%s\x1b[0m', `Error: ${err.message}`);
 });
 
-const ServerStart = new Server();
-ServerStart.start();
-export default ServerStart;
+new Server().start();

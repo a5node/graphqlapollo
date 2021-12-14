@@ -30,15 +30,16 @@ class AuthService extends Populate {
 
   auth = async (req: Request): Promise<any> => {
     const { apollo_user, apollo_key, authorization } = req.headers;
-    if (process.env.NODE_ENV === 'production') {
-      if (apollo_key !== config.apolloKey) {
-        throw new Http401Error({ code: 1001, message: "You have't allows" });
-      }
 
-      if (!config.apolloUsers.split(' ').includes(apollo_user as string)) {
-        throw new Http401Error({ code: 1001, message: "You have't allows" });
-      }
-    }
+    // if (process.env.NODE_ENV === 'production') {
+    //   if (apollo_key !== config.apolloKey) {
+    //     throw new Http401Error({ code: 1001, message: "You have't allows" });
+    //   }
+
+    //   if (!config.apolloUsers.split(' ').includes(apollo_user as string)) {
+    //     throw new Http401Error({ code: 1001, message: "You have't allows" });
+    //   }
+    // }
 
     if (!authorization) {
       return {
