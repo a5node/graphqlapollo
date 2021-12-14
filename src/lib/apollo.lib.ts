@@ -61,7 +61,10 @@ export default async (app: Express, httpServer: http.Server): Promise<ApolloServ
       console.dir(err);
       return new HttpApolloErrors({ code: 1 }).json(err);
     },
-    // formatResponse: (res, req) => res,
+    formatResponse: (res, req) => {
+      console.dir('res');
+      return res;
+    },
   });
 
   await server.start();
@@ -70,12 +73,12 @@ export default async (app: Express, httpServer: http.Server): Promise<ApolloServ
     app,
     path: config.apolloOptions.path,
     bodyParserConfig: true,
-    // cors: {
-    //   credentials: true,
-    //   origin: (origin, callback) => {
-    //     callback(null, true);
-    //   },
-    //},
+    cors: {
+      credentials: true,
+      origin: (origin, callback) => {
+        callback(null, true);
+      },
+    },
   });
 
   return server;
