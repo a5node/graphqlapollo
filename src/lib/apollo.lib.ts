@@ -62,7 +62,6 @@ export default async (app: Express, httpServer: http.Server): Promise<ApolloServ
       return new HttpApolloErrors({ code: 1 }).json(err);
     },
     formatResponse: (res, req) => {
-      console.dir('res');
       return res;
     },
   });
